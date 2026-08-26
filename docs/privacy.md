@@ -1,23 +1,29 @@
 # Privacy and data handling
 
-## Foundation behavior
+## Memory mode
 
-- Uploaded files are read into server memory for the duration of one request.
-- The application does not write resumes, extracted text or analysis results to a database or filesystem.
-- The browser retains only the current page state.
-- Ollama generation receives only a requested fictional role and seniority—not an uploaded resume.
-- The project does not include analytics or telemetry.
+Memory mode is the default:
 
-Infrastructure can still produce access logs, temporary data or crash dumps. Anyone deploying the application is responsible for configuring those systems, access controls, TLS, retention and regional legal requirements.
+- Files and extracted text exist for the duration of a request or server process.
+- No resume, result or reviewer note is written to an application database.
+- Ollama generation receives only a fictional role and seniority.
+- Embeddings run through the configured local adapter.
+- The project does not include analytics or third-party telemetry.
 
-## Safe demonstration data
+## PostgreSQL workspace mode
 
-The generator is instructed to create fictional identities and employers. Its output is validated, and non-example email addresses are replaced. Do not treat synthetic profiles as representative of demographic groups or use them to claim fairness.
+Workspace mode is opt-in and stores resume text, analysis results, reviewer notes, statuses, retention dates and audit events. Candidates can be deleted immediately, and the retention endpoint removes expired records.
 
-## Prohibited product direction
+Operators are responsible for TLS, encryption at rest, database access control, backups, regional requirements and infrastructure logs. Deleting the application record does not automatically delete an operator's backups.
 
-Contributions should not introduce protected-attribute inference, emotion/personality inference, automatic rejection, covert candidate monitoring, or model training on uploaded resumes.
+## OCR
 
-## Reporting
+Image OCR runs through local Tesseract.js. Scanned PDFs are sent to an external service only when the operator explicitly configures `OCR_ENDPOINT`. That service becomes a data processor and must be assessed separately.
 
-Do not submit real resumes in public issues. Follow `SECURITY.md` for vulnerabilities that could expose personal data.
+## Authentication
+
+Private local mode can disable authentication. Shared deployments must enable signed HTTP-only sessions, replace the development secret and use a generated scrypt password hash. The built-in single-user authentication is appropriate for a portfolio deployment, not enterprise identity governance.
+
+## Prohibited direction
+
+Do not add protected-attribute inference, personality or emotion inference, automatic rejection, covert monitoring, resume-claim verification presented as fact, or training on uploaded resumes without explicit consent.

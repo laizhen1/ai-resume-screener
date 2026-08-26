@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateSyntheticResume, resumeToText } from "@/lib/synthetic";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -10,6 +11,8 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const throttle = rateLimit(request, "public.generate", 10);
+  if (!throttle.allowed) return NextResponse.json({ error: "Too many generation requests. Try again shortly." }, { status: 429 });
   try {
     const input = requestSchema.parse(await request.json());
     const result = await generateSyntheticResume(input.role, input.seniority);

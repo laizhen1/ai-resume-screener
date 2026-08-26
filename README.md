@@ -1,29 +1,23 @@
 # Open Resume Lab
 
-A local-first foundation for experimenting with explainable resume-to-job matching without using real candidate data or paying per AI token.
+Open Resume Lab is a privacy-first, explainable candidate-matching and evaluation platform. It extracts resume evidence, applies a versioned deterministic rubric, offers advisory local semantic matches, and keeps employment decisions with a human reviewer.
 
-The application can generate fictional resumes, read PDF/DOCX/TXT documents, identify relevant skills, produce a weighted score, show supporting evidence, and suggest fair interview questions. It is a learning and decision-support project—not an automated hiring system.
+It is a learning and decision-support system, not an automated hiring system. Use fictional or properly consented data only.
 
-## Why this project is different
+## What it demonstrates
 
-- **Free by default:** it works offline with deterministic logic. Optional generation uses a local [Ollama](https://ollama.com/) model.
-- **Privacy conscious:** documents are processed in memory and are not stored by the application.
-- **Explainable:** each score has a visible weight, reason and extracted evidence.
-- **Safe demonstrations:** generated people, employers and achievements are fictional; email addresses use `example.com`.
-- **Provider independent:** the AI integration is isolated so other local providers can be added later.
+- PDF, DOCX, TXT, PNG and JPEG ingestion with signature validation and a 5 MB limit
+- Structured resume sections and exact evidence provenance
+- Configurable, versioned skill, experience, impact and clarity scoring
+- Optional Ollama generation and embedding adapters with deterministic offline fallbacks
+- Job workspaces, batches of up to ten resumes, review states, notes and comparisons
+- In-memory private demo mode or opt-in PostgreSQL/pgvector persistence
+- Redis-backed background analysis with an inline local fallback
+- Retention dates, permanent deletion, audit history, signed sessions and rate limits
+- A reproducible synthetic benchmark reporting precision, recall, F1, latency and name-counterfactual consistency
+- Unit, Playwright, CI, Docker Compose and operational documentation
 
-## Current capabilities
-
-- Synthetic resume generation with an Ollama-first, offline-fallback design
-- Job description and resume comparison
-- PDF, DOCX and TXT text extraction (5 MB limit)
-- Transparent skill, experience, impact and clarity criteria
-- Missing-skill verification questions
-- Responsive web interface
-- Unit tests and GitHub Actions checks
-- Docker and local development setup
-
-## Quick start
+## Local private demo
 
 Requirements: Node.js 20.9+ and npm 10+.
 
@@ -32,57 +26,68 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. No model or API key is required.
+Open `http://localhost:3000`. The default `DATA_MODE=memory`, `QUEUE_MODE=inline` and disabled authentication require no database, model or API key. Data disappears when the server process ends.
 
-## Optional free local AI
+## Complete workspace stack
 
-Install Ollama, then download a small model once:
+Docker Compose starts the web application, PostgreSQL with pgvector, Redis, a migration job and an analysis worker:
+
+```bash
+docker compose up --build
+```
+
+The compose file uses local-demo credentials and disables authentication. Change the database credentials, set `AUTH_DISABLED=false`, provide a random `AUTH_SECRET`, and create `AUTH_PASSWORD_HASH` before exposing the service:
+
+```bash
+npm run auth:hash -- your-password
+```
+
+See `.env.example` and [operations](docs/operations.md).
+
+## Optional local AI and OCR
+
+Synthetic generation can use `qwen3:4b`; semantic evidence can use `nomic-embed-text` through Ollama. Both paths fall back safely when unavailable.
 
 ```bash
 ollama pull qwen3:4b
+ollama pull nomic-embed-text
 ```
 
-Copy `.env.example` to `.env.local`, start Ollama, then start the app. Generation automatically falls back to the built-in generator if the local model is unavailable. Model downloads require disk space and adequate memory but have no per-token fee.
+PNG and JPEG OCR runs locally through Tesseract.js. Text PDFs are parsed locally. Scanned PDFs require a configured `OCR_ENDPOINT` or conversion to page images; this boundary avoids silently accepting empty extraction results.
 
-## Quality checks
+## Quality and evaluation
 
 ```bash
 npm test
+npm run evaluate -- 120
 npm run lint
 npm run build
+npm run test:e2e
 ```
+
+The generated benchmark is a regression suite, not evidence of real-world hiring validity or fairness. Publish dataset construction and annotation details before making performance claims.
 
 ## Architecture
 
 ```text
 Browser
-  ├─ POST /api/generate ── Ollama on localhost
-  │                         └─ built-in fallback
-  └─ POST /api/analyze ─── in-memory document extraction
-                            └─ deterministic explainable scorer
+  |-- private analyzer ---------- in-memory extraction -> deterministic score
+  |-- review workspace ---------- jobs -> candidates -> evidence -> human review
+  |                                  |                     |
+  |                                  |                     +-> audit + retention
+  |                                  +-> Redis worker -> hybrid analysis
+  |-- evaluation laboratory ----- synthetic corpus -> versioned metrics
+  |
+  +-- memory repository (default) or PostgreSQL + pgvector (opt-in)
 ```
 
-There is intentionally no database in the foundation release. Avoiding persistence reduces privacy risk and keeps local setup simple. A future opt-in batch mode can add PostgreSQL and pgvector with retention controls.
+The embedding layer produces advisory semantic evidence and does not change the deterministic overall score. Every analysis records its engine and taxonomy versions.
 
-See [docs/architecture.md](docs/architecture.md), [docs/scoring-method.md](docs/scoring-method.md) and [docs/privacy.md](docs/privacy.md) for design decisions.
+Read [architecture](docs/architecture.md), [scoring](docs/scoring-method.md), [evaluation](docs/evaluation.md), [privacy](docs/privacy.md) and the [threat model](docs/threat-model.md).
 
 ## Responsible-use boundary
 
-Do not use the score as the sole basis for an employment decision. The system does not determine whether someone is qualified, detect protected attributes, rank candidates for automatic rejection, or validate that statements are true. A person must review the original application and consider transferable experience, accommodations and context.
-
-## Roadmap
-
-- Configurable criteria and skill taxonomies
-- Local embedding option and semantic skill equivalence
-- OCR for scanned documents
-- Anonymous-view mode for identifying details
-- Curated synthetic evaluation suite with precision/recall reporting
-- Opt-in PostgreSQL/pgvector batch comparison
-- Additional local model adapters
-
-## Contributing
-
-Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Security concerns should follow [SECURITY.md](SECURITY.md).
+Do not use the score as the sole basis for an employment decision. The system does not infer protected attributes, personality or emotion; automatically reject candidates; validate resume claims; or determine whether a person is qualified. Reviewers must inspect original evidence and consider transferable experience, accommodations and context.
 
 ## License
 

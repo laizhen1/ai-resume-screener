@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import type { AnalysisResult } from "@/lib/types";
 
 const SAMPLE_JOB = `We are seeking a Software Engineer to build reliable customer-facing products. The role requires TypeScript, React, Next.js, Node.js, PostgreSQL, Docker, testing and GitHub Actions. You will design REST APIs, improve application performance, collaborate with an agile team and communicate technical trade-offs.`;
@@ -50,7 +51,7 @@ export default function Home() {
   return (
     <main>
       <header className="hero">
-        <nav><span className="brand">Open Resume Lab</span><span className="nav-label">Foundation v0.1</span></nav>
+        <nav><span className="brand">Open Resume Lab</span><span className="home-nav"><Link href="/workspace">Review workspace</Link><Link href="/evaluation">Evaluation lab</Link></span></nav>
         <div className="hero-copy">
           <p className="eyebrow">LOCAL-FIRST · EXPLAINABLE · OPEN SOURCE</p>
           <h1>Explore candidate fit<br /><em>without exposing real people.</em></h1>
@@ -76,7 +77,7 @@ export default function Home() {
           <label>Job description<textarea rows={8} value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} /></label>
           <label>Resume text<textarea rows={13} value={resumeText} onChange={(e) => { setResumeText(e.target.value); setFile(null); }} placeholder="Generate a fictional resume above, paste text, or upload a file." /></label>
           <div className="upload-row">
-            <label className="file-button">Upload PDF, DOCX or TXT<input type="file" accept=".pdf,.docx,.txt" onChange={(e) => { setFile(e.target.files?.[0] ?? null); setResumeText(""); }} /></label>
+            <label className="file-button">Upload PDF, DOCX, TXT or image<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" onChange={(e) => { setFile(e.target.files?.[0] ?? null); setResumeText(""); }} /></label>
             <span>{file ? file.name : "Maximum 5 MB · processed in memory"}</span>
           </div>
           <button className="primary" disabled={loading !== null}>{loading === "analyze" ? "Analysing…" : "Analyse match"}<span>→</span></button>
@@ -91,6 +92,7 @@ export default function Home() {
           <div><h3>Supported skills</h3><div className="chips matched">{result.matchedSkills.length ? result.matchedSkills.map((s) => <span key={s}>{s}</span>) : <small>None detected</small>}</div></div>
           <div><h3>Skills to verify</h3><div className="chips missing">{result.missingSkills.length ? result.missingSkills.map((s) => <span key={s}>{s}</span>) : <small>None detected</small>}</div></div>
         </div>
+        {result.semanticMatches?.length ? <div className="semantic-note"><h3>Advisory semantic evidence</h3>{result.semanticMatches.map((match) => <p key={match.skill}><strong>{match.skill}</strong> · {Math.round(match.similarity * 100)}% similarity — “{match.evidence.text}”</p>)}</div> : null}
         <div className="criteria">
           {result.criteria.map((item) => <article key={item.criterion}>
             <div className="criterion-top"><h3>{item.criterion}</h3><strong>{item.score}/100</strong></div>
