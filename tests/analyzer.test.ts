@@ -18,4 +18,10 @@ describe("analyzeResume", () => {
     expect(result.missingSkills).toContain("typescript");
     expect(result.criteria[0].evidence.every((line) => !line.toLowerCase().includes("typescript"))).toBe(true);
   });
+
+  it("applies a valid job-specific scoring rubric", () => {
+    const result = analyzeResume(job, strongResume, { skills: 40, experience: 30, impact: 20, clarity: 10 });
+    expect(result.criteria.map((criterion) => criterion.weight)).toEqual([40, 30, 20, 10]);
+    expect(result.criteria.reduce((sum, criterion) => sum + criterion.weight, 0)).toBe(100);
+  });
 });

@@ -8,7 +8,9 @@ export const SKILL_CATALOG = [
   "testing", "typescript", "vector search"
 ] as const;
 
-const ALIASES: Record<string, string[]> = {
+export const TAXONOMY_VERSION = "2026.08.1";
+
+export const SKILL_ALIASES: Record<string, string[]> = {
   "ci/cd": ["continuous integration", "continuous delivery"],
   "c#": ["csharp", ".net"],
   "c++": ["cpp"],
@@ -26,10 +28,14 @@ const ALIASES: Record<string, string[]> = {
 export function findSkills(text: string): string[] {
   const haystack = ` ${text.toLowerCase().replace(/[_–—]/g, " ")} `;
   return SKILL_CATALOG.filter((skill) => {
-    const terms = [skill, ...(ALIASES[skill] ?? [])];
+    const terms = [skill, ...(SKILL_ALIASES[skill] ?? [])];
     return terms.some((term) => {
       const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       return new RegExp(`(^|[^a-z0-9+#])${escaped}([^a-z0-9+#]|$)`, "i").test(haystack);
     });
   });
+}
+
+export function termsForSkill(skill: string): string[] {
+  return [skill, ...(SKILL_ALIASES[skill] ?? [])];
 }

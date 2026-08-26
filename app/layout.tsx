@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Open Resume Lab",
-  description: "Private, explainable and local-first resume matching"
+  description: "Privacy-first, explainable candidate matching and evaluation"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

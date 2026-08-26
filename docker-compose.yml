@@ -1,11 +1,79 @@
 services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: resume
+      POSTGRES_PASSWORD: resume
+      POSTGRES_DB: open_resume_lab
+    volumes:
+      - resume_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U resume -d open_resume_lab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save 60 1
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      target: worker
+    command: ["./node_modules/.bin/tsx", "scripts/migrate.ts"]
+    environment:
+      DATABASE_URL: postgresql://resume:resume@postgres:5432/open_resume_lab
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      target: worker
+    environment:
+      DATA_MODE: postgres
+      DATABASE_URL: postgresql://resume:resume@postgres:5432/open_resume_lab
+      REDIS_URL: redis://redis:6379
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      ENABLE_LOCAL_EMBEDDINGS: "false"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   web:
-    build: .
+    build:
+      context: .
+      target: runner
     ports:
       - "3000:3000"
     environment:
+      DATA_MODE: postgres
+      DATABASE_URL: postgresql://resume:resume@postgres:5432/open_resume_lab
+      QUEUE_MODE: redis
+      REDIS_URL: redis://redis:6379
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       OLLAMA_MODEL: qwen3:4b
       ENABLE_LOCAL_AI: "true"
+      ENABLE_LOCAL_EMBEDDINGS: "false"
+      AUTH_DISABLED: "true"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+volumes:
+  resume_data:

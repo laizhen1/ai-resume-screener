@@ -2,28 +2,44 @@
 
 ## Principles
 
-1. Local-first behavior must remain functional without an AI service.
-2. Uploaded files must not be persisted in the foundation release.
-3. Scoring must be deterministic, inspectable and tested.
-4. AI-generated content must not control the employment score.
-5. External providers must sit behind narrow interfaces.
+1. Local, no-storage behavior remains the default.
+2. Uploaded documents are persisted only in explicit PostgreSQL workspace mode.
+3. The employment score is deterministic, inspectable and versioned.
+4. Embeddings provide advisory evidence and do not alter the overall score.
+5. Every workspace mutation creates an audit event.
+6. External providers sit behind narrow adapters and have offline fallbacks.
+
+## Runtime modes
+
+| Concern | Local default | Workspace option |
+| --- | --- | --- |
+| Repository | Process-memory store | PostgreSQL and pgvector |
+| Analysis jobs | Inline | Redis list and worker |
+| Authentication | Disabled for a private machine | Signed, HTTP-only session |
+| Generation | Built-in synthetic generator | Ollama |
+| Embeddings | Deterministic token hash | Ollama embedding model |
+| OCR | Tesseract.js for images | Configured scanned-PDF OCR endpoint |
 
 ## Components
 
-The Next.js application contains the browser interface and two server routes:
+The App Router application exposes three experiences:
 
-- `/api/generate` validates the requested role and level, tries the configured Ollama endpoint, validates its JSON, and safely falls back to a randomized offline generator.
-- `/api/analyze` reads an uploaded document into memory or accepts pasted text, then invokes the deterministic analyzer.
+- The private analyzer performs one-off extraction and matching without persistence.
+- The review workspace owns jobs, rubrics, candidate batches, evidence, reviewer notes, comparison, retention and audit history.
+- The evaluation laboratory runs a generated synthetic corpus and stores versioned regression results.
 
-`lib/documents.ts` owns format-specific extraction. `lib/skills.ts` owns the initial skill vocabulary and aliases. `lib/analyzer.ts` produces a weighted result and evidence. `lib/synthetic.ts` owns both generation paths and validates model output.
+The analysis boundary is split into extraction, structured parsing, deterministic scoring and advisory semantic matching. Repository and queue interfaces prevent UI routes from depending directly on PostgreSQL or Redis.
 
-## Why matching is not delegated to an LLM
+## Data flow
 
-LLM scoring can be unstable, difficult to reproduce and hard to audit. This release uses AI only to create fictional test content. Matching uses version-controlled rules that contributors can inspect and evaluate.
+1. Validate the file size, extension and signature.
+2. Extract text in memory and reject suspiciously empty results.
+3. Parse sections and attach source offsets to evidence.
+4. Save the candidate only in the selected repository mode.
+5. Execute analysis inline or enqueue it for the Redis worker.
+6. Persist the versioned result and an audit event.
+7. Require human review for any workflow status change.
 
-## Intended extension points
+## Deployment boundary
 
-- Replace the static skill catalog with a versioned taxonomy.
-- Add an embedding interface for semantic equivalence while retaining lexical evidence.
-- Add storage through an opt-in repository interface with explicit deletion and retention behavior.
-- Add local model adapters beside Ollama rather than inside UI or scoring code.
+Docker Compose provides a portfolio-grade single-host deployment. It is not a claim of enterprise multi-tenancy. A public deployment still requires TLS, secret management, database backups, encrypted storage, infrastructure log retention and an external security review.

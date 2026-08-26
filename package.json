@@ -1,31 +1,42 @@
 {
   "name": "open-resume-lab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "A local-first, explainable resume screening foundation with synthetic data generation.",
+  "description": "A privacy-first, explainable candidate matching and evaluation platform.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "evaluate": "tsx scripts/evaluate.ts",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "worker": "tsx scripts/worker.ts",
+    "auth:hash": "tsx scripts/hash-password.ts"
   },
   "dependencies": {
     "mammoth": "^1.10.0",
     "next": "^16.3.1",
     "pdf-parse": "1.1.1",
+    "pg": "^8.23.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "redis": "^6.2.1",
+    "tesseract.js": "^7.0.0",
     "zod": "^4.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.3.0",
     "@types/pdf-parse": "^1.1.5",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.34.0",
     "eslint-config-next": "^16.3.1",
+    "tsx": "^4.23.12",
     "typescript": "^5.9.0",
     "vitest": "^3.2.0"
   },
