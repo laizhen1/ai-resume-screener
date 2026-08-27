@@ -13,5 +13,9 @@ describe("evaluation laboratory", () => {
     expect(result.metrics.precision).toBeGreaterThanOrEqual(0);
     expect(result.metrics.precision).toBeLessThanOrEqual(1);
     expect(result.metrics.counterfactualConsistency).toBe(1);
+    expect(result.metrics.contextualAccuracy).toBeGreaterThan(0.9);
+    expect(result.metrics.negationFalsePositiveRate).toBe(0);
+    expect(result.metrics.aspirationalFalsePositiveRate).toBe(0);
+    expect(result.metrics.evidenceCoverage).toBe(1);
   });
 });

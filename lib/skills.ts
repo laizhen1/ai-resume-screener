@@ -8,20 +8,22 @@ export const SKILL_CATALOG = [
   "testing", "typescript", "vector search"
 ] as const;
 
-export const TAXONOMY_VERSION = "2026.08.1";
+export const TAXONOMY_VERSION = "2026.08.2";
 
 export const SKILL_ALIASES: Record<string, string[]> = {
+  "accessibility": ["accessible"],
   "ci/cd": ["continuous integration", "continuous delivery"],
   "c#": ["csharp", ".net"],
   "c++": ["cpp"],
   "gcp": ["google cloud"],
-  "github actions": ["github workflow"],
+  "github actions": ["github workflow", "github workflows"],
+  "kubernetes": ["k8s"],
   "machine learning": ["ml"],
   "next.js": ["nextjs"],
   "node.js": ["nodejs", "node"],
   "postgresql": ["postgres"],
   "rag": ["retrieval augmented generation", "retrieval-augmented generation"],
-  "rest api": ["restful api", "rest apis"],
+  "rest api": ["restful api", "restful apis", "rest apis"],
   "vector search": ["semantic search", "embeddings", "pgvector"]
 };
 

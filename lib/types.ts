@@ -52,6 +52,31 @@ export type SemanticMatch = {
   method: "ollama-embedding" | "deterministic-fallback";
 };
 
+export type RequirementImportance = "required" | "preferred" | "unspecified";
+export type EvidenceVerdict = "supported" | "partial" | "contradicted" | "unknown";
+
+export type JobRequirement = {
+  skill: string;
+  importance: RequirementImportance;
+  sourceText: string;
+};
+
+export type RequirementAssessment = JobRequirement & {
+  verdict: EvidenceVerdict;
+  confidence: number;
+  reason: string;
+  evidence?: EvidenceProvenance;
+  method: "contextual-rules-v1";
+};
+
+export type ReliabilitySummary = {
+  evidenceCoverage: number;
+  averageConfidence: number;
+  extractionQuality: "low" | "medium" | "high";
+  status: "review-ready" | "needs-human-verification";
+  abstainedRequirements: string[];
+};
+
 export type AnalysisResult = {
   overallScore: number;
   matchedSkills: string[];
@@ -64,4 +89,6 @@ export type AnalysisResult = {
   taxonomyVersion?: string;
   semanticMatches?: SemanticMatch[];
   structuredResume?: StructuredResume;
+  requirementAssessments?: RequirementAssessment[];
+  reliability?: ReliabilitySummary;
 };

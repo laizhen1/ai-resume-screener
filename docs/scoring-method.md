@@ -1,26 +1,42 @@
 # Scoring method
 
-Engine version: **2.0.0**. Taxonomy version is returned with every result.
+Engine version: **3.0.0**. The taxonomy and engine versions are returned with every result.
 
-The deterministic overall result is a weighted sum of four criteria. Workspace rubrics may change the weights, but they must total 100.
+The overall result is a deterministic weighted sum of four criteria. Workspace rubrics may change the weights, but they must total 100.
 
 | Criterion | Default weight | Signal |
 | --- | ---: | --- |
-| Relevant skills | 55% | Canonical job skills also supported in the resume |
+| Relevant skills | 55% | Contextual verdicts for recognized job requirements |
 | Demonstrated experience | 20% | Distinct delivery-oriented action terms |
 | Measurable impact | 15% | Quantified outcome expressions |
 | Document clarity | 10% | Common section headings and sufficient text |
 
-Each criterion includes an explanation, verbatim evidence, section name and character offsets. Missing skills produce verification questions rather than rejection decisions.
+## Contextual skill score
+
+Each detected job skill becomes a requirement. Requirements inherit required, preferred or unspecified importance from their source sentence, but importance is descriptive in version 3 and does not silently override the configured rubric.
+
+Supported evidence receives full skill credit, partial evidence receives 40%, and contradicted or unknown evidence receives none. The skill score is:
+
+```text
+100 × (supported + 0.4 × partial) / detected requirements
+```
+
+Every resolved verdict includes a reason, verbatim evidence, section name and character offsets. Unknown requirements create verification questions rather than rejection decisions.
+
+## Reliability and confidence
+
+Evidence coverage is the proportion of requirements with a supported, partial or contradicted verdict. Unknown requirements are explicit abstentions. Extraction quality is based on document length and recognized structure.
+
+The confidence value is a versioned rule-strength estimate. It is evaluated with Brier score in the adversarial regression suite, but it is not a probability of competence, qualification or future job performance.
 
 ## Semantic evidence
 
-When enabled, the analyzer embeds missing job skills and resume sentences, then displays high-similarity sentences as advisory evidence. The embedding provider, similarity and exact source sentence remain visible. Semantic matches do not alter the deterministic overall score.
+When enabled, the analyzer embeds unknown job skills and résumé sentences, then displays high-similarity sentences as advisory candidates. The provider, similarity and exact source sentence remain visible. Semantic candidates do not alter verdicts or the deterministic overall score.
 
-The offline token-hash embedding exists for reproducible development behavior; it is not a substitute for a semantic model.
+The offline token-hash embedding exists for reproducible development behavior. It is not a semantic model and is not presented to users as semantic evidence. When the configured local model is unavailable, semantic retrieval abstains.
 
 ## Known limitations
 
-Keyword signals can miss synonyms, transferable experience, negation, proficiency and context. Detecting a skill does not prove competence. Action verbs and numbers are weak proxies and can be gamed. Document clarity can be affected by extraction quality.
+Contextual rules can miss synonyms, transferable experience, complex negation, proficiency, recency and multilingual context. Detecting a skill does not prove competence. Action verbs and numbers are weak proxies and can be gamed. Document clarity can be affected by extraction quality.
 
 The score is therefore an inspectable prioritization aid, not a prediction of job performance.

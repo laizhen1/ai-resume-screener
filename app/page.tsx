@@ -53,10 +53,10 @@ export default function Home() {
       <header className="hero">
         <nav><span className="brand">Open Resume Lab</span><span className="home-nav"><Link href="/workspace">Review workspace</Link><Link href="/evaluation">Evaluation lab</Link></span></nav>
         <div className="hero-copy">
-          <p className="eyebrow">LOCAL-FIRST · EXPLAINABLE · OPEN SOURCE</p>
-          <h1>Explore candidate fit<br /><em>without exposing real people.</em></h1>
-          <p className="lede">Generate fictional resumes, compare them with a role, and inspect every reason behind the score. Files are processed in memory and never stored by this application.</p>
-          <div className="trust"><span>✓ No paid API required</span><span>✓ Synthetic demo data</span><span>✓ Human review required</span></div>
+          <p className="eyebrow">LOCAL-FIRST · EVIDENCE-GROUNDED · OPEN SOURCE</p>
+          <h1>Inspect candidate evidence<br /><em>without automating decisions.</em></h1>
+          <p className="lede">The contextual engine separates demonstrated, learning-only, contradicted and unknown requirements, then shows the exact résumé evidence behind every judgment.</p>
+          <div className="trust"><span>✓ No paid API required</span><span>✓ Explicit abstention</span><span>✓ Human review required</span></div>
         </div>
       </header>
 
@@ -85,14 +85,36 @@ export default function Home() {
         </section>
       </form>
 
+      <section className="guidance-strip" aria-label="How to read the analysis">
+        <div><strong>Supported</strong><span>Explicit evidence linked to delivery or a listed competency.</span></div>
+        <div><strong>Partial</strong><span>Learning, coursework, familiarity or limited exposure—not proven delivery.</span></div>
+        <div><strong>Contradicted</strong><span>The résumé explicitly says the experience is absent or limited.</span></div>
+        <div><strong>Unknown</strong><span>No reliable evidence was found, so the engine abstains.</span></div>
+      </section>
+
       {result && <section className="results" aria-live="polite">
         <div className="result-title"><div><p className="eyebrow">EXPLAINABLE RESULT</p><h2>Match analysis</h2></div><div className="score"><strong>{result.overallScore}</strong><span>/100</span></div></div>
         <p className="disclaimer">{result.disclaimer}</p>
+        {result.reliability && <div className={`reliability-banner ${result.reliability.status}`}>
+          <div><span>Review status</span><strong>{result.reliability.status === "review-ready" ? "Evidence found—review still required" : "Human verification required"}</strong></div>
+          <div><span>Evidence coverage</span><strong>{Math.round(result.reliability.evidenceCoverage * 100)}%</strong></div>
+          <div><span>Extraction quality</span><strong>{result.reliability.extractionQuality}</strong></div>
+          <div><span>Rule confidence</span><strong>{Math.round(result.reliability.averageConfidence * 100)}%</strong></div>
+        </div>}
+        {result.requirementAssessments?.length ? <section className="requirement-section">
+          <div className="section-copy"><h3>Requirement evidence</h3><p>Confidence describes the rule judgment, not a probability that a person is qualified.</p></div>
+          <div className="requirement-grid">{result.requirementAssessments.map((assessment) => <article className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}>
+            <div><strong>{assessment.skill}</strong><span>{assessment.importance}</span></div>
+            <p className="verdict-label">{assessment.verdict} · {Math.round(assessment.confidence * 100)}%</p>
+            <p>{assessment.reason}</p>
+            {assessment.evidence && <blockquote>{assessment.evidence.text}<small>{assessment.evidence.section} · characters {assessment.evidence.start}–{assessment.evidence.end}</small></blockquote>}
+          </article>)}</div>
+        </section> : null}
         <div className="skills-grid">
           <div><h3>Supported skills</h3><div className="chips matched">{result.matchedSkills.length ? result.matchedSkills.map((s) => <span key={s}>{s}</span>) : <small>None detected</small>}</div></div>
           <div><h3>Skills to verify</h3><div className="chips missing">{result.missingSkills.length ? result.missingSkills.map((s) => <span key={s}>{s}</span>) : <small>None detected</small>}</div></div>
         </div>
-        {result.semanticMatches?.length ? <div className="semantic-note"><h3>Advisory semantic evidence</h3>{result.semanticMatches.map((match) => <p key={match.skill}><strong>{match.skill}</strong> · {Math.round(match.similarity * 100)}% similarity — “{match.evidence.text}”</p>)}</div> : null}
+        {result.semanticMatches?.length ? <div className="semantic-note"><h3>Advisory semantic candidates</h3><p>These local-model retrieval results never alter the deterministic score.</p>{result.semanticMatches.map((match) => <p key={match.skill}><strong>{match.skill}</strong> · {Math.round(match.similarity * 100)}% similarity — “{match.evidence.text}”</p>)}</div> : null}
         <div className="criteria">
           {result.criteria.map((item) => <article key={item.criterion}>
             <div className="criterion-top"><h3>{item.criterion}</h3><strong>{item.score}/100</strong></div>

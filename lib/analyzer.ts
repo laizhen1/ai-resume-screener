@@ -1,9 +1,10 @@
 import type { AnalysisResult, Evidence } from "./types";
-import { findSkills, TAXONOMY_VERSION } from "./skills";
+import { TAXONOMY_VERSION } from "./skills";
 import { cosineSimilarity, embedTexts } from "./embeddings";
 import { locateEvidence, parseResume } from "./parser";
+import { assessRequirements, summarizeReliability } from "./evidence-intelligence";
 
-export const ENGINE_VERSION = "2.0.0";
+export const ENGINE_VERSION = "3.0.0";
 
 export type ScoringWeights = {
   skills: number;
@@ -37,12 +38,16 @@ function evidenceLines(text: string, terms: string[], limit = 4): string[] {
 
 export function analyzeResume(jobDescription: string, resumeText: string, weights = DEFAULT_SCORING_WEIGHTS): AnalysisResult {
   const structuredResume = parseResume(resumeText);
-  const jobSkills = findSkills(jobDescription);
-  const resumeSkills = findSkills(resumeText);
-  const matchedSkills = jobSkills.filter((skill) => resumeSkills.includes(skill));
-  const missingSkills = jobSkills.filter((skill) => !resumeSkills.includes(skill));
+  const requirementAssessments = assessRequirements(jobDescription, resumeText);
+  const jobSkills = requirementAssessments.map((assessment) => assessment.skill);
+  const matchedSkills = requirementAssessments.filter((assessment) => assessment.verdict === "supported").map((assessment) => assessment.skill);
+  const missingSkills = requirementAssessments.filter((assessment) => assessment.verdict !== "supported").map((assessment) => assessment.skill);
+  const partial = requirementAssessments.filter((assessment) => assessment.verdict === "partial");
+  const contradicted = requirementAssessments.filter((assessment) => assessment.verdict === "contradicted");
+  const unknown = requirementAssessments.filter((assessment) => assessment.verdict === "unknown");
+  const reliability = summarizeReliability(resumeText, requirementAssessments);
 
-  const skillScore = jobSkills.length ? (matchedSkills.length / jobSkills.length) * 100 : 50;
+  const skillScore = jobSkills.length ? ((matchedSkills.length + partial.length * 0.4) / jobSkills.length) * 100 : 50;
   const quantified = (resumeText.match(/\b\d+(?:\.\d+)?%|\b\d+\+?\s*(?:users|customers|projects|teams|ms|seconds|hours|days)\b/gi) ?? []).length;
   const impactScore = clamp(35 + quantified * 15);
   const actionVerbs = ["built", "created", "delivered", "designed", "developed", "improved", "implemented", "led", "reduced", "shipped"];
@@ -56,8 +61,10 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
       criterion: "Relevant skills",
       weight: weights.skills,
       score: clamp(skillScore),
-      explanation: jobSkills.length ? `${matchedSkills.length} of ${jobSkills.length} detected job skills are supported.` : "Few explicit skills were detected in the job description.",
-      evidence: evidenceLines(resumeText, matchedSkills)
+      explanation: jobSkills.length
+        ? `${matchedSkills.length} supported, ${partial.length} partial, ${contradicted.length} contradicted and ${unknown.length} unknown across ${jobSkills.length} detected requirements.`
+        : "Few explicit skills were detected in the job description.",
+      evidence: requirementAssessments.flatMap((assessment) => assessment.evidence?.text ? [assessment.evidence.text] : []).slice(0, 6)
     },
     {
       criterion: "Demonstrated experience",
@@ -89,7 +96,8 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
   const warnings = [
     ...(jobSkills.length < 3 ? ["The job description has few recognizable skills, so the score may be less informative."] : []),
     ...(resumeText.length < 350 ? ["The resume contains limited text; check that document extraction succeeded."] : []),
-    "Keyword evidence can miss transferable or equivalent experience. A person must review the original application."
+    ...(reliability.abstainedRequirements.length ? [`The analyzer abstained on ${reliability.abstainedRequirements.length} requirement(s) without explicit evidence.`] : []),
+    "Contextual rules can miss transferable or equivalent experience. A person must review the original application."
   ];
 
   const interviewQuestions = missingSkills.slice(0, 3).map((skill) => `Can you describe any experience related to ${skill}, even if it is not listed on your resume?`);
@@ -107,14 +115,20 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
     disclaimer: "Decision-support only. Do not use this score as the sole basis for an employment decision.",
     engineVersion: ENGINE_VERSION,
     taxonomyVersion: TAXONOMY_VERSION,
-    structuredResume
+    structuredResume,
+    requirementAssessments,
+    reliability
   };
 }
 
 export async function analyzeResumeHybrid(jobDescription: string, resumeText: string, weights = DEFAULT_SCORING_WEIGHTS): Promise<AnalysisResult> {
   const result = analyzeResume(jobDescription, resumeText, weights);
-  const missing = result.missingSkills.slice(0, 8);
+  const missing = result.requirementAssessments
+    ?.filter((assessment) => assessment.verdict === "unknown")
+    .map((assessment) => assessment.skill)
+    .slice(0, 8) ?? [];
   if (!missing.length) return { ...result, semanticMatches: [] };
+  if (process.env.ENABLE_LOCAL_EMBEDDINGS !== "true") return { ...result, semanticMatches: [] };
 
   const snippets = resumeText
     .split(/\r?\n|(?<=[.!?])\s+/)
@@ -125,9 +139,12 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
 
   const inputs = [...missing, ...snippets];
   const embedded = await embedTexts(inputs);
+  if (embedded.source !== "ollama-embedding") {
+    return { ...result, semanticMatches: [], warnings: [...result.warnings, "The local embedding model was unavailable, so semantic retrieval abstained."] };
+  }
   const skillVectors = embedded.vectors.slice(0, missing.length);
   const snippetVectors = embedded.vectors.slice(missing.length);
-  const threshold = embedded.source === "ollama-embedding" ? 0.62 : 0.35;
+  const threshold = 0.62;
   const semanticMatches = missing.flatMap((skill, skillIndex) => {
     let bestIndex = -1;
     let bestSimilarity = -1;
