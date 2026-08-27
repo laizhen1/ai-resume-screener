@@ -24,4 +24,25 @@ describe("analyzeResume", () => {
     expect(result.criteria.map((criterion) => criterion.weight)).toEqual([40, 30, 20, 10]);
     expect(result.criteria.reduce((sum, criterion) => sum + criterion.weight, 0)).toBe(100);
   });
+
+  it("separates demonstrated, learning-only, negated and missing evidence", () => {
+    const result = analyzeResume(
+      "TypeScript, Docker, React and Terraform are required.",
+      "SUMMARY\nEngineer\nEXPERIENCE\nBuilt TypeScript services. Currently learning Docker. No professional experience with React.\nEDUCATION\nExample University"
+    );
+    const verdicts = Object.fromEntries(result.requirementAssessments?.map((assessment) => [assessment.skill, assessment.verdict]) ?? []);
+    expect(verdicts).toEqual({ docker: "partial", react: "contradicted", terraform: "unknown", typescript: "supported" });
+    expect(result.matchedSkills).toEqual(["typescript"]);
+    expect(result.reliability?.status).toBe("needs-human-verification");
+    expect(result.reliability?.abstainedRequirements).toContain("terraform");
+  });
+
+  it("keeps mixed required and preferred requirements distinct", () => {
+    const result = analyzeResume(
+      "AWS is required. GCP experience is preferred.",
+      "SUMMARY\nCloud engineer\nEXPERIENCE\nUsed AWS to operate production services.\nEDUCATION\nExample University"
+    );
+    const importance = Object.fromEntries(result.requirementAssessments?.map((assessment) => [assessment.skill, assessment.importance]) ?? []);
+    expect(importance).toEqual({ aws: "required", gcp: "preferred" });
+  });
 });

@@ -15,6 +15,8 @@
 | Unauthorized access | Signed HTTP-only sessions and rate limiting | TLS, identity lifecycle and secret rotation |
 | Excess retention | Per-candidate expiry and deletion endpoint | Scheduled execution and backup expiry |
 | Silent model influence | Semantic results are advisory and labelled | Reviewer training and policy enforcement |
+| Negated or aspirational claim treated as experience | Contextual verdicts separate contradicted and partial evidence; adversarial CI metrics | Manual evidence review and broader external evaluation |
+| False certainty | Unknown verdicts, explicit abstention and extraction-quality warnings | Reviewer training; never interpret confidence as qualification probability |
 | Empty/incorrect extraction | Minimum text checks, warnings and OCR boundary | Manual comparison with the source document |
 | Audit tampering | Append-only application behavior | Restricted database roles and external log integrity |
 | Denial of service | Request and batch limits | Reverse-proxy limits and capacity monitoring |

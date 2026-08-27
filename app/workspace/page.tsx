@@ -131,7 +131,7 @@ export default function WorkspacePage() {
       <nav className="app-nav"><Link href="/workspace">Workspace</Link><Link href="/evaluation">Evaluation</Link><Link href="/login">Sign in</Link></nav>
     </header>
 
-    <section className="page-intro"><p className="eyebrow">HUMAN REVIEW WORKSPACE</p><h1>Jobs, evidence and decisions.</h1><p>Create a role, process up to ten résumés at once, and retain a human-owned review history. No candidate is automatically rejected.</p></section>
+    <section className="page-intro"><p className="eyebrow">HUMAN REVIEW WORKSPACE</p><h1>Jobs, evidence and decisions.</h1><p>Review requirement-level evidence, including partial, contradicted and unknown findings. Scores prioritize inspection; they never reject a candidate or establish qualification.</p></section>
     {error && <div className="wide-error" role="alert">{error}</div>}
 
     <div className="workspace-layout">
@@ -168,6 +168,8 @@ export default function WorkspacePage() {
               </select>
             </div>
             {candidate.analysis && <details><summary>Inspect evidence</summary>
+              {candidate.analysis.reliability && <div className={`reliability-banner compact ${candidate.analysis.reliability.status}`}><div><span>Evidence coverage</span><strong>{Math.round(candidate.analysis.reliability.evidenceCoverage * 100)}%</strong></div><div><span>Extraction</span><strong>{candidate.analysis.reliability.extractionQuality}</strong></div><div><span>Review state</span><strong>{candidate.analysis.reliability.status.replaceAll("-", " ")}</strong></div></div>}
+              {candidate.analysis.requirementAssessments?.length ? <div className="requirement-grid compact">{candidate.analysis.requirementAssessments.map((assessment) => <div className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}><div><strong>{assessment.skill}</strong><span>{assessment.importance}</span></div><p className="verdict-label">{assessment.verdict} · {Math.round(assessment.confidence * 100)}%</p><p>{assessment.reason}</p>{assessment.evidence && <blockquote>{assessment.evidence.text}</blockquote>}</div>)}</div> : null}
               <div className="evidence-grid">{candidate.analysis.criteria.map((criterion) => <div key={criterion.criterion}><strong>{criterion.criterion} · {criterion.score}</strong><p>{criterion.explanation}</p>{criterion.evidence.map((line) => <blockquote key={line}>{line}</blockquote>)}</div>)}</div>
               {candidate.analysis.semanticMatches?.length ? <div className="semantic-note"><strong>Advisory semantic matches</strong>{candidate.analysis.semanticMatches.map((match) => <p key={match.skill}>{match.skill} · {Math.round(match.similarity * 100)}% — “{match.evidence.text}”</p>)}</div> : null}
               <label>Reviewer notes<textarea defaultValue={candidate.notes} rows={3} onBlur={(event) => { if (event.target.value !== candidate.notes) void updateCandidate(candidate, { notes: event.target.value }); }} /></label>
