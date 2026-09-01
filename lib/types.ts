@@ -77,6 +77,15 @@ export type ReliabilitySummary = {
   abstainedRequirements: string[];
 };
 
+export type AiReviewSummary = {
+  source: "ollama";
+  model: string;
+  summary: string;
+  demonstratedStrengths: string[];
+  verificationPoints: string[];
+  suggestedQuestions: string[];
+};
+
 export type AnalysisResult = {
   overallScore: number;
   matchedSkills: string[];
@@ -91,4 +100,5 @@ export type AnalysisResult = {
   structuredResume?: StructuredResume;
   requirementAssessments?: RequirementAssessment[];
   reliability?: ReliabilitySummary;
+  aiReview?: AiReviewSummary;
 };

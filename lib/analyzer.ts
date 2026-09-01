@@ -3,6 +3,7 @@ import { TAXONOMY_VERSION } from "./skills";
 import { cosineSimilarity, embedTexts } from "./embeddings";
 import { locateEvidence, parseResume } from "./parser";
 import { assessRequirements, summarizeReliability } from "./evidence-intelligence";
+import { createAiReview } from "./ai-review";
 
 export const ENGINE_VERSION = "3.0.0";
 
@@ -123,24 +124,32 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
 
 export async function analyzeResumeHybrid(jobDescription: string, resumeText: string, weights = DEFAULT_SCORING_WEIGHTS): Promise<AnalysisResult> {
   const result = analyzeResume(jobDescription, resumeText, weights);
+  const addAiReview = async (analysis: AnalysisResult) => {
+    const aiReview = await createAiReview({
+      jobDescription,
+      resumeText,
+      assessments: analysis.requirementAssessments ?? []
+    });
+    return aiReview ? { ...analysis, aiReview } : analysis;
+  };
   const missing = result.requirementAssessments
     ?.filter((assessment) => assessment.verdict === "unknown")
     .map((assessment) => assessment.skill)
     .slice(0, 8) ?? [];
-  if (!missing.length) return { ...result, semanticMatches: [] };
-  if (process.env.ENABLE_LOCAL_EMBEDDINGS !== "true") return { ...result, semanticMatches: [] };
+  if (!missing.length) return addAiReview({ ...result, semanticMatches: [] });
+  if (process.env.ENABLE_LOCAL_EMBEDDINGS !== "true") return addAiReview({ ...result, semanticMatches: [] });
 
   const snippets = resumeText
     .split(/\r?\n|(?<=[.!?])\s+/)
     .map((line) => line.trim())
     .filter((line) => line.length >= 20)
     .slice(0, 40);
-  if (!snippets.length) return { ...result, semanticMatches: [] };
+  if (!snippets.length) return addAiReview({ ...result, semanticMatches: [] });
 
   const inputs = [...missing, ...snippets];
   const embedded = await embedTexts(inputs);
   if (embedded.source !== "ollama-embedding") {
-    return { ...result, semanticMatches: [], warnings: [...result.warnings, "The local embedding model was unavailable, so semantic retrieval abstained."] };
+    return addAiReview({ ...result, semanticMatches: [], warnings: [...result.warnings, "The local embedding model was unavailable, so semantic retrieval abstained."] });
   }
   const skillVectors = embedded.vectors.slice(0, missing.length);
   const snippetVectors = embedded.vectors.slice(missing.length);
@@ -164,11 +173,11 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
     }];
   });
 
-  return {
+  return addAiReview({
     ...result,
     semanticMatches,
     warnings: semanticMatches.length
       ? [...result.warnings, "Semantic matches are advisory and do not change the deterministic overall score."]
       : result.warnings
-  };
+  });
 }
