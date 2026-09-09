@@ -10,7 +10,7 @@ It is a learning and decision-support system, not an automated hiring system. Us
 - Structured résumé sections, job requirements and exact evidence provenance
 - Context-aware requirement verdicts for supported, partial, contradicted and unknown evidence
 - Explicit abstention, extraction-quality signals and evidence-coverage reporting
-- Configurable, versioned skill, experience, impact and clarity scoring
+- Ollama-powered requirement extraction, evidence judgments, scoring explanations and interview prompts with a deterministic offline fallback
 - Optional Ollama generation and embedding adapters with deterministic offline fallbacks
 - Job workspaces, batches of up to ten resumes, review states, notes and comparisons
 - In-memory private demo mode or opt-in PostgreSQL/pgvector persistence
@@ -71,13 +71,13 @@ The benchmark is a deterministic regression suite, not evidence of real-world hi
 
 ## Evidence Intelligence engine
 
-The version 3 pipeline is evidence-first:
+The version 3 pipeline is evidence-first and AI-assisted when Ollama is available:
 
 1. Extract canonical skills from each job sentence and label them required, preferred or unspecified.
 2. Find exact or aliased résumé evidence with section and character-offset provenance.
-3. Classify each requirement as supported, partial, contradicted or unknown using versioned contextual rules.
+3. Ask the configured local Ollama model to classify each requirement as supported, partial, contradicted or unknown; every quoted evidence fragment is verified against the original resume.
 4. Abstain when a term is missing or ambiguous instead of converting uncertainty into a match.
-5. Compute the weighted score deterministically; partial evidence receives limited credit, while contradicted and unknown evidence receive none.
+5. Ask Ollama to score the configured criteria and explain its evidence; the weighted overall score is calculated from those validated criterion scores. If Ollama is unavailable or returns unverifiable JSON, the versioned deterministic engine is used.
 6. Optionally retrieve advisory semantic candidates with a local Ollama embedding model. Semantic candidates never alter the score.
 
 The displayed confidence is the strength of the contextual rule judgment—not a probability that a candidate is qualified. See [evidence intelligence](docs/evidence-intelligence.md), [scoring](docs/scoring-method.md) and [evaluation](docs/evaluation.md).

@@ -26,6 +26,7 @@ function evidenceContext(assessments: RequirementAssessment[]) {
 
 export async function createAiReview(input: ReviewInput): Promise<AiReviewSummary | null> {
   if (process.env.ENABLE_LOCAL_AI_REVIEW === "false") return null;
+  if (process.env.NODE_ENV === "test" || process.env.VITEST) return null;
 
   const baseUrl = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
   const model = process.env.OLLAMA_REVIEW_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
@@ -51,7 +52,7 @@ Return JSON only with this exact shape:
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false, format: "json", options: { temperature: 0.1 } }),
+      body: JSON.stringify({ model, prompt, stream: false, format: "json", think: false, options: { temperature: 0.1 } }),
       signal: AbortSignal.timeout(45_000)
     });
     if (!response.ok) throw new Error(`Ollama returned ${response.status}`);

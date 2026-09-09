@@ -93,7 +93,7 @@ export default function Home() {
       </section>
 
       {result && <section className="results" aria-live="polite">
-        <div className="result-title"><div><p className="eyebrow">EXPLAINABLE RESULT</p><h2>Match analysis</h2></div><div className="score"><strong>{result.overallScore}</strong><span>/100</span></div></div>
+        <div className="result-title"><div><p className="eyebrow">EXPLAINABLE RESULT</p><h2>Match analysis</h2><span className={`analysis-source ${result.analysisProvider === "ollama" ? "ai" : "fallback"}`}>{result.analysisProvider === "ollama" ? `AI analysis · ${result.analysisModel}` : "Deterministic offline fallback"}</span></div><div className="score"><strong>{result.overallScore}</strong><span>/100</span></div></div>
         <p className="disclaimer">{result.disclaimer}</p>
         {result.reliability && <div className={`reliability-banner ${result.reliability.status}`}>
           <div><span>Review status</span><strong>{result.reliability.status === "review-ready" ? "Evidence found—review still required" : "Human verification required"}</strong></div>

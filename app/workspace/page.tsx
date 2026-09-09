@@ -162,7 +162,7 @@ export default function WorkspacePage() {
             <div className="candidate-summary">
               <label className="compare-check"><input type="checkbox" checked={compareIds.includes(candidate.id)} onChange={() => toggleCompare(candidate.id)} />Compare</label>
               <div><h3>{candidate.displayName}</h3><p>{candidate.fileName} · retained until {new Date(candidate.retentionUntil).toLocaleDateString()}</p></div>
-              <div className="candidate-score"><strong>{candidate.analysis?.overallScore ?? "—"}</strong><small>/100</small></div>
+              <div className="candidate-score"><strong>{candidate.analysis?.overallScore ?? "—"}</strong><small>/100</small>{candidate.analysis?.analysisProvider && <span className="candidate-provider">{candidate.analysis.analysisProvider === "ollama" ? "AI analysis" : "Offline fallback"}</span>}</div>
               <select aria-label={`Status for ${candidate.displayName}`} value={candidate.status} disabled={busy === candidate.id} onChange={(event) => void updateCandidate(candidate, { status: event.target.value as ReviewStatus })}>
                 <option value="new">New</option><option value="reviewing">Reviewing</option><option value="interview">Interview</option><option value="hold">Hold</option><option value="closed">Closed</option>
               </select>

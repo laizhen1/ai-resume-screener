@@ -66,7 +66,7 @@ export type RequirementAssessment = JobRequirement & {
   confidence: number;
   reason: string;
   evidence?: EvidenceProvenance;
-  method: "contextual-rules-v1";
+  method: "contextual-rules-v1" | "ollama-structured-v1";
 };
 
 export type ReliabilitySummary = {
@@ -101,4 +101,6 @@ export type AnalysisResult = {
   requirementAssessments?: RequirementAssessment[];
   reliability?: ReliabilitySummary;
   aiReview?: AiReviewSummary;
+  analysisProvider?: "ollama" | "deterministic-fallback";
+  analysisModel?: string;
 };
