@@ -4,7 +4,7 @@
 
 1. Local, no-storage behavior remains the default.
 2. Uploaded documents are persisted only in explicit PostgreSQL workspace mode.
-3. Requirement verdicts and the employment score are deterministic, inspectable and versioned.
+3. AI-generated requirement verdicts and criterion scores are schema-validated, evidence-checked, inspectable and versioned; a deterministic engine remains available as an explicit offline fallback.
 4. Embeddings provide advisory evidence and do not alter the overall score.
 5. Every workspace mutation creates an audit event.
 6. External providers sit behind narrow adapters and have offline fallbacks.
@@ -28,7 +28,7 @@ The App Router application exposes three experiences:
 - The review workspace owns jobs, rubrics, candidate batches, evidence, reviewer notes, comparison, retention and audit history.
 - The evaluation laboratory runs a generated synthetic corpus and stores versioned regression results.
 
-The analysis boundary is split into extraction, structured parsing, job-requirement extraction, contextual evidence judgment, reliability summarization, deterministic scoring and advisory semantic retrieval. Repository and queue interfaces prevent UI routes from depending directly on PostgreSQL or Redis.
+The analysis boundary is split into extraction, structured parsing, AI-assisted job-requirement extraction, evidence judgment, reliability summarization, criterion scoring and advisory semantic retrieval. Every AI evidence quote is checked against the original resume. Repository and queue interfaces prevent UI routes from depending directly on PostgreSQL or Redis.
 
 ## Data flow
 

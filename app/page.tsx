@@ -93,7 +93,7 @@ export default function Home() {
       </section>
 
       {result && <section className="results" aria-live="polite">
-        <div className="result-title"><div><p className="eyebrow">EXPLAINABLE RESULT</p><h2>Match analysis</h2></div><div className="score"><strong>{result.overallScore}</strong><span>/100</span></div></div>
+        <div className="result-title"><div><p className="eyebrow">EXPLAINABLE RESULT</p><h2>Match analysis</h2><span className={`analysis-source ${result.analysisProvider === "ollama" ? "ai" : "fallback"}`}>{result.analysisProvider === "ollama" ? `AI analysis · ${result.analysisModel}` : "Deterministic offline fallback"}</span></div><div className="score"><strong>{result.overallScore}</strong><span>/100</span></div></div>
         <p className="disclaimer">{result.disclaimer}</p>
         {result.reliability && <div className={`reliability-banner ${result.reliability.status}`}>
           <div><span>Review status</span><strong>{result.reliability.status === "review-ready" ? "Evidence found—review still required" : "Human verification required"}</strong></div>
@@ -101,6 +101,14 @@ export default function Home() {
           <div><span>Extraction quality</span><strong>{result.reliability.extractionQuality}</strong></div>
           <div><span>Rule confidence</span><strong>{Math.round(result.reliability.averageConfidence * 100)}%</strong></div>
         </div>}
+        {result.aiReview && <section className="semantic-note ai-review">
+          <h3>Local AI reviewer summary</h3>
+          <p>This optional summary was generated locally by {result.aiReview.model}. It does not change the score or make an employment decision.</p>
+          <p><strong>Summary:</strong> {result.aiReview.summary}</p>
+          {result.aiReview.demonstratedStrengths.length ? <div><strong>Demonstrated evidence</strong><ul>{result.aiReview.demonstratedStrengths.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+          {result.aiReview.verificationPoints.length ? <div><strong>Verify with the reviewer</strong><ul>{result.aiReview.verificationPoints.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+          {result.aiReview.suggestedQuestions.length ? <div><strong>Suggested neutral questions</strong><ul>{result.aiReview.suggestedQuestions.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+        </section>}
         {result.requirementAssessments?.length ? <section className="requirement-section">
           <div className="section-copy"><h3>Requirement evidence</h3><p>Confidence describes the rule judgment, not a probability that a person is qualified.</p></div>
           <div className="requirement-grid">{result.requirementAssessments.map((assessment) => <article className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}>

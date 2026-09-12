@@ -70,12 +70,12 @@ Use example.com for email, invented employers, no real people, no phone number, 
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false, format: "json", options: { temperature: 0.8 } }),
+      body: JSON.stringify({ model, prompt, stream: false, format: "json", think: false, options: { temperature: 0.8 } }),
       signal: AbortSignal.timeout(30_000)
     });
     if (!response.ok) throw new Error(`Ollama returned ${response.status}`);
-    const data = await response.json() as { response?: string };
-    const resume = resumeSchema.parse(extractJson(data.response ?? ""));
+    const data = await response.json() as { response?: string; thinking?: string };
+    const resume = resumeSchema.parse(extractJson(data.response || data.thinking || ""));
     if (!resume.email.endsWith("@example.com")) resume.email = fallback.email;
     return { resume, source: "ollama" as const };
   } catch {

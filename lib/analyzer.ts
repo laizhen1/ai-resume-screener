@@ -3,6 +3,8 @@ import { TAXONOMY_VERSION } from "./skills";
 import { cosineSimilarity, embedTexts } from "./embeddings";
 import { locateEvidence, parseResume } from "./parser";
 import { assessRequirements, summarizeReliability } from "./evidence-intelligence";
+import { createAiReview } from "./ai-review";
+import { analyzeWithOllama, type AiAnalysisDraft } from "./ai-analysis";
 
 export const ENGINE_VERSION = "3.0.0";
 
@@ -27,6 +29,68 @@ export function weightsFromCriteria(criteria: Array<{ name: string; weight: numb
 }
 
 const clamp = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+
+function verifiedEvidence(resumeText: string, snippet: string | null, sections: ReturnType<typeof parseResume>["sections"]) {
+  if (!snippet) return undefined;
+  const start = resumeText.toLowerCase().indexOf(snippet.toLowerCase());
+  return start >= 0 ? locateEvidence(resumeText, resumeText.slice(start, start + snippet.length), sections) : undefined;
+}
+
+function composeAiAnalysis(jobDescription: string, resumeText: string, weights: ScoringWeights, draft: AiAnalysisDraft, model: string): AnalysisResult {
+  const expectedCriteria = new Set(["relevant skills", "demonstrated experience", "measurable impact", "document clarity"]);
+  if (new Set(draft.criteria.map((item) => item.criterion.toLowerCase())).size !== expectedCriteria.size || draft.criteria.some((item) => !expectedCriteria.has(item.criterion.toLowerCase()))) {
+    throw new Error("The AI returned an invalid scoring rubric.");
+  }
+  const structuredResume = parseResume(resumeText);
+  const assessments = draft.requirements
+    .map((item) => {
+      const evidence = verifiedEvidence(resumeText, item.evidenceText, structuredResume.sections);
+      const verdict = item.verdict !== "unknown" && !evidence ? "unknown" as const : item.verdict;
+      return {
+        skill: item.skill.trim().toLowerCase(),
+        importance: item.importance,
+        sourceText: jobDescription.toLowerCase().includes(item.sourceText.toLowerCase()) ? item.sourceText : jobDescription.slice(0, 300),
+        verdict,
+        confidence: verdict === "unknown" && item.verdict !== "unknown" ? Math.min(item.confidence, 0.5) : item.confidence,
+        reason: verdict === "unknown" && item.verdict !== "unknown"
+          ? "The AI analysis did not provide an exact resume quote, so the system abstained."
+          : item.reason,
+        evidence,
+        method: "ollama-structured-v1" as const
+      };
+    })
+    .filter((item, index, all) => all.findIndex((candidate) => candidate.skill === item.skill) === index);
+  const criteria = draft.criteria.map((item) => {
+    const evidence = item.evidence.filter((snippet) => Boolean(verifiedEvidence(resumeText, snippet, structuredResume.sections)));
+    return {
+      criterion: item.criterion,
+      weight: weights[item.criterion.toLowerCase() === "relevant skills" ? "skills" : item.criterion.toLowerCase() === "demonstrated experience" ? "experience" : item.criterion.toLowerCase() === "measurable impact" ? "impact" : "clarity"],
+      score: clamp(item.score),
+      explanation: item.explanation,
+      evidence,
+      provenance: evidence.map((snippet) => locateEvidence(resumeText, snippet, structuredResume.sections))
+    };
+  });
+  const overallScore = clamp(criteria.reduce((total, item) => total + item.score * (item.weight / 100), 0));
+  const matchedSkills = assessments.filter((item) => item.verdict === "supported").map((item) => item.skill);
+  const missingSkills = assessments.filter((item) => item.verdict !== "supported").map((item) => item.skill);
+  return {
+    overallScore,
+    matchedSkills,
+    missingSkills,
+    criteria,
+    interviewQuestions: draft.interviewQuestions,
+    warnings: [...draft.warnings, "AI-generated analysis is advisory. Review the original resume before making any decision."],
+    disclaimer: "Decision-support only. Do not use this score as the sole basis for an employment decision.",
+    engineVersion: ENGINE_VERSION,
+    taxonomyVersion: TAXONOMY_VERSION,
+    structuredResume,
+    requirementAssessments: assessments,
+    reliability: summarizeReliability(resumeText, assessments),
+    analysisProvider: "ollama",
+    analysisModel: model
+  };
+}
 
 function evidenceLines(text: string, terms: string[], limit = 4): string[] {
   const lines = text.split(/\n|(?<=[.!?])\s+/).map((line) => line.trim()).filter(Boolean);
@@ -117,30 +181,55 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
     taxonomyVersion: TAXONOMY_VERSION,
     structuredResume,
     requirementAssessments,
-    reliability
+    reliability,
+    analysisProvider: "deterministic-fallback"
   };
 }
 
 export async function analyzeResumeHybrid(jobDescription: string, resumeText: string, weights = DEFAULT_SCORING_WEIGHTS): Promise<AnalysisResult> {
-  const result = analyzeResume(jobDescription, resumeText, weights);
+  const deterministicResult = analyzeResume(jobDescription, resumeText, weights);
+  const aiResult = await analyzeWithOllama(jobDescription, resumeText, weights);
+  let result: AnalysisResult;
+  try {
+    result = aiResult
+      ? composeAiAnalysis(jobDescription, resumeText, weights, aiResult.draft, aiResult.model)
+      : {
+      ...deterministicResult,
+      warnings: [...deterministicResult.warnings, "Ollama was unavailable, so this result used the deterministic offline fallback."]
+      };
+  } catch {
+    result = {
+      ...deterministicResult,
+      warnings: [...deterministicResult.warnings, "The AI response could not be verified, so this result used the deterministic offline fallback."]
+    };
+  }
+  const addAiReview = async (analysis: AnalysisResult) => {
+    if (analysis.analysisProvider === "ollama") return analysis;
+    const aiReview = await createAiReview({
+      jobDescription,
+      resumeText,
+      assessments: analysis.requirementAssessments ?? []
+    });
+    return aiReview ? { ...analysis, aiReview } : analysis;
+  };
   const missing = result.requirementAssessments
     ?.filter((assessment) => assessment.verdict === "unknown")
     .map((assessment) => assessment.skill)
     .slice(0, 8) ?? [];
-  if (!missing.length) return { ...result, semanticMatches: [] };
-  if (process.env.ENABLE_LOCAL_EMBEDDINGS !== "true") return { ...result, semanticMatches: [] };
+  if (!missing.length) return addAiReview({ ...result, semanticMatches: [] });
+  if (process.env.ENABLE_LOCAL_EMBEDDINGS !== "true") return addAiReview({ ...result, semanticMatches: [] });
 
   const snippets = resumeText
     .split(/\r?\n|(?<=[.!?])\s+/)
     .map((line) => line.trim())
     .filter((line) => line.length >= 20)
     .slice(0, 40);
-  if (!snippets.length) return { ...result, semanticMatches: [] };
+  if (!snippets.length) return addAiReview({ ...result, semanticMatches: [] });
 
   const inputs = [...missing, ...snippets];
   const embedded = await embedTexts(inputs);
   if (embedded.source !== "ollama-embedding") {
-    return { ...result, semanticMatches: [], warnings: [...result.warnings, "The local embedding model was unavailable, so semantic retrieval abstained."] };
+    return addAiReview({ ...result, semanticMatches: [], warnings: [...result.warnings, "The local embedding model was unavailable, so semantic retrieval abstained."] });
   }
   const skillVectors = embedded.vectors.slice(0, missing.length);
   const snippetVectors = embedded.vectors.slice(missing.length);
@@ -164,11 +253,11 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
     }];
   });
 
-  return {
+  return addAiReview({
     ...result,
     semanticMatches,
     warnings: semanticMatches.length
       ? [...result.warnings, "Semantic matches are advisory and do not change the deterministic overall score."]
       : result.warnings
-  };
+  });
 }
