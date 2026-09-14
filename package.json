@@ -14,7 +14,8 @@
     "evaluate": "tsx scripts/evaluate.ts",
     "db:migrate": "tsx scripts/migrate.ts",
     "worker": "tsx scripts/worker.ts",
-    "auth:hash": "tsx scripts/hash-password.ts"
+    "auth:hash": "tsx scripts/hash-password.ts",
+    "compare": "tsx scripts/compare.ts"
   },
   "dependencies": {
     "mammoth": "^1.10.0",

@@ -21,7 +21,7 @@ test("creates a job and opens the review workspace", async ({ page }) => {
 });
 
 test("runs and displays an evaluation", async ({ page }) => {
-  await page.goto("/evaluation");
+  await page.goto("/evaluation/regression");
   const evaluationResponse = page.waitForResponse((response) => response.url().endsWith("/api/workspace/evaluations") && response.request().method() === "POST");
   await page.getByRole("button", { name: "Run benchmark" }).click();
   expect((await evaluationResponse).ok()).toBe(true);

@@ -57,6 +57,33 @@ ollama pull nomic-embed-text
 
 PNG and JPEG OCR runs locally through Tesseract.js. Text PDFs are parsed locally. Scanned PDFs require a configured `OCR_ENDPOINT` or conversion to page images; this boundary avoids silently accepting empty extraction results.
 
+## AI/ML experiment lab
+
+Open `/evaluation` to compare rules, LLM-only judgments and evidence-validated hybrid outputs on the same examples.
+
+- **Separate datasets:** 10 unique development documents and 24 unique provisional held-out documents, identified by SHA-256 fingerprints.
+- **Quality and performance:** confusion matrices, macro F1, support precision/recall, abstention, citation validity, error categories and p50/p95 latency.
+- **Evidence review:** inspect highlighted source quotes and record audited reviewer corrections without changing frozen labels or historical metrics.
+- **Reproducible experiments:** export JSON reports, compare saved runs and run a development accuracy gate in CI.
+- **Transparent model failures:** unavailable LLM results and deterministic hybrid fallbacks are explicitly labeled.
+
+### Run a comparison
+
+```bash
+# Rules baseline; no model required
+npm run compare -- --split development --min-accuracy 0.90 --output reports/development.json
+npm run compare -- --split heldout --output reports/heldout-rules.json
+
+# Requires an installed model running in local Ollama
+npm run compare -- --split heldout --with-model --model qwen3:4b --output reports/heldout-comparison.json
+```
+
+The measured rules baseline achieved **24/24 correct development judgments** and **20/24 correct held-out judgments (83.3%)**. The held-out set exposed four errors despite every prediction having an exact source citation. These are small, fictional, agent-authored datasets with provisional labels; independent human annotation is still pending. LLM performance was not measured because Ollama was unavailable during verification.
+
+See [measured results and portfolio talking points](reports/README.md) and [experiment methodology, dataset card and metric definitions](docs/experiments.md).
+
+PostgreSQL users must run `npm run db:migrate` to add report storage. Memory-mode reports and feedback last only until the server restarts. The original repeated-fixture suite remains at `/evaluation/regression`.
+
 ## Quality and evaluation
 
 ```bash

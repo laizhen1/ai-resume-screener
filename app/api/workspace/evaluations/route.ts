@@ -7,7 +7,7 @@ import { traced } from "@/lib/telemetry";
 export async function GET(request: Request) {
   const auth = authorize(request, "evaluations.list");
   if ("response" in auth) return auth.response;
-  return NextResponse.json({ evaluations: await (await getRepository()).listEvaluations() });
+  return NextResponse.json({ evaluations: await (await getRepository()).listEvaluations().then(runs => runs.filter(run => !run.report)) });
 }
 
 export async function POST(request: Request) {

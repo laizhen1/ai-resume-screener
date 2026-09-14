@@ -36,7 +36,7 @@ function verifiedEvidence(resumeText: string, snippet: string | null, sections: 
   return start >= 0 ? locateEvidence(resumeText, resumeText.slice(start, start + snippet.length), sections) : undefined;
 }
 
-function composeAiAnalysis(jobDescription: string, resumeText: string, weights: ScoringWeights, draft: AiAnalysisDraft, model: string): AnalysisResult {
+export function composeAiAnalysis(jobDescription: string, resumeText: string, weights: ScoringWeights, draft: AiAnalysisDraft, model: string): AnalysisResult {
   const expectedCriteria = new Set(["relevant skills", "demonstrated experience", "measurable impact", "document clarity"]);
   if (new Set(draft.criteria.map((item) => item.criterion.toLowerCase())).size !== expectedCriteria.size || draft.criteria.some((item) => !expectedCriteria.has(item.criterion.toLowerCase()))) {
     throw new Error("The AI returned an invalid scoring rubric.");

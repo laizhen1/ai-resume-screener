@@ -1,0 +1,769 @@
+{
+  "version": "comparison-v1",
+  "createdAt": "2026-09-14T22:38:48.029Z",
+  "engineVersion": "3.0.0",
+  "taxonomyVersion": "2026.08.2",
+  "dataset": {
+    "version": "adversarial-context-v2.0",
+    "split": "development",
+    "hash": "015068509d86deb7fb4321695a90fe0d353796ea525664f98e79e778690aabb6",
+    "uniqueCases": 10,
+    "executions": 10,
+    "annotationStatus": "Development regression fixtures; used to tune the rules."
+  },
+  "configuration": {
+    "includeModel": false,
+    "model": "qwen3:4b",
+    "promptVersion": "core-analysis-v1",
+    "seed": 42,
+    "temperature": 0,
+    "timeoutMs": 45000,
+    "node": "v24.19.0",
+    "platform": "win32"
+  },
+  "examples": [
+    {
+      "challenge": "exact",
+      "job": "This role requires TypeScript and React for customer-facing products.",
+      "resume": "Synthetic Candidate 1\nSKILLS\nTypeScript, React\nEXPERIENCE\nBuilt and shipped production TypeScript services and React interfaces for 2,000 users.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "typescript": "supported",
+        "react": "supported"
+      },
+      "id": "adversarial-1"
+    },
+    {
+      "challenge": "alias",
+      "job": "We need Node.js, PostgreSQL and Docker experience.",
+      "resume": "Synthetic Candidate 2\nSUMMARY\nBackend engineer\nEXPERIENCE\nBuilt a NodeJS service backed by Postgres. Currently learning Docker through a personal course.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "node.js": "supported",
+        "postgresql": "supported",
+        "docker": "partial"
+      },
+      "id": "adversarial-2"
+    },
+    {
+      "challenge": "negation",
+      "job": "React and Docker are required for this role.",
+      "resume": "Synthetic Candidate 3\nSUMMARY\nPlatform engineer\nEXPERIENCE\nNo professional experience with React. Never used Docker in production.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "contradicted",
+        "docker": "contradicted"
+      },
+      "id": "adversarial-3"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "The role requires Terraform and Kubernetes.",
+      "resume": "Synthetic Candidate 4\nSUMMARY\nCloud support engineer\nEXPERIENCE\nCurrently learning Terraform and exploring Kubernetes in a training environment.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "terraform": "partial",
+        "kubernetes": "partial"
+      },
+      "id": "adversarial-4"
+    },
+    {
+      "challenge": "ambiguity",
+      "job": "Experience with React and Go is essential.",
+      "resume": "Synthetic Candidate 5\nSUMMARY\nOperations coordinator\nEXPERIENCE\nReact to customer incidents quickly and coordinate go-to-market planning.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "unknown",
+        "go": "unknown"
+      },
+      "id": "adversarial-5"
+    },
+    {
+      "challenge": "alias",
+      "job": "We require CI/CD, GitHub Actions and testing experience.",
+      "resume": "Synthetic Candidate 6\nSKILLS\nAutomated testing\nEXPERIENCE\nImplemented continuous integration and continuous delivery using GitHub workflows.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "ci/cd": "supported",
+        "github actions": "supported",
+        "testing": "supported"
+      },
+      "id": "adversarial-6"
+    },
+    {
+      "challenge": "missing",
+      "job": "AWS is required and GCP experience is preferred.",
+      "resume": "Synthetic Candidate 7\nSKILLS\nAWS\nEXPERIENCE\nUsed AWS to operate production services for three years.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "aws": "supported",
+        "gcp": "unknown"
+      },
+      "id": "adversarial-7"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "SQL is required. Python experience is preferred.",
+      "resume": "Synthetic Candidate 8\nSUMMARY\nData analyst\nEXPERIENCE\nBuilt SQL reporting pipelines for 900 users. Completed introductory Python coursework.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "sql": "supported",
+        "python": "partial"
+      },
+      "id": "adversarial-8"
+    },
+    {
+      "challenge": "alias",
+      "job": "Machine learning, PyTorch and vector search are required.",
+      "resume": "Synthetic Candidate 9\nSUMMARY\nML engineer\nEXPERIENCE\nDeveloped machine learning models with PyTorch and implemented pgvector semantic search.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "machine learning": "supported",
+        "pytorch": "supported",
+        "vector search": "supported"
+      },
+      "id": "adversarial-9"
+    },
+    {
+      "challenge": "exact",
+      "job": "The position requires Next.js, REST API and accessibility experience.",
+      "resume": "Synthetic Candidate 10\nSUMMARY\nFrontend engineer\nEXPERIENCE\nDeveloped accessible NextJS interfaces and designed RESTful APIs for customer products.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "next.js": "supported",
+        "rest api": "supported",
+        "accessibility": "supported"
+      },
+      "id": "adversarial-10"
+    }
+  ],
+  "results": [
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 6.522600000000011,
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.0739000000000374,
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.6449999999999818,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "No professional experience with React.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.684599999999989,
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.6775000000000091,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.7834000000000287,
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "Automated testing",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.3956000000000017,
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "AWS",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit supporting or contradicting evidence was found; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.6583999999999719,
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built SQL reporting pipelines for 900 users.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.873299999999972,
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "ML engineer",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 0.7174999999999727,
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    }
+  ],
+  "summaries": [
+    {
+      "pipeline": "rules",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.125,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 0.7174999999999727,
+      "p95LatencyMs": 6.522600000000011,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          15,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 9,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 4,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "llm",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    },
+    {
+      "pipeline": "hybrid",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    }
+  ]
+}

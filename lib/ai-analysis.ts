@@ -54,13 +54,13 @@ function extractJson(raw: string): unknown {
   return JSON.parse(candidate);
 }
 
-export async function analyzeWithOllama(jobDescription: string, resumeText: string, weights: ScoringWeights): Promise<{ draft: AiAnalysisDraft; model: string } | null> {
+export async function analyzeWithOllama(jobDescription: string, resumeText: string, weights: ScoringWeights, options: { model?: string; seed?: number; temperature?: number; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<{ draft: AiAnalysisDraft; model: string } | null> {
   if (process.env.ENABLE_LOCAL_AI === "false" || process.env.ENABLE_LOCAL_AI_ANALYSIS === "false") return null;
   if (process.env.NODE_ENV === "test" || process.env.VITEST) return null;
 
   const baseUrl = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
-  const model = process.env.OLLAMA_ANALYSIS_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
-  const timeoutMs = Number(process.env.OLLAMA_ANALYSIS_TIMEOUT_MS ?? 45_000);
+  const model = options.model ?? process.env.OLLAMA_ANALYSIS_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
+  const timeoutMs = options.timeoutMs ?? Number(process.env.OLLAMA_ANALYSIS_TIMEOUT_MS ?? 45_000);
   const prompt = `You are an evidence extraction assistant for a human reviewer. Analyze the job description and resume below.
 
 Your output must be JSON only with exactly these keys:
@@ -102,8 +102,8 @@ Return JSON matching this shape:
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false, format: ollamaFormat, think: false, options: { temperature: 0.1, num_predict: 1200 } }),
-      signal: AbortSignal.timeout(Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 45_000)
+      body: JSON.stringify({ model, prompt, stream: false, format: ollamaFormat, think: false, options: { temperature: options.temperature ?? 0.1, seed: options.seed, num_predict: 1200 } }),
+      signal: AbortSignal.any([AbortSignal.timeout(Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 45_000), ...(options.signal ? [options.signal] : [])])
     });
     if (!response.ok) throw new Error(`Ollama returned ${response.status}`);
     const payload = await response.json() as { response?: string; thinking?: string };

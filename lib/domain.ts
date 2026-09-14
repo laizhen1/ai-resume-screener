@@ -46,5 +46,6 @@ export type EvaluationRunRecord = {
   engineVersion: string;
   datasetSize: number;
   metrics: Record<string, number>;
+  report?: import("./experiments/types").ExperimentReport;
   createdAt: string;
 };

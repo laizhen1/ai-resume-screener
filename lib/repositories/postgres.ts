@@ -65,12 +65,12 @@ export class PostgresRepository implements WorkspaceRepository {
   }
   async saveEvaluation(input: Omit<EvaluationRunRecord, "id" | "createdAt">) {
     const row = (await this.pool.query(
-      "INSERT INTO evaluation_runs(id,engine_version,dataset_size,metrics) VALUES($1,$2,$3,$4) RETURNING *",
-      [randomUUID(), input.engineVersion, input.datasetSize, JSON.stringify(input.metrics)]
+      "INSERT INTO evaluation_runs(id,engine_version,dataset_size,metrics,report) VALUES($1,$2,$3,$4,$5) RETURNING *",
+      [randomUUID(), input.engineVersion, input.datasetSize, JSON.stringify(input.metrics), JSON.stringify(input.report ?? null)]
     )).rows[0];
-    return { id: row.id, engineVersion: row.engine_version, datasetSize: row.dataset_size, metrics: row.metrics, createdAt: row.created_at.toISOString() };
+    return { id: row.id, engineVersion: row.engine_version, datasetSize: row.dataset_size, metrics: row.metrics, report: row.report ?? undefined, createdAt: row.created_at.toISOString() };
   }
   async listEvaluations() {
-    return (await this.pool.query("SELECT * FROM evaluation_runs ORDER BY created_at DESC")).rows.map((row) => ({ id: row.id, engineVersion: row.engine_version, datasetSize: row.dataset_size, metrics: row.metrics, createdAt: row.created_at.toISOString() }));
+    return (await this.pool.query("SELECT * FROM evaluation_runs ORDER BY created_at DESC")).rows.map((row) => ({ id: row.id, engineVersion: row.engine_version, datasetSize: row.dataset_size, metrics: row.metrics, report: row.report ?? undefined, createdAt: row.created_at.toISOString() }));
   }
 }
