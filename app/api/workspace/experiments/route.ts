@@ -8,6 +8,7 @@ export const runtime = "nodejs";
 const input = z.object({
   split: z.enum(["development", "heldout"]),
   includeModel: z.boolean(),
+  includeTransformers: z.boolean().optional(),
   model: z.string().trim().min(1).max(120).regex(/^[a-zA-Z0-9_.:/-]+$/).optional()
 }).strict();
 

@@ -33,7 +33,7 @@ export function summarize(pipeline: Pipeline, all: CaseResult[]): PipelineMetric
   return {
     pipeline, status: !evaluated.length ? rows.some(row => row.provider === "unavailable") ? "unavailable" : "not-run" : evaluated.length === rows.length && !evaluated.some(row => row.provider === "fallback") ? "complete" : "partial",
     evaluatedCases: evaluated.length, totalCases: rows.length,
-    modelCases: evaluated.filter(row => row.provider === "ollama").length,
+    modelCases: evaluated.filter(row => row.provider === "ollama" || row.provider === "transformers").length,
     fallbackCases: evaluated.filter(row => row.provider === "fallback").length,
     accuracy, macroF1: n ? f1s.reduce((a, b) => a + b, 0) / 4 : null,
     supportPrecision: fraction(supportTP, supported.length),

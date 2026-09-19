@@ -1,7 +1,7 @@
 import type { EvidenceVerdict } from "../types";
 
 export const VERDICTS = ["supported", "partial", "contradicted", "unknown"] as const;
-export const PIPELINES = ["rules", "llm", "hybrid"] as const;
+export const PIPELINES = ["rules", "llm", "hybrid", "dense-nli", "reranked-nli", "rules-transformer"] as const;
 export type Pipeline = typeof PIPELINES[number];
 export type Split = "development" | "heldout";
 export type Example = {
@@ -14,8 +14,10 @@ export type Prediction = {
 };
 export type CaseResult = {
   caseId: string; pipeline: Pipeline; challenge: string;
-  provider: "rules" | "ollama" | "fallback" | "unavailable" | "not-run";
+  provider: "rules" | "ollama" | "transformers" | "fallback" | "unavailable" | "not-run";
   latencyMs: number; predictions: Prediction[]; error?: string;
+  transformerMetadata?: import("../transformers").TransformerMetadata;
+  transformerEvidence?: import("../transformers").TransformerAssessment[];
 };
 export type PipelineMetrics = {
   pipeline: Pipeline; status: "complete" | "partial" | "not-run" | "unavailable";
@@ -29,7 +31,7 @@ export type PipelineMetrics = {
 export type ExperimentReport = {
   version: "comparison-v1"; createdAt: string; engineVersion: string; taxonomyVersion: string;
   dataset: { version: string; split: Split; hash: string; uniqueCases: number; executions: number; annotationStatus: string };
-  configuration: { includeModel: boolean; model: string; promptVersion: string; seed: number; temperature: number; timeoutMs: number; node: string; platform: string };
+  configuration: { includeModel: boolean; includeTransformers?: boolean; model: string; promptVersion: string; seed: number; temperature: number; timeoutMs: number; node: string; platform: string };
   examples: Example[]; results: CaseResult[]; summaries: PipelineMetrics[];
 };
 export type Feedback = {

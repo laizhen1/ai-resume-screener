@@ -3,6 +3,8 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import type { AnalysisResult } from "@/lib/types";
+import { TransformerEvidencePanel } from "./components/transformer-evidence";
+import { ResumeQa } from "./components/resume-qa";
 
 const SAMPLE_JOB = `We are seeking a Software Engineer to build reliable customer-facing products. The role requires TypeScript, React, Next.js, Node.js, PostgreSQL, Docker, testing and GitHub Actions. You will design REST APIs, improve application performance, collaborate with an agile team and communicate technical trade-offs.`;
 
@@ -16,6 +18,7 @@ export default function Home() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState<"generate" | "analyze" | null>(null);
   const [error, setError] = useState("");
+  const [analysisSource, setAnalysisSource] = useState<{ text: string; file: File | null }>({ text: "", file: null });
 
   async function generateResume() {
     setLoading("generate"); setError(""); setResult(null);
@@ -43,6 +46,7 @@ export default function Home() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResult(data.analysis);
+      setAnalysisSource({ text: resumeText, file });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Analysis failed.");
     } finally { setLoading(null); }
@@ -109,6 +113,8 @@ export default function Home() {
           {result.aiReview.verificationPoints.length ? <div><strong>Verify with the reviewer</strong><ul>{result.aiReview.verificationPoints.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
           {result.aiReview.suggestedQuestions.length ? <div><strong>Suggested neutral questions</strong><ul>{result.aiReview.suggestedQuestions.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
         </section>}
+        <TransformerEvidencePanel result={result.transformerEvidence} />
+        {result.transformerEvidence && <ResumeQa resumeText={analysisSource.text} file={analysisSource.file} />}
         {result.requirementAssessments?.length ? <section className="requirement-section">
           <div className="section-copy"><h3>Requirement evidence</h3><p>Confidence describes the rule judgment, not a probability that a person is qualified.</p></div>
           <div className="requirement-grid">{result.requirementAssessments.map((assessment) => <article className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}>

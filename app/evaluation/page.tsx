@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { EvaluationRunRecord } from "@/lib/domain";
 import { VERDICTS, type Feedback, type Pipeline, type Split } from "@/lib/experiments/types";
 
-const names: Record<Pipeline, string> = { rules: "Rules baseline", llm: "LLM only", hybrid: "Hybrid - verified evidence" };
+const names: Record<Pipeline, string> = { rules: "Rules baseline", llm: "LLM only", hybrid: "Hybrid - verified evidence", "dense-nli": "Dense retrieval + DeBERTa", "reranked-nli": "Reranker + DeBERTa", "rules-transformer": "Rules + transformers" };
 const percent = (value: number | null) => value === null ? "N/A" : `${(value * 100).toFixed(1)}%`;
 const latency = (value: number | null) => value === null ? "N/A" : value >= 1000 ? `${(value / 1000).toFixed(2)} s` : `${value.toFixed(1)} ms`;
 function download(name: string, data: unknown) {
@@ -23,6 +23,7 @@ export default function EvaluationPage() {
   const [runId, setRunId] = useState("");
   const [split, setSplit] = useState<Split>("heldout");
   const [includeModel, setIncludeModel] = useState(false);
+  const [includeTransformers, setIncludeTransformers] = useState(false);
   const [model, setModel] = useState("");
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState({ completed: 0, total: 24 });
@@ -66,7 +67,7 @@ export default function EvaluationPage() {
     try {
       const response = await fetch("/api/workspace/experiments", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ split, includeModel, ...(model.trim() ? { model: model.trim() } : {}) }),
+        body: JSON.stringify({ split, includeModel, includeTransformers, ...(model.trim() ? { model: model.trim() } : {}) }),
         signal: controller.current.signal
       });
       if (!response.ok) { const data = await response.json(); throw new Error(data.error); }
@@ -114,11 +115,13 @@ export default function EvaluationPage() {
         <div className="experiment-controls">
           <label>Dataset split<select value={split} disabled={busy} onChange={event => setSplit(event.target.value as Split)}><option value="heldout">Held-out - 24 unique cases</option><option value="development">Development - 10 unique cases</option></select></label>
           <label className="checkbox-label"><input type="checkbox" checked={includeModel} disabled={busy} onChange={event => setIncludeModel(event.target.checked)} />Include local LLM + hybrid</label>
+          <label className="checkbox-label"><input type="checkbox" checked={includeTransformers} disabled={busy} onChange={event => setIncludeTransformers(event.target.checked)} />Include transformers + reranking</label>
           {includeModel && <label>Ollama model<input placeholder="Use server configuration" value={model} disabled={busy} onChange={event => setModel(event.target.value)} /></label>}
           <button className="primary" disabled={busy} onClick={() => void run()}>{busy ? "Running experiment..." : "Run comparison"}</button>
           {busy && <button className="secondary" onClick={() => controller.current?.abort()}>Cancel</button>}
         </div>
         <p className="experiment-note">{includeModel ? "Uses your local Ollama model. Each example may take up to two minutes; progress appears after each example. Failed model calls are disclosed and stop further model requests for this run." : "Rules run locally without a model. Enable the comparison to measure LLM and hybrid results."}</p>
+        {includeTransformers && <p className="experiment-note">Requires the local Python model service. Compares dense retrieval with reranking, then combines transformer judgments with rules. Service failures are reported as unavailable, never as model predictions.</p>}
         {busy && <div role="status"><progress max={progress.total} value={progress.completed} aria-label="Experiment progress" /><span> {progress.completed} / {progress.total} unique examples</span></div>}
       </section>
       {error && <p className="wide-error" role="alert">{error}</p>}
@@ -126,6 +129,7 @@ export default function EvaluationPage() {
         <section className="content-card experiment-metadata">
           <div><p className="eyebrow">{report.dataset.split === "heldout" ? "HELD-OUT EVALUATION" : "DEVELOPMENT EVALUATION"}</p><h2>{report.dataset.uniqueCases} unique examples - {report.dataset.executions} executions</h2><p>{report.dataset.annotationStatus}</p></div>
           <button className="secondary" onClick={() => download(`experiment-${active.id}.json`, report)}>Export run JSON</button>
+          {report.configuration.includeTransformers && <p>Transformer comparison requested. Each completed case records model names, revisions, package versions, thresholds and retrieved evidence in the JSON export.</p>}
           <dl><div><dt>Dataset</dt><dd>{report.dataset.version}</dd></div><div><dt>Model</dt><dd>{report.configuration.includeModel ? report.configuration.model : "Not requested"}</dd></div><div><dt>Engine / prompt</dt><dd>{report.engineVersion} / {report.configuration.promptVersion}</dd></div><div><dt>Dataset SHA-256</dt><dd className="hash-value">{report.dataset.hash}</dd></div></dl>
         </section>
         <section className="content-card">
@@ -134,6 +138,7 @@ export default function EvaluationPage() {
             {report.summaries.map(item => <tr key={item.pipeline}><th scope="row"><button className="text-button" aria-pressed={pipeline === item.pipeline} onClick={() => { setPipeline(item.pipeline); chooseCase(""); }}>{names[item.pipeline]}</button><small>{item.status} - {item.modelCases} model / {item.fallbackCases} fallback</small></th><td>{item.evaluatedCases}/{item.totalCases}</td><td>{percent(item.accuracy)}{item.accuracyInterval && <small>95% CI {percent(item.accuracyInterval[0])} to {percent(item.accuracyInterval[1])}</small>}</td><td>{percent(item.macroF1)}</td><td>{percent(item.supportPrecision)}</td><td>{percent(item.supportRecall)}</td><td>{latency(item.p95LatencyMs)}</td></tr>)}
           </tbody></table></div>
           <p className="experiment-note">LLM and hybrid share one generation per example to isolate validation. Hybrid latency includes that generation plus rules and validation; it excludes optional review and embedding enrichment. Confidence intervals are approximate Wilson intervals for one-requirement cases, not evidence of real-world hiring validity.</p>
+          {report.configuration.includeTransformers && <p className="experiment-note">Transformer latency includes rule extraction plus service-reported retrieval and classification time, excluding transport and model startup. Both retrieval variants classify three passages per requirement. Rules + transformers preserves rule-detected partial/contradicted evidence and abstains on conflicting supported judgments. These measurements use a different timing boundary from LLM requests.</p>}
         </section>
         {summary && <section className="experiment-grid">
           <article className="content-card"><h2>{names[pipeline]}</h2><dl className="quality-list"><div><dt>Abstention rate</dt><dd>{percent(summary.abstentionRate)}</dd></div><div><dt>Incorrect supported verdicts / all supported</dt><dd>{percent(summary.unsupportedSupportRate)}</dd></div><div><dt>Invalid or missing quotes / resolved verdicts</dt><dd>{percent(summary.invalidCitationRate)}</dd></div><div><dt>Requirements not extracted</dt><dd>{percent(summary.missingRequirementRate)}</dd></div><div><dt>Median latency</dt><dd>{latency(summary.p50LatencyMs)}</dd></div></dl><p className="experiment-note">An exact quote can still be irrelevant. Citation validity checks source presence; expected labels measure whether the judgment is correct. N/A means no denominator or no evaluated cases.</p></article>
@@ -148,6 +153,7 @@ export default function EvaluationPage() {
           <p><strong>Job requirement:</strong> {example.job}</p>
           {selected.predictions.length > 1 && <label>Requirement<select value={prediction?.skill ?? ""} onChange={event => { setSkill(event.target.value); setReason(""); setNotice(""); }}>{selected.predictions.map(p => <option key={p.skill}>{p.skill}</option>)}</select></label>}
           <div className="experiment-grid"><div><h3>Original resume</h3><Highlight text={example.resume} quote={prediction?.quote ?? null} /></div><div><h3>Model judgment</h3>{prediction ? <><p><strong>{prediction.skill}</strong>: {prediction.actual} / expected {prediction.expected}</p><p>{prediction.reason}</p><blockquote>{prediction.quote ?? "No evidence quote provided."}</blockquote><p>{prediction.citationValid ? "Exact quote verified in the source." : "No exact source citation verified."}</p></> : <p>{selected.error ?? "This pipeline was not run."}</p>}</div></div>
+          {selected.transformerMetadata && <details><summary>Transformer model configuration and retrieved passages</summary><pre className="source-text">{JSON.stringify({ metadata: selected.transformerMetadata, evidence: selected.transformerEvidence?.filter(item => item.skill === prediction?.skill) }, null, 2)}</pre></details>}
           {prediction && <form onSubmit={event => { event.preventDefault(); void saveFeedback(); }}>
             <h3>Record a reviewer correction</h3><p>Corrections enter a development-candidate review queue. They do not rewrite this experiment or its frozen labels.</p>
             <label>Reviewer verdict<select value={verdict} disabled={saving} onChange={event => setVerdict(event.target.value as typeof verdict)}>{VERDICTS.map(v => <option key={v}>{v}</option>)}</select></label>
@@ -158,7 +164,7 @@ export default function EvaluationPage() {
         </section>}
         <section className="content-card"><div className="experiment-heading"><h2>Reviewer feedback - {feedback.length}</h2><button className="secondary" disabled={!feedback.length} onClick={() => download(`development-candidates-${active.id}.json`, { status: "pending-independent-adjudication", approvedForTraining: false, sourceDataset: report.dataset, policy: "Retire this held-out version before using its examples for training or prompt tuning.", candidates: feedback.map(item => ({ ...item, example: report.examples.find(e => e.id === item.caseId) })) })}>Export review candidates</button></div><p className="experiment-note">Human adjudication is required before promotion. Using held-out examples for development retires that split for future unbiased comparisons.</p>{feedback.map(item => <article className="feedback-item" key={item.id}><strong>{item.caseId} / {item.skill} to {item.verdict}</strong><p>{item.reason}</p><small>{item.actor} / {new Date(item.createdAt).toLocaleString()} / {names[item.pipeline]}</small></article>)}</section>
       </> : <section className="content-card experiment-empty"><h2>Establish your first baseline</h2><p>Run 24 unique, provisional held-out examples across delivery, learning, negation, ambiguous language, and adversarial instructions. Start with rules, then enable your local model to compare its strengths and failures.</p><p>Development data is for iteration. Held-out data is for a frozen comparison; do not tune the engine on its results.</p></section>}
-      <section className="content-card"><h2>Experiment history</h2>{runs.length ? <div className="table-scroll"><table><thead><tr><th>Created</th><th>Split</th><th>Model</th><th>Unique cases</th><th>Report</th></tr></thead><tbody>{runs.map(run => <tr key={run.id}><td>{new Date(run.createdAt).toLocaleString()}</td><td>{run.report?.dataset.split}</td><td>{run.report?.configuration.includeModel ? run.report.configuration.model : "Rules only"}</td><td>{run.datasetSize}</td><td><button className="secondary" disabled={run.id === active?.id} onClick={() => { setRunId(run.id); chooseCase(""); setFeedback([]); }}>View run</button></td></tr>)}</tbody></table></div> : <p>No saved experiments yet.</p>}</section>
+      <section className="content-card"><h2>Experiment history</h2>{runs.length ? <div className="table-scroll"><table><thead><tr><th>Created</th><th>Split</th><th>Model</th><th>Unique cases</th><th>Report</th></tr></thead><tbody>{runs.map(run => <tr key={run.id}><td>{new Date(run.createdAt).toLocaleString()}</td><td>{run.report?.dataset.split}</td><td>{[run.report?.configuration.includeModel ? run.report.configuration.model : "", run.report?.configuration.includeTransformers ? "Transformers" : ""].filter(Boolean).join(" + ") || "Rules only"}</td><td>{run.datasetSize}</td><td><button className="secondary" disabled={run.id === active?.id} onClick={() => { setRunId(run.id); chooseCase(""); setFeedback([]); }}>View run</button></td></tr>)}</tbody></table></div> : <p>No saved experiments yet.</p>}</section>
     </div>
   </main>;
 }

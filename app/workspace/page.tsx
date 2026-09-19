@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import type { AuditEvent, Candidate, Job, ReviewStatus } from "@/lib/domain";
+import { TransformerEvidencePanel } from "../components/transformer-evidence";
+import { ResumeQa } from "../components/resume-qa";
 
 const DEFAULT_DESCRIPTION = "We are seeking a Software Engineer to build reliable customer-facing products. The role requires TypeScript, React, Next.js, Node.js, PostgreSQL, Docker, testing, REST APIs and GitHub Actions.";
 
@@ -171,6 +173,8 @@ export default function WorkspacePage() {
               {candidate.analysis.reliability && <div className={`reliability-banner compact ${candidate.analysis.reliability.status}`}><div><span>Evidence coverage</span><strong>{Math.round(candidate.analysis.reliability.evidenceCoverage * 100)}%</strong></div><div><span>Extraction</span><strong>{candidate.analysis.reliability.extractionQuality}</strong></div><div><span>Review state</span><strong>{candidate.analysis.reliability.status.replaceAll("-", " ")}</strong></div></div>}
               {candidate.analysis.requirementAssessments?.length ? <div className="requirement-grid compact">{candidate.analysis.requirementAssessments.map((assessment) => <div className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}><div><strong>{assessment.skill}</strong><span>{assessment.importance}</span></div><p className="verdict-label">{assessment.verdict} · {Math.round(assessment.confidence * 100)}%</p><p>{assessment.reason}</p>{assessment.evidence && <blockquote>{assessment.evidence.text}</blockquote>}</div>)}</div> : null}
               <div className="evidence-grid">{candidate.analysis.criteria.map((criterion) => <div key={criterion.criterion}><strong>{criterion.criterion} · {criterion.score}</strong><p>{criterion.explanation}</p>{criterion.evidence.map((line) => <blockquote key={line}>{line}</blockquote>)}</div>)}</div>
+              <TransformerEvidencePanel result={candidate.analysis.transformerEvidence} />
+              {candidate.analysis.transformerEvidence && <ResumeQa candidateId={candidate.id} />}
               {candidate.analysis.semanticMatches?.length ? <div className="semantic-note"><strong>Advisory semantic matches</strong>{candidate.analysis.semanticMatches.map((match) => <p key={match.skill}>{match.skill} · {Math.round(match.similarity * 100)}% — “{match.evidence.text}”</p>)}</div> : null}
               <label>Reviewer notes<textarea defaultValue={candidate.notes} rows={3} onBlur={(event) => { if (event.target.value !== candidate.notes) void updateCandidate(candidate, { notes: event.target.value }); }} /></label>
               <button className="danger-button" onClick={() => void deleteCandidate(candidate)} disabled={busy === candidate.id}>Permanently delete candidate</button>

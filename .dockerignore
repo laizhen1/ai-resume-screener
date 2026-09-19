@@ -4,3 +4,7 @@ node_modules
 coverage
 .env*
 *.log
+.venv
+**/.venv
+**/__pycache__
+.model-cache

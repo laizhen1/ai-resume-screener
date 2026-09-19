@@ -89,3 +89,9 @@ Corrections are append-only audit events with reviewer identity, original predic
 - Record a correction; export the immutable report and proposed development data.
 
 Describe what the measurements actually demonstrate. Fill resume bullets with measured dataset sizes and results from exported reports; do not invent improvements or claim human-reviewed labels.
+
+## Additional transformer comparisons
+
+The comparison lab now supports `dense-nli`, `reranked-nli` and `rules-transformer` alongside the original three pipelines. Enable **Include transformers + reranking** in the UI or pass `--with-transformers` to the CLI. The new variants share frozen source documents with the baseline and receive no expected labels. Failed service requests are unavailable, not abstentions or rule predictions. Historical reports remain readable.
+
+See [transformer experiments](transformer-experiments.md) for the exact verdict mapping, evidence-budget ablation, model provenance and distinct latency boundaries, and [model-service README](../services/model-service/README.md) for setup.

@@ -12,6 +12,9 @@ It is a learning and decision-support system, not an automated hiring system. Us
 - Explicit abstention, extraction-quality signals and evidence-coverage reporting
 - Ollama-powered requirement extraction, evidence judgments, scoring explanations and interview prompts with a deterministic offline fallback
 - Optional Ollama generation and embedding adapters with deterministic offline fallbacks
+- Sentence Transformers retrieval, cross-encoder reranking and DeBERTa NLI evidence review through an optional local Python service
+- Cited résumé Q&A and configurable fine-tuned BERT/DistilBERT entity-extraction inference
+- Six-way evaluation of rules, LLM, verified LLM, dense NLI, reranked NLI and rules/transformer outputs
 - Job workspaces, batches of up to ten resumes, review states, notes and comparisons
 - In-memory private demo mode or opt-in PostgreSQL/pgvector persistence
 - Redis-backed background analysis with an inline local fallback
@@ -59,7 +62,36 @@ PNG and JPEG OCR runs locally through Tesseract.js. Text PDFs are parsed locally
 
 ## AI/ML experiment lab
 
-Open `/evaluation` to compare rules, LLM-only judgments and evidence-validated hybrid outputs on the same examples.
+### Local transformer stack
+
+The optional model service adds a measurable transformer pipeline:
+
+```text
+Exact résumé passages → Sentence Transformers → cross-encoder → DeBERTa NLI
+                                      ↓                              ↓
+                            cited Q&A with Ollama          independent evidence review
+```
+
+Default checkpoints are `sentence-transformers/all-MiniLM-L6-v2`, `cross-encoder/ms-marco-MiniLM-L-6-v2`, and `MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli`. Transformer judgments appear alongside the existing analysis and do not change the main score. An optional `NER_MODEL` enables a fine-tuned token-classification checkpoint; this repository does not include a newly trained résumé extractor.
+
+Start the full stack with the model-service override:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.models.yml up --build
+```
+
+The first start downloads model weights; subsequent starts reuse the model cache. Ollama remains a separate local service and is needed for generated Q&A answers, not transformer classification. For a Python-only model service alongside `npm run dev`, see [model-service setup, configuration and API](services/model-service/README.md).
+
+```bash
+npm run compare -- --split development --with-transformers --output reports/development-transformers.json
+npm run compare -- --split heldout --with-transformers --with-model --model qwen3:4b --output reports/all-models.json
+```
+
+On `/evaluation`, enable **Include transformers + reranking** to compare dense retrieval, reranking and the rules/transformer hybrid. Model failures stay visible as unavailable results. Exports include model names, resolved revisions, runtime versions, raw NLI probabilities and source passages. See [transformer methodology and limitations](docs/transformer-experiments.md). Actual CPU runs showed pure NLI below the rules baseline. Rules + transformers matched rules on development (24/24) and got 21/24 provisional held-out judgments correct versus rules' 20/24. This is one additional correct judgment on a small, provisionally labeled set, not established real-world improvement. See [complete measured results](reports/README.md); transformer results remain advisory.
+
+### Existing baseline and LLM comparisons
+
+Open `/evaluation` to compare rules, LLM-only judgments, evidence-validated hybrid outputs and the optional transformer variants on the same examples.
 
 - **Separate datasets:** 10 unique development documents and 24 unique provisional held-out documents, identified by SHA-256 fingerprints.
 - **Quality and performance:** confusion matrices, macro F1, support precision/recall, abstention, citation validity, error categories and p50/p95 latency.
@@ -107,7 +139,7 @@ The version 3 pipeline is evidence-first and AI-assisted when Ollama is availabl
 5. Ask Ollama to score the configured criteria and explain its evidence; the weighted overall score is calculated from those validated criterion scores. If Ollama is unavailable or returns unverifiable JSON, the versioned deterministic engine is used.
 6. Optionally retrieve advisory semantic candidates with a local Ollama embedding model. Semantic candidates never alter the score.
 
-The displayed confidence is the strength of the contextual rule judgment—not a probability that a candidate is qualified. See [evidence intelligence](docs/evidence-intelligence.md), [scoring](docs/scoring-method.md) and [evaluation](docs/evaluation.md).
+The displayed rule confidence is the strength of the contextual rule judgment—not a probability that a candidate is qualified. Transformer panels display uncalibrated model probabilities separately. See [evidence intelligence](docs/evidence-intelligence.md), [scoring](docs/scoring-method.md), [evaluation](docs/evaluation.md) and [transformer experiments](docs/transformer-experiments.md).
 
 ## Architecture
 

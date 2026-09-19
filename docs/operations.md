@@ -25,3 +25,11 @@ PNG and JPEG OCR downloads Tesseract language assets on first use. Pin or mirror
 ## Backup and deletion
 
 Database backups are outside the application's deletion boundary. Document backup schedules and restore tests, limit operators, encrypt backups and ensure retention promises include backup expiration.
+
+## Optional model service operations
+
+Use `docker compose -f docker-compose.yml -f docker-compose.models.yml up --build` to include local transformer inference, or follow the [Python setup](../services/model-service/README.md). Wait for `/health` to report ready; model downloads occur during first startup. The override enables the service URL on both web and worker. Keep a single inference worker unless memory capacity has been measured. Busy requests return 503 and must be retried.
+
+For an existing standalone deployment, set `ENABLE_TRANSFORMER_ANALYSIS=true`, `MODEL_SERVICE_URL`, and optionally matching `MODEL_SERVICE_TOKEN` values on the app/worker and model service. Python service settings must be exported in its own shell; Next.js `.env.local` does not configure a separate Python process. The comparison CLI likewise reads exported environment variables. Keep port 8000 private. Cache model weights before enabling `HF_HUB_OFFLINE=1` for disconnected inference.
+
+Model failure preserves existing analysis and displays unavailable transformer evidence. Evaluation never substitutes rules as transformer measurements. Q&A needs both the model service and Ollama; it returns an unavailable response if retrieval, generation or citation validation fails.

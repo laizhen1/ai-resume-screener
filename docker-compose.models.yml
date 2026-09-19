@@ -1,0 +1,41 @@
+# Opt in with: docker compose -f docker-compose.yml -f docker-compose.models.yml up --build
+services:
+  model-service:
+    build: ./services/model-service
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      MODEL_DEVICE: cpu
+      MODEL_SERVICE_TOKEN: ${MODEL_SERVICE_TOKEN:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-sentence-transformers/all-MiniLM-L6-v2}
+      RERANKER_MODEL: ${RERANKER_MODEL:-cross-encoder/ms-marco-MiniLM-L-6-v2}
+      NLI_MODEL: ${NLI_MODEL:-MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli}
+      NER_MODEL: ${NER_MODEL:-}
+    volumes:
+      - model_cache:/models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,urllib.request; r=urllib.request.Request('http://127.0.0.1:8000/health', headers={'Authorization':'Bearer '+os.getenv('MODEL_SERVICE_TOKEN','')}); urllib.request.urlopen(r, timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 180s
+  web:
+    environment:
+      ENABLE_TRANSFORMER_ANALYSIS: "true"
+      MODEL_SERVICE_URL: http://model-service:8000
+      MODEL_SERVICE_TOKEN: ${MODEL_SERVICE_TOKEN:-}
+      MODEL_SERVICE_TIMEOUT_MS: "120000"
+    depends_on:
+      model-service:
+        condition: service_healthy
+  worker:
+    environment:
+      ENABLE_TRANSFORMER_ANALYSIS: "true"
+      MODEL_SERVICE_URL: http://model-service:8000
+      MODEL_SERVICE_TOKEN: ${MODEL_SERVICE_TOKEN:-}
+      MODEL_SERVICE_TIMEOUT_MS: "120000"
+    depends_on:
+      model-service:
+        condition: service_healthy
+volumes:
+  model_cache:

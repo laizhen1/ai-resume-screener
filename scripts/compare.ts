@@ -8,6 +8,7 @@ async function main() {
     split: { type: "string", default: "development" },
     model: { type: "string" },
     "with-model": { type: "boolean", default: false },
+    "with-transformers": { type: "boolean", default: false },
     output: { type: "string" },
     "min-accuracy": { type: "string" }
   } });
@@ -15,14 +16,14 @@ async function main() {
   const minimum = values["min-accuracy"] === undefined ? undefined : Number(values["min-accuracy"]);
   if (minimum !== undefined && (!Number.isFinite(minimum) || minimum < 0 || minimum > 1)) throw new Error("--min-accuracy must be between 0 and 1.");
   if (minimum !== undefined && values.split !== "development") throw new Error("Release gates use development data. Do not optimize against held-out scores.");
-  const report = await runComparison({ split: values.split, includeModel: values["with-model"] || Boolean(values.model), model: values.model }, (done, total) => console.error(`Evaluated ${done}/${total} unique cases`));
+  const report = await runComparison({ split: values.split, includeModel: values["with-model"] || Boolean(values.model), includeTransformers: values["with-transformers"], model: values.model }, (done, total) => console.error(`Evaluated ${done}/${total} unique cases`));
   if (values.output) {
     const target = resolve(values.output); await mkdir(dirname(target), { recursive: true }); await writeFile(target, JSON.stringify(report, null, 2) + "\n");
     console.error(`Saved report: ${target}`);
   }
   console.log(JSON.stringify({ dataset: report.dataset, configuration: report.configuration, summaries: report.summaries }, null, 2));
   if (minimum !== undefined && (report.summaries[0].accuracy ?? 0) < minimum) process.exitCode = 1;
-  if (report.configuration.includeModel && report.summaries.some(summary => summary.status !== "complete")) {
+  if (report.summaries.some(summary => summary.status !== "complete" && ((report.configuration.includeModel && ["llm", "hybrid"].includes(summary.pipeline)) || (report.configuration.includeTransformers && ["dense-nli", "reranked-nli", "rules-transformer"].includes(summary.pipeline))))) {
     console.error("Requested model comparison is incomplete; inspect unavailable and fallback counts."); process.exitCode = 2;
   }
 }

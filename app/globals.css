@@ -381,3 +381,9 @@ th, td { padding: 13px 11px; }
 .feedback-item{padding:16px 0;border-top:1px solid var(--line)}.experiment-body progress{width:min(360px,100%);accent-color:var(--green);margin-top:10px}.experiment-empty{padding:32px}
 @media(max-width:850px){.experiment-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.experiment-body{padding:0 16px 36px}.experiment-metadata dl{grid-template-columns:1fr}.experiment-controls{align-items:stretch;flex-direction:column}.experiment-controls label{flex-basis:auto}}
+/* Source-linked transformer evidence and question answering. */
+.transformer-panel, .resume-qa { overflow-wrap: anywhere; }
+.transformer-panel details { margin-top: 0.8rem; }
+.transformer-panel summary { cursor: pointer; font-weight: 600; }
+.transformer-panel small, .resume-qa blockquote small { display: block; margin-top: 0.4rem; }
+.resume-qa > input { width: 100%; margin: 0.5rem 0 0.8rem; }

@@ -5,6 +5,7 @@ import { SKILL_ALIASES, TAXONOMY_VERSION } from "../skills";
 import { getDataset } from "./dataset";
 import { summarize } from "./metrics";
 import { PIPELINES, type CaseResult, type Example, type ExperimentReport, type Prediction, type Split } from "./types";
+import { analyzeWithTransformers, combineTransformerEvidence } from "../transformers";
 
 type ModelCall = typeof analyzeWithOllama;
 function align(example: Example, assessments: { skill: string; verdict: Prediction["actual"]; reason: string; quote: string | null }[]): Prediction[] {
@@ -24,9 +25,10 @@ const mapped = (result: ReturnType<typeof analyzeResume>) => (result.requirement
 }));
 
 export async function runComparison(
-  options: { split: Split; includeModel: boolean; model?: string; signal?: AbortSignal },
+  options: { split: Split; includeModel: boolean; includeTransformers?: boolean; model?: string; signal?: AbortSignal },
   onProgress?: (completed: number, total: number) => void,
-  modelCall: ModelCall = analyzeWithOllama
+  modelCall: ModelCall = analyzeWithOllama,
+  transformerCall: typeof analyzeWithTransformers = analyzeWithTransformers
 ): Promise<ExperimentReport> {
   const { examples, metadata } = getDataset(options.split);
   const model = options.model ?? process.env.OLLAMA_ANALYSIS_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
@@ -34,6 +36,7 @@ export async function runComparison(
   const timeoutMs = Number.isFinite(configuredTimeout) && configuredTimeout > 0 ? Math.min(configuredTimeout, 120_000) : 45_000;
   const results: CaseResult[] = [];
   let modelFailed = false;
+  let transformerFailed = false;
   for (const [index, example] of examples.entries()) {
     options.signal?.throwIfAborted();
     const start = performance.now();
@@ -68,12 +71,35 @@ export async function runComparison(
         }
       }
     }
+    const transformerPipelines = ["dense-nli", "reranked-nli", "rules-transformer"] as const;
+    if (!options.includeTransformers) {
+      for (const pipeline of transformerPipelines) results.push({ ...base, pipeline, provider: "not-run", latencyMs: 0, predictions: [] });
+    } else {
+      const transformerStart = performance.now();
+      const output = transformerFailed ? null : await transformerCall(rules.requirementAssessments ?? [], example.resume, { includeBaseline: true, signal: options.signal });
+      options.signal?.throwIfAborted();
+      if (!output || output.status !== "complete") {
+        transformerFailed = true;
+        for (const pipeline of transformerPipelines) results.push({ ...base, pipeline, provider: "unavailable", latencyMs: performance.now() - transformerStart, predictions: [], error: output?.error ?? "Skipped after the transformer service failed earlier in this run." });
+      } else {
+        const hybridStart = performance.now();
+        const combined = combineTransformerEvidence(rules.requirementAssessments ?? [], output.assessments);
+        const hybridMs = performance.now() - hybridStart;
+        for (const pipeline of transformerPipelines) {
+          const assessments = pipeline === "dense-nli" ? output.baseline : pipeline === "reranked-nli" ? output.assessments : combined;
+          results.push({ ...base, pipeline, provider: "transformers", transformerMetadata: output.metadata,
+            transformerEvidence: pipeline === "dense-nli" ? output.baseline : output.assessments,
+            latencyMs: rulesMs + (pipeline === "dense-nli" ? output.timings?.baselineMs ?? 0 : output.timings?.rerankedMs ?? 0) + (pipeline === "rules-transformer" ? hybridMs : 0),
+            predictions: align(example, assessments.map(item => ({ ...item, quote: item.evidence?.text ?? null }))) });
+        }
+      }
+    }
     onProgress?.(index + 1, examples.length);
   }
   return {
     version: "comparison-v1", createdAt: new Date().toISOString(), engineVersion: ENGINE_VERSION, taxonomyVersion: TAXONOMY_VERSION,
     dataset: metadata,
-    configuration: { includeModel: options.includeModel, model, promptVersion: "core-analysis-v1", seed: 42, temperature: 0, timeoutMs, node: process.version, platform: process.platform },
+    configuration: { includeModel: options.includeModel, includeTransformers: options.includeTransformers ?? false, model, promptVersion: "core-analysis-v1", seed: 42, temperature: 0, timeoutMs, node: process.version, platform: process.platform },
     examples, results, summaries: PIPELINES.map(pipeline => summarize(pipeline, results))
   };
 }

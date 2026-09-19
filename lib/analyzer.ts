@@ -5,6 +5,7 @@ import { locateEvidence, parseResume } from "./parser";
 import { assessRequirements, summarizeReliability } from "./evidence-intelligence";
 import { createAiReview } from "./ai-review";
 import { analyzeWithOllama, type AiAnalysisDraft } from "./ai-analysis";
+import { analyzeWithTransformers } from "./transformers";
 
 export const ENGINE_VERSION = "3.0.0";
 
@@ -204,6 +205,9 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
     };
   }
   const addAiReview = async (analysis: AnalysisResult) => {
+    if (process.env.ENABLE_TRANSFORMER_ANALYSIS === "true") {
+      analysis = { ...analysis, transformerEvidence: await analyzeWithTransformers(deterministicResult.requirementAssessments ?? [], resumeText, { includeEntities: true }) };
+    }
     if (analysis.analysisProvider === "ollama") return analysis;
     const aiReview = await createAiReview({
       jobDescription,

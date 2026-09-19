@@ -44,3 +44,11 @@ The analysis boundary is split into extraction, structured parsing, AI-assisted 
 ## Deployment boundary
 
 Docker Compose provides a portfolio-grade single-host deployment. It is not a claim of enterprise multi-tenancy. A public deployment still requires TLS, secret management, database backups, encrypted storage, infrastructure log retention and an external security review.
+
+## Optional transformer service
+
+The Node analyzer can call a local Python FastAPI service for Sentence Transformers retrieval, cross-encoder reranking, DeBERTa NLI and optional token classification. `ENABLE_TRANSFORMER_ANALYSIS=true` adds an independent source-verified evidence panel to both analyzer and workspace results. The original score and requirement assessments remain unchanged. The service receives bounded passage text and requirement skills; model IDs and bearer credentials stay in server configuration.
+
+The evaluation runner explicitly opts into three additional variants with `includeTransformers`. Existing JSON report storage accepts their additive fields. `/api/resume-qa` uses the same retrieval service and local Ollama to return individually cited claims. Stored candidate source is fetched only after authorization; public-demo text and uploads remain stateless.
+
+See [service setup](../services/model-service/README.md) and [transformer methodology](transformer-experiments.md).
