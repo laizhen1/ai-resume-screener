@@ -1,8 +1,9 @@
 """Model-independent orchestration. Scores are experimental, not calibrated confidence."""
 import math
+import re
 from time import perf_counter
 
-VERSION = "transformer-evidence-v1"
+VERSION = "transformer-evidence-v2"
 THRESHOLD = 0.80
 MARGIN = 0.15
 TOP_K = 8
@@ -29,7 +30,7 @@ def decide(candidates):
             supported.append(row)
         elif learning == "entailment":
             partial.append(row)
-        elif delivery == "contradiction":
+        elif delivery == "contradiction" and row.get("mentionsRequirement", True):
             contradicted.append(row)
     if supported and contradicted:
         verdict, reason, chosen = "unknown", "Retrieved passages give conflicting evidence; review their context.", supported[0]
@@ -68,13 +69,18 @@ def analyze(engine, requirements, passages, include_baseline=False):
         # Both variants classify three passages, isolating the selection stage.
         dense = indices[:RERANK_K]
         def classify(selected):
-            chosen_texts = [texts[i] for i in selected]
+            # Resume bullets usually omit their subject. Establish document ownership
+            # without asserting experience or rewriting the original cited passage.
+            chosen_texts = [f"The applicant states in their resume: {texts[i]}" for i in selected]
             delivery = engine.nli(chosen_texts, f"The applicant has experience with {requirement['skill']}.")
             learning = engine.nli(chosen_texts, f"The applicant is learning or has limited exposure to {requirement['skill']}.")
             if len(delivery) != len(selected) or len(learning) != len(selected):
                 raise ValueError("Incomplete NLI response")
             candidates = [{"passageId": passages[i]["id"], "similarity": float(similarities_row[i]),
-                           "rerankScore": float(score_map[i]), "nli": d, "learningNli": l}
+                           "rerankScore": float(score_map[i]), "nli": d, "learningNli": l,
+                           # Silence about a requirement is not a denial of it.
+                           # An alias-only negative may abstain rather than accuse.
+                           "mentionsRequirement": bool(re.search(r"(?<![\w+#])" + re.escape(requirement["skill"]) + r"(?![\w+#])", texts[i], re.IGNORECASE))}
                           for i, d, l in zip(selected, delivery, learning)]
             return {"skill": requirement["skill"], **decide(candidates)}
         if include_baseline:

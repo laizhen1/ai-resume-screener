@@ -1,0 +1,4 @@
+{"id":"train-e0","document_id":"train-e0","group_id":"train-e-source-0","requirement":"python experience is required.","skill":"python","passage":"Implemented Python reconciliation jobs.","label":"supported","challenge":"supported"}
+{"id":"train-e1","document_id":"train-e1","group_id":"train-e-source-1","requirement":"docker experience is required.","skill":"docker","passage":"Practised Docker packaging in a guided workshop.","label":"partial","challenge":"partial"}
+{"id":"train-e2","document_id":"train-e2","group_id":"train-e-source-2","requirement":"terraform experience is required.","skill":"terraform","passage":"I have never worked with Terraform.","label":"contradicted","challenge":"contradicted"}
+{"id":"train-e3","document_id":"train-e3","group_id":"train-e-source-3","requirement":"react experience is required.","skill":"react","passage":"My responsibilities cover invoicing and purchasing.","label":"unknown","challenge":"unknown"}

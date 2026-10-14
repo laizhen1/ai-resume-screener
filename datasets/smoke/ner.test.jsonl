@@ -1,0 +1,3 @@
+{"id":"test-n0","document_id":"test-n0","group_id":"test-n-source-0","text":"Backend engineer applying Java with Kubernetes.","entities":[{"start":0,"end":16,"text":"Backend engineer","label":"JOB_TITLE"},{"start":26,"end":30,"text":"Java","label":"SKILL"},{"start":36,"end":46,"text":"Kubernetes","label":"TOOL"}]}
+{"id":"test-n1","document_id":"test-n1","group_id":"test-n-source-1","text":"Diploma in Computing completed during 2020.","entities":[{"start":0,"end":20,"text":"Diploma in Computing","label":"QUALIFICATION"},{"start":38,"end":42,"text":"2020","label":"DATE"}]}
+{"id":"test-n2","document_id":"test-n2","group_id":"test-n-source-2","text":"Maintained calendars and coordinated appointments.","entities":[]}

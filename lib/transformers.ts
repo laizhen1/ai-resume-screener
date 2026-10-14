@@ -4,23 +4,30 @@ import { parseSections } from "./parser";
 
 const probabilities = z.object({ entailment: z.number().min(0).max(1), neutral: z.number().min(0).max(1), contradiction: z.number().min(0).max(1) })
   .refine(value => Math.abs(value.entailment + value.neutral + value.contradiction - 1) < 0.01);
-const candidateSchema = z.object({ passageId: z.number().int().nonnegative(), similarity: z.number().min(-1).max(1), rerankScore: z.number().finite(), nli: probabilities, learningNli: probabilities });
+const candidateSchema = z.object({ passageId: z.number().int().nonnegative(), similarity: z.number().min(-1).max(1), rerankScore: z.number().finite(), nli: probabilities, learningNli: probabilities, mentionsRequirement: z.boolean().optional() });
 const assessmentSchema = z.object({
   skill: z.string(), verdict: z.enum(["supported", "partial", "contradicted", "unknown"]), reason: z.string().min(1).max(1000),
   passageId: z.number().int().nonnegative().nullable(), candidates: z.array(candidateSchema).max(3)
 });
 const metadataSchema = z.object({
-  version: z.literal("transformer-evidence-v1"),
-  models: z.object({ embedding: z.string(), reranker: z.string(), nli: z.string(), ner: z.string().nullable() }),
+  version: z.enum(["transformer-evidence-v1", "transformer-evidence-v2"]),
+  models: z.object({ embedding: z.string(), reranker: z.string(), nli: z.string(), ner: z.string().nullable(), evidence: z.string().nullable().optional() }),
   revisions: z.record(z.string(), z.string().nullable()), packages: z.record(z.string(), z.string()),
   device: z.string(), threshold: z.number().min(0).max(1), margin: z.number().min(0).max(1), topK: z.number().int().positive(), rerankK: z.number().int().positive()
+});
+const trainedEvidenceSchema = z.object({
+  skill: z.string(), passageId: z.number().int().nonnegative(), verdict: z.enum(["supported", "partial", "contradicted", "unknown"]), abstained: z.boolean(),
+  probabilities: z.object({ supported: z.number().min(0).max(1), partial: z.number().min(0).max(1), contradicted: z.number().min(0).max(1), unknown: z.number().min(0).max(1) })
+    .refine(p => Math.abs(Object.values(p).reduce((a, b) => a + b, 0) - 1) < 0.001)
 });
 const responseSchema = z.object({
   baseline: z.array(assessmentSchema).max(40), reranked: z.array(assessmentSchema).max(40),
   metadata: metadataSchema,
   timings: z.object({ baselineMs: z.number().finite().nonnegative(), rerankedMs: z.number().finite().nonnegative() }),
   entities: z.array(z.object({ passageId: z.number().int().nonnegative(), start: z.number().int().nonnegative(), end: z.number().int().positive(), text: z.string().min(1), label: z.string().min(1), score: z.number().min(0).max(1) })).max(300),
-  entityError: z.string().nullable()
+  entityError: z.string().nullable(),
+  trainedEvidence: z.array(trainedEvidenceSchema).max(120).optional().default([]),
+  trainedEvidenceError: z.string().nullable().optional()
 });
 export type TransformerMetadata = z.infer<typeof metadataSchema>;
 export type TransformerAssessment = RequirementAssessment & { candidates: Array<z.infer<typeof candidateSchema> & { evidence: EvidenceProvenance }> };
@@ -28,6 +35,7 @@ export type TransformerEvidence = {
   status: "complete" | "unavailable"; error?: string; warnings: string[];
   assessments: TransformerAssessment[]; baseline: TransformerAssessment[];
   entities: Array<{ label: string; score: number; evidence: EvidenceProvenance }>;
+  trainedEvidence?: Array<z.infer<typeof trainedEvidenceSchema> & { evidence: EvidenceProvenance }>;
   metadata?: TransformerMetadata; timings?: { baselineMs: number; rerankedMs: number };
 };
 
@@ -94,7 +102,7 @@ export async function analyzeWithTransformers(requirements: JobRequirement[], re
         if (row.passageId !== null && !chosen) throw new Error("Selected passage is missing from candidates.");
         if (row.verdict !== "unknown" && !chosen) throw new Error("A resolved verdict requires source evidence.");
         const confidence = !chosen ? 0 : row.verdict === "partial" ? chosen.learningNli.entailment : row.verdict === "supported" ? chosen.nli.entailment : row.verdict === "contradicted" ? chosen.nli.contradiction : chosen.nli.neutral;
-        return { ...requirement, verdict: row.verdict, reason: row.reason, confidence, evidence: chosen?.evidence, method: "transformer-nli-v1", candidates };
+        return { ...requirement, verdict: row.verdict, reason: row.reason, confidence, evidence: chosen?.evidence, method: response.metadata.version === "transformer-evidence-v2" ? "transformer-nli-v2" : "transformer-nli-v1", candidates };
       });
     };
     const entities = response.entities.map(entity => {
@@ -102,7 +110,13 @@ export async function analyzeWithTransformers(requirements: JobRequirement[], re
       if (!passage || entity.end > passage.text.length || entity.start >= entity.end || passage.text.slice(entity.start, entity.end) !== entity.text) throw new Error("Invalid entity source span.");
       return { label: entity.label, score: entity.score, evidence: { text: entity.text, start: passage.start + entity.start, end: passage.start + entity.end, section: passage.section } };
     });
-    return { status: "complete", warnings: [...warnings, ...(response.entityError ? [response.entityError] : [])],
+    const trainedEvidence = response.trainedEvidence.map(item => {
+      const evidence = passages[item.passageId];
+      if (!evidence || !requirements.some(r => r.skill === item.skill)) throw new Error("Invalid trained evidence source reference.");
+      if (item.abstained && item.verdict !== "unknown") throw new Error("Abstained classifier must return unknown.");
+      return { ...item, evidence };
+    });
+    return { status: "complete", warnings: [...warnings, ...(response.entityError ? [response.entityError] : []), ...(response.trainedEvidenceError ? [response.trainedEvidenceError] : [])], trainedEvidence,
       assessments: convert(response.reranked), baseline: options.includeBaseline ? convert(response.baseline) : [],
       metadata: response.metadata, timings: response.timings, entities };
   } catch (error) {

@@ -3,10 +3,12 @@ import secrets
 import threading
 from contextlib import asynccontextmanager
 from importlib.metadata import version
-from typing import Annotated
+from typing import Annotated, Literal
 from fastapi import FastAPI, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from pipeline import analyze, VERSION, THRESHOLD, MARGIN, TOP_K, RERANK_K
+from retrieval import retrieve as retrieve_ranked
+from learned import evidence_verdict
 
 
 class StrictModel(BaseModel):
@@ -32,6 +34,20 @@ class AnalysisInput(StrictModel):
 class RetrievalInput(StrictModel):
     query: str = Field(min_length=3, max_length=500)
     passages: list[Passage] = Field(min_length=1, max_length=160)
+    mode: Literal["keyword", "dense", "hybrid"] | None = None
+    backend: Literal["numpy", "faiss"] | None = None
+    topK: int = Field(default=8, ge=1, le=40)
+    resultK: int = Field(default=3, ge=1, le=20)
+    rerank: bool = True
+
+
+class EvidencePair(StrictModel):
+    requirement: str = Field(min_length=1, max_length=500)
+    passage: str = Field(min_length=1, max_length=800)
+
+
+class EvidenceInput(StrictModel):
+    pairs: list[EvidencePair] = Field(min_length=1, max_length=40)
 
 
 def authorize(authorization: Annotated[str | None, Header()] = None):
@@ -85,7 +101,23 @@ def analysis(data: AnalysisInput):
                 entities = app.state.engine.entities(passages)
             except Exception:
                 entity_error = "Configured entity extractor failed."
-        return {**result, "metadata": metadata(), "entities": entities, "entityError": entity_error}
+        trained, trained_error = [], None
+        if app.state.engine.evidence:
+            try:
+                by_id = {p["id"]: p for p in passages}
+                threshold = float(os.getenv("EVIDENCE_THRESHOLD", "0.8"))
+                for row in result["reranked"]:
+                    candidates = row["candidates"]
+                    if not candidates:
+                        continue
+                    scores = app.state.engine.evidence.predict([f"{row['skill']} experience is required."] * len(candidates),
+                        [by_id[c["passageId"]]["text"] for c in candidates])
+                    trained.extend({"skill": row["skill"], "passageId": c["passageId"], **evidence_verdict(p, threshold)} for c, p in zip(candidates, scores))
+            except Exception:
+                trained = []
+                trained_error = "Configured evidence classifier failed."
+        return {**result, "metadata": metadata(), "entities": entities, "entityError": entity_error,
+                "trainedEvidence": trained, "trainedEvidenceError": trained_error}
     except Exception as error:
         raise HTTPException(503, "Model inference failed; check service configuration") from error
     finally:
@@ -98,13 +130,27 @@ def retrieve(data: RetrievalInput):
     if not app.state.lock.acquire(blocking=False):
         raise HTTPException(503, "Model service busy; retry later")
     try:
-        texts = [p.text for p in data.passages]
-        similarities = app.state.engine.similarities([data.query], texts)[0]
-        indices = sorted(range(len(texts)), key=lambda i: similarities[i], reverse=True)[:TOP_K]
-        scores = app.state.engine.rerank(data.query, [texts[i] for i in indices])
-        ranked = sorted(zip(indices, scores), key=lambda item: item[1], reverse=True)[:RERANK_K]
-        return {"passageIds": [data.passages[i].id for i, _ in ranked], "metadata": metadata()}
+        result = retrieve_ranked(app.state.engine, data.query, [p.model_dump() for p in data.passages],
+            mode=data.mode or os.getenv("RETRIEVAL_MODE", "hybrid"), backend=data.backend or os.getenv("RETRIEVAL_BACKEND", "numpy"),
+            top_k=data.topK, rerank_k=data.resultK, rerank=data.rerank)
+        return {**result, "metadata": metadata()}
     except Exception as error:
         raise HTTPException(503, "Retrieval failed") from error
+    finally:
+        app.state.lock.release()
+
+
+@app.post("/classify-evidence")
+def classify_evidence(data: EvidenceInput):
+    if not app.state.engine.evidence:
+        raise HTTPException(503, "Set EVIDENCE_MODEL to a trained four-class checkpoint")
+    if not app.state.lock.acquire(blocking=False):
+        raise HTTPException(503, "Model service busy; retry later")
+    try:
+        scores = app.state.engine.evidence.predict([p.requirement for p in data.pairs], [p.passage for p in data.pairs])
+        threshold = float(os.getenv("EVIDENCE_THRESHOLD", "0.8"))
+        return {"predictions": [evidence_verdict(p, threshold) for p in scores], "threshold": threshold, "metadata": metadata()}
+    except Exception as error:
+        raise HTTPException(503, "Evidence inference failed") from error
     finally:
         app.state.lock.release()

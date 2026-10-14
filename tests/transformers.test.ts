@@ -12,6 +12,17 @@ const response = () => ({ baseline: [], reranked: [{ skill: "python", verdict: "
 
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 describe("transformer evidence integration", () => {
+  it("validates trained classifier sources and abstention without changing the NLI result", async () => {
+    const item = { skill: "python", passageId: 1, verdict: "unknown", abstained: true, probabilities: { supported: 0.4, partial: 0.3, contradicted: 0.1, unknown: 0.2 } };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ ...response(), trainedEvidence: [item] })));
+    const result = await analyzeWithTransformers(requirements, resume);
+    expect(result.trainedEvidence?.[0].evidence.text).toContain("Built Python");
+    expect(result.assessments[0].verdict).toBe("supported");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ ...response(), trainedEvidence: [{ ...item, passageId: 99 }] })));
+    expect((await analyzeWithTransformers(requirements, resume)).status).toBe("unavailable");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ ...response(), trainedEvidence: [{ ...item, verdict: "supported" }] })));
+    expect((await analyzeWithTransformers(requirements, resume)).status).toBe("unavailable");
+  });
   it("preserves exact Unicode and CRLF source offsets, including long passages", () => {
     const text = resume + "\r\n" + "long document passage ".repeat(100);
     for (const passage of passageChunks(text)) {

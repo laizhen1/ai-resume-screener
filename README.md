@@ -24,7 +24,7 @@ It is a learning and decision-support system, not an automated hiring system. Us
 
 ## Local private demo
 
-Requirements: Node.js 20.9+ and npm 10+.
+Requirements: Node.js 22.22+ and npm 10+ (the Promptfoo development tooling requires Node 22.22+).
 
 ```bash
 npm install
@@ -32,6 +32,25 @@ npm run dev
 ```
 
 Open `http://localhost:3000`. The default `DATA_MODE=memory`, `QUEUE_MODE=inline` and disabled authentication require no database, model or API key. Data disappears when the server process ends.
+
+## Run locally with PyTorch
+
+With Python 3.12 and Node.js installed, run from the project root:
+
+```sh
+npm run models:setup
+npm run dev:ml
+```
+
+Setup creates `.venv` and installs the inference and fine-tuning dependencies. If Python is not on PATH, set `MODEL_PYTHON` to the full path of its Python 3.12 executable before setup. If OneDrive or folder protection prevents environment creation, set `MODEL_VENV` in `.env.local` to a writable directory outside OneDrive. The first model startup downloads several GB of pretrained weights into `.model-cache`; later runs reuse them. `HF_HOME` can relocate this cache outside OneDrive too.
+
+`dev:ml` starts the local PyTorch service, waits for model readiness, and launches Next.js with transformer analysis enabled. Analyze a résumé to see source-linked evidence in the existing transformer panel. Ctrl+C stops both processes. If either process exits, the launcher stops the other. The launcher refuses an occupied model-service port.
+
+Use `npm run models:start` for the Python service alone and `npm run models:check` in another terminal to verify installed dependencies and live model readiness. Standalone `npm run dev` still needs `ENABLE_TRANSFORMER_ANALYSIS=true` in `.env.local` to enable this panel.
+
+The launcher loads Next.js development environment files for both processes, including `.env.local`. It defaults to CPU and `http://127.0.0.1:8000`. Set `MODEL_DEVICE=cuda` only with a compatible PyTorch/CUDA installation. `MODEL_STARTUP_TIMEOUT_MS` defaults to 900000 (15 minutes); increase it for slow first-time downloads. `MODEL_SERVICE_TOKEN` is shared between the service and app. `npm run dev:ml -- --port 3001` selects a different web port.
+
+Pretrained transformer results remain advisory. Fine-tuning your own résumé model requires reviewed training data; see [model training](docs/model-training.md).
 
 ## Complete workspace stack
 
@@ -61,6 +80,21 @@ ollama pull nomic-embed-text
 PNG and JPEG OCR runs locally through Tesseract.js. Text PDFs are parsed locally. Scanned PDFs require a configured `OCR_ENDPOINT` or conversion to page images; this boundary avoids silently accepting empty extraction results.
 
 ## AI/ML experiment lab
+
+### Training, prompt testing, and retrieval evaluation
+
+The following workflows are implemented. See the [training and evaluation guide](docs/model-training.md) for setup, commands, data contracts, and interpretation.
+
+| Step | Implementation | Validation / output |
+| --- | --- | --- |
+| 1. Fine-tuned entity extraction | Hugging Face/PyTorch BERT or DistilBERT training with exact span-to-BIO alignment; checkpoint deployment through `NER_MODEL` | Entity precision/recall/F1, training-only dictionary baseline, source-span highlights |
+| 2. Requirement–evidence classifier | Four-class fine-tuning, optional `EVIDENCE_MODEL`, independent passage verdicts in the review panel | Rules/NLI comparisons, macro F1, confusion matrix, false-supported rate, calibration diagnostics, abstention curves, per-case errors |
+| 3. Promptfoo | Regression suite using the real Ollama analysis function, separate schema/citation/verdict assertions, local-model CI gate | `npm run eval:prompts`; offline HTTP-fixture wiring check with `npm run test:prompts` |
+| 4. Retrieval evaluation | BM25, dense search, reciprocal-rank fusion, cross-encoder reranking, optional FAISS `IndexFlatIP` | Recall@k, MRR@k, nDCG@k, latency, and reproducible JSON reports |
+
+Training checks document/template separation and exact-text leakage, saves dataset hashes and model metadata, and never reads the existing held-out benchmark. The [bundled datasets](datasets/smoke/README.md) are tiny fictional smoke fixtures, not a reviewed training corpus. The training/reload smoke test uses randomly initialized tiny BERTs; no useful domain model or accuracy improvement is claimed. Supply independently reviewed data and evaluate a trained checkpoint before enabling it for review.
+
+Q&A now uses hybrid retrieval by default. Set `RETRIEVAL_MODE=dense` in the Python service to use the previous dense candidate selection. FAISS is optional and request-scoped; it does not persist résumés or share passages between requests. Fine-tuned classifier outputs remain advisory and do not change the main score.
 
 ### Local transformer stack
 
@@ -162,6 +196,11 @@ Read [architecture](docs/architecture.md), [scoring](docs/scoring-method.md), [e
 ## Responsible-use boundary
 
 Do not use the score as the sole basis for an employment decision. The system does not infer protected attributes, personality or emotion; automatically reject candidates; validate resume claims; or determine whether a person is qualified. Reviewers must inspect original evidence and consider transferable experience, accommodations and context.
+
+## Future implementation
+
+- **Step 5 — Standardize structured outputs:** extend JSON Schema-constrained generation to Q&A, evidence review, and synthetic generation; share schema definitions with runtime validation; distinguish schema failures from unsupported claims. Main analysis already uses structured output, but this cross-application standardization is future work.
+- **Step 6 — MCP server:** expose authenticated, workspace-scoped, read-only tools such as `search_resume_evidence`, `get_analysis_report`, and `compare_experiment_runs`, returning source references and preserving existing access controls. No MCP server is implemented yet.
 
 ## License
 

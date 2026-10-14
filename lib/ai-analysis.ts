@@ -27,7 +27,7 @@ const criterionSchema = z.object({
   evidence: z.array(z.string().trim().min(1).max(500)).max(6)
 });
 
-const analysisSchema = z.object({
+export const analysisSchema = z.object({
   requirements: z.array(requirementSchema).max(50),
   criteria: z.array(criterionSchema).length(4),
   interviewQuestions: z.array(z.string().trim().min(1).max(300)).min(1).max(4),

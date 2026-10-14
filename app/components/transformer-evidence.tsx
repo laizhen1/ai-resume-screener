@@ -18,6 +18,15 @@ export function TransformerEvidencePanel({ result }: { result?: TransformerEvide
         </div>)}</details>
       </article>)}</div>
       {result.metadata?.models.ner && <div><h4>Extracted entities</h4><p>{result.metadata.models.ner} · model labels require review.</p>{result.entities.length ? result.entities.map((entity, index) => <p key={index}><strong>{entity.label}:</strong> <mark>{entity.evidence.text}</mark> · {entity.evidence.section} · characters {entity.evidence.start}–{entity.evidence.end}</p>) : <p>No entity spans returned.</p>}</div>}
+      {result.metadata?.models.evidence && <div>
+        <h4>Fine-tuned evidence classifier</h4>
+        <p>{result.metadata.models.evidence} · Passage-level predictions; probabilities are uncalibrated and do not change the score.</p>
+        {result.trainedEvidence?.map((item, index) => <article key={index}>
+          <strong>{item.skill}: {item.verdict}</strong>{item.abstained && <span> · abstained below confidence threshold</span>}
+          <blockquote>{item.evidence.text}</blockquote>
+          <small>{Object.entries(item.probabilities).map(([label, value]) => `${label}: ${value.toFixed(3)}`).join(" · ")}</small>
+        </article>)}
+      </div>}
     </>}
     {result.warnings.map(warning => <p key={warning}>{warning}</p>)}
   </section>;

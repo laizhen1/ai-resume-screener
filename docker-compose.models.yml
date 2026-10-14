@@ -1,7 +1,10 @@
 # Opt in with: docker compose -f docker-compose.yml -f docker-compose.models.yml up --build
 services:
   model-service:
-    build: ./services/model-service
+    build:
+      context: ./services/model-service
+      args:
+        INSTALL_FAISS: ${INSTALL_FAISS:-false}
     ports:
       - "127.0.0.1:8000:8000"
     environment:
@@ -11,6 +14,10 @@ services:
       RERANKER_MODEL: ${RERANKER_MODEL:-cross-encoder/ms-marco-MiniLM-L-6-v2}
       NLI_MODEL: ${NLI_MODEL:-MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli}
       NER_MODEL: ${NER_MODEL:-}
+      EVIDENCE_MODEL: ${EVIDENCE_MODEL:-}
+      EVIDENCE_THRESHOLD: ${EVIDENCE_THRESHOLD:-0.8}
+      RETRIEVAL_MODE: ${RETRIEVAL_MODE:-hybrid}
+      RETRIEVAL_BACKEND: ${RETRIEVAL_BACKEND:-numpy}
     volumes:
       - model_cache:/models
     healthcheck:

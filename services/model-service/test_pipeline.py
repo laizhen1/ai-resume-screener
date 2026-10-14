@@ -19,10 +19,40 @@ class FakeEngine:
 
     def nli(self, texts, hypothesis):
         learning = "limited exposure" in hypothesis
-        return [probabilities("entailment" if text == "Built Python services" and not learning else "neutral") for text in texts]
+        return [probabilities("entailment" if text == "The applicant states in their resume: Built Python services" and not learning else "neutral") for text in texts]
 
 
 class PipelineTests(unittest.TestCase):
+    def test_unrelated_contradiction_cannot_cancel_support(self):
+        unrelated = {**candidate("contradiction", passage_id=1), "mentionsRequirement": False}
+        self.assertEqual(decide([unrelated])["verdict"], "unknown")
+        self.assertEqual(decide([candidate("entailment"), unrelated])["verdict"], "supported")
+
+    def test_resume_context_is_only_added_for_inference(self):
+        class ContextEngine:
+            def similarities(self, queries, texts):
+                self.retrieved = texts
+                return [[1.0]]
+
+            def rerank(self, query, texts):
+                self.reranked = texts
+                return [1.0]
+
+            def nli(self, texts, hypothesis):
+                self.classified.append(texts)
+                return [probabilities("neutral")]
+
+        engine = ContextEngine()
+        engine.classified = []
+        original = "- Built TypeScript services."
+        passages = [{"id": 7, "text": original}]
+        output = analyze(engine, [{"skill": "typescript"}], passages, True)
+        self.assertEqual(engine.retrieved, [original])
+        self.assertEqual(engine.reranked, [original])
+        self.assertEqual(passages, [{"id": 7, "text": original}])
+        self.assertEqual(engine.classified, [[f"The applicant states in their resume: {original}"]] * 4)
+        self.assertEqual(output["reranked"][0]["passageId"], 7)
+
     def test_uncertain_and_invalid_probabilities(self):
         self.assertEqual(probability_winner({"entailment": 0.6, "neutral": 0.3, "contradiction": 0.1}), "neutral")
         with self.assertRaises(ValueError):

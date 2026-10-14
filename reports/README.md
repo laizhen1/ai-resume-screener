@@ -1,5 +1,7 @@
 # Baseline experiment results
 
+For training, Promptfoo, and retrieval implementation checks, see [AI foundations verification](ai-foundations-verification.md). Those smoke results are separate from the model-quality experiments below.
+
 ## Transformer integrations
 
 The application now also compares `dense-nli`, `reranked-nli` and `rules-transformer`. The original baseline artifacts below remain unchanged. Unit and orchestration tests use controlled responses; the separate [development transformer run](development-transformers.json) uses the actual downloaded checkpoints on CPU.

@@ -2,6 +2,7 @@ import os
 import torch
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from learned import EvidenceClassifier
 
 
 class Models:
@@ -22,12 +23,16 @@ class Models:
         ner_model = os.getenv("NER_MODEL", "").strip()
         self.ner = pipeline("token-classification", model=ner_model, aggregation_strategy="simple", device=self.device, trust_remote_code=False) if ner_model else None
         self.ids["ner"] = ner_model or None
+        evidence_model = os.getenv("EVIDENCE_MODEL", "").strip()
+        self.evidence = EvidenceClassifier(evidence_model, self.device) if evidence_model else None
+        self.ids["evidence"] = evidence_model or None
         # Save resolved commits when available, alongside package versions in reports.
         self.revisions = {
             "embedding": getattr(self.embedding[0].auto_model.config, "_commit_hash", None),
             "reranker": getattr(self.reranker.model.config, "_commit_hash", None),
             "nli": getattr(self.classifier.config, "_commit_hash", None),
             "ner": getattr(self.ner.model.config, "_commit_hash", None) if self.ner else None,
+            "evidence": self.evidence.revision if self.evidence else None,
         }
 
     def similarities(self, queries, passages):

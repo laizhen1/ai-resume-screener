@@ -1,0 +1,28 @@
+name: Local LLM regression gate
+on:
+  workflow_dispatch:
+jobs:
+  ollama:
+    # Opt-in runner with local Ollama and qwen3:4b already installed.
+    runs-on: [self-hosted, ollama]
+    permissions:
+      contents: read
+    env:
+      PROMPTFOO_DISABLE_TELEMETRY: '1'
+      PROMPTFOO_CONFIG_DIR: ${{ github.workspace }}/tmp/promptfoo
+      OLLAMA_ANALYSIS_MODEL: qwen3:4b
+      ENABLE_LOCAL_AI: 'true'
+      ENABLE_LOCAL_AI_ANALYSIS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run eval:prompts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: llm-regression
+          path: reports/promptfoo.json

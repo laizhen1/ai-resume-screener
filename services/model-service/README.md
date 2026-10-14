@@ -53,6 +53,10 @@ Set these in the model-service process environment, not the browser or Next.js `
 | `NLI_MODEL` | `MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli` |
 | `MODEL_DEVICE` | `cpu`; use `cuda` only with a compatible PyTorch/CUDA installation |
 | `NER_MODEL` | Empty: optional token-classification extractor disabled |
+| `EVIDENCE_MODEL` | Empty: optional fine-tuned four-class evidence checkpoint disabled |
+| `EVIDENCE_THRESHOLD` | `0.8`; abstain below maximum class probability (experimental, uncalibrated) |
+| `RETRIEVAL_MODE` | `hybrid`; alternatives `dense`, `keyword` |
+| `RETRIEVAL_BACKEND` | `numpy`; optional `faiss` after installing `requirements-faiss.txt` |
 | `MODEL_SERVICE_TOKEN` | Optional bearer token; set the same value in Next.js/worker configuration |
 | `HF_HOME` | Location of the downloaded model cache |
 | `HF_HUB_OFFLINE` | Set to `1` after caching weights to prohibit Hub downloads |
@@ -65,13 +69,14 @@ The standalone server binds to loopback. The Docker override publishes port 8000
 
 Set `NER_MODEL` to a local or Hugging Face **fine-tuned token-classification checkpoint**, restart the service, and reanalyze. Exact entity spans and the checkpoint's label names appear in the transformer panel. A generic person/location/organization NER checkpoint does not extract résumé-specific skills, titles or qualifications. A base BERT checkpoint without a trained extraction head is not a working résumé extractor.
 
-This repository provides inference integration, not a newly trained résumé model. To train one, independently annotate consented or fictional documents with span labels (for example `SKILL`, `JOB_TITLE`, `QUALIFICATION`), split by source document, train a token-classification model, and measure entity-level precision/recall/F1 on an untouched set. Do not train on the existing held-out examples and continue calling that split held out. The supplied 34 provisional documents are not an adequate domain-training corpus. Inference currently caps returned entities at 300, and tokenizers may truncate long passages.
+This repository now includes `train.py`, `evaluate_model.py`, and a training/reload smoke test for NER and four-class evidence classification. Follow the [training guide](../../docs/model-training.md). Supply independently annotated consented or fictional documents and split by source/template group. The bundled fixtures are not an adequate domain-training corpus. Do not train on the existing held-out examples and continue calling that split held out. Inference currently caps returned entities at 300, and tokenizers may truncate long passages; the training path rejects overlong sequences instead of losing labels silently.
 
 ## HTTP contract
 
 - `GET /health`: loaded model names, revisions, package versions and decision settings.
 - `POST /analyze`: `{requirements:[{skill}], passages:[{id,text}], includeBaseline, includeEntities}`. Returns `baseline`, `reranked`, `entities`, `metadata` and timing breakdowns. At most 40 requirements and 160 passages, each at most 800 characters. Invalid input returns 422; busy/failed inference returns 503.
-- `POST /retrieve`: `{query, passages:[{id,text}]}`. Returns up to three reranked passage IDs and metadata for question answering.
+- `POST /retrieve`: `{query, passages:[{id,text}], mode?, backend?, topK?, resultK?, rerank?}`. Defaults to hybrid candidate selection and three reranked passage IDs; returns retrieval timing/configuration and model metadata. FAISS indexes only this request's passages in memory.
+- `POST /classify-evidence`: `{pairs:[{requirement,passage}]}`; up to 40 pairs. Requires `EVIDENCE_MODEL`; returns probabilities, verdicts and explicit abstention. `/analyze` also includes advisory `trainedEvidence` and `trainedEvidenceError` fields when configured.
 
 No expected verdicts or training labels are sent to inference. Passage IDs refer only to the supplied request. Next.js reconstructs exact source offsets and rejects invalid IDs or entity spans.
 

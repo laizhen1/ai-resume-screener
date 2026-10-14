@@ -1,0 +1,3 @@
+{"id":"train-n0","document_id":"train-n0","group_id":"train-n-source-0","text":"Python developer using Docker.","entities":[{"start":0,"end":6,"text":"Python","label":"SKILL"},{"start":7,"end":16,"text":"developer","label":"JOB_TITLE"},{"start":23,"end":29,"text":"Docker","label":"TOOL"}]}
+{"id":"train-n1","document_id":"train-n1","group_id":"train-n-source-1","text":"Bachelor of Science awarded in 2021.","entities":[{"start":0,"end":19,"text":"Bachelor of Science","label":"QUALIFICATION"},{"start":31,"end":35,"text":"2021","label":"DATE"}]}
+{"id":"train-n2","document_id":"train-n2","group_id":"train-n-source-2","text":"Customer correspondence and office planning.","entities":[]}

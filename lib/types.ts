@@ -66,7 +66,7 @@ export type RequirementAssessment = JobRequirement & {
   confidence: number;
   reason: string;
   evidence?: EvidenceProvenance;
-  method: "contextual-rules-v1" | "ollama-structured-v1" | "transformer-nli-v1";
+  method: "contextual-rules-v1" | "ollama-structured-v1" | "transformer-nli-v1" | "transformer-nli-v2";
 };
 
 export type ReliabilitySummary = {

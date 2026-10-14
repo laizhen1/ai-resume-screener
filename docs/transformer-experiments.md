@@ -56,3 +56,11 @@ The existing provisional development and held-out documents and their hashes rem
 The analyzer and workspace expose question answering when transformer review is enabled. The service retrieves/reranks up to three passages; the existing local Ollama model generates structured claims with exact quotes. Next.js rejects an answer if any quote is absent from its cited retrieved passage. The UI distinguishes answered, abstained and unavailable outcomes. Citation presence checks provenance, not whether a generated claim is logically supported.
 
 Stored candidate questions use authenticated repository access. Public-demo questions accept a résumé upload or text and are rate-limited. Questions and answers are not persisted by this feature. No automatic reviewer-feedback training is performed.
+
+## Version 2: résumé context and abstention
+
+`transformer-evidence-v2` prefixes only the NLI input with `The applicant states in their resume: ` so subjectless résumé bullets can be compared with hypotheses about the applicant. Retrieval and citations still use the unchanged source passages. The 0.80 threshold and 0.15 margin are unchanged.
+
+A predicted contradiction is eligible only when the original passage mentions the canonical requirement with token boundaries, case-insensitively. An unrelated passage cannot establish absence of experience or cancel supporting evidence. Alias-only negatives may conservatively abstain. Exports include `mentionsRequirement` per candidate; raw NLI probabilities remain available even when a contradiction is ineligible.
+
+Focused real-checkpoint checks confirmed supported results for explicit TypeScript, React and Python delivery examples, contradiction for an explicit Docker denial, and abstention for unrelated text. A coursework example still abstains: this generic model remains imperfect. These are regression probes, not a domain-accuracy benchmark. Earlier published measurements used version 1 and must not be attributed to version 2 without rerunning evaluation.

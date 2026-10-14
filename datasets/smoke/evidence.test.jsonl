@@ -1,0 +1,4 @@
+{"id":"test-e0","document_id":"test-e0","group_id":"test-e-source-0","requirement":"postgresql experience is required.","skill":"postgresql","passage":"Maintained PostgreSQL migrations for an inventory application.","label":"supported","challenge":"supported"}
+{"id":"test-e1","document_id":"test-e1","group_id":"test-e-source-1","requirement":"kubernetes experience is required.","skill":"kubernetes","passage":"Learning Kubernetes in supervised practice sessions.","label":"partial","challenge":"partial"}
+{"id":"test-e2","document_id":"test-e2","group_id":"test-e-source-2","requirement":"java experience is required.","skill":"java","passage":"I have not used Java professionally.","label":"contradicted","challenge":"contradicted"}
+{"id":"test-e3","document_id":"test-e3","group_id":"test-e-source-3","requirement":"tensorflow experience is required.","skill":"tensorflow","passage":"Organised meeting agendas and recorded actions.","label":"unknown","challenge":"unknown"}
