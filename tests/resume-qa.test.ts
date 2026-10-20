@@ -20,6 +20,10 @@ describe("cited resume question answering", () => {
     expect(text.slice(result.claims[0].evidence.start, result.claims[0].evidence.end)).toBe(result.claims[0].evidence.text);
     const prompt = JSON.parse(fetch.mock.calls[1][1].body).prompt;
     expect(prompt).toContain("Built Python services");
+    const format = JSON.parse(fetch.mock.calls[1][1].body).format;
+    expect(format.type).toBe("object");
+    expect(format.required).toEqual(["abstain", "claims"]);
+    expect(format.additionalProperties).toBe(false);
   });
   it("rejects invented quotes and citations outside the retrieved passages", async () => {
     vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
@@ -27,6 +31,7 @@ describe("cited resume question answering", () => {
       vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(Response.json({ passageIds: [1], metadata })).mockResolvedValueOnce(Response.json({ response: JSON.stringify({ abstain: false, claims: [{ text: "Unverified claim.", ...claim }] }) })));
       const result = await answerResumeQuestion("What is listed?", text);
       expect(result.status).toBe("unavailable"); expect(result.claims).toEqual([]);
+      expect(result.failure).toBe("invalid-citation");
     }
   });
   it("honors model abstention without displaying speculative claims", async () => {
@@ -38,6 +43,44 @@ describe("cited resume question answering", () => {
     vi.stubEnv("AUTH_DISABLED", "false");
     const form = new FormData(); form.set("question", "What experience is listed?"); form.set("candidateId", "00000000-0000-4000-8000-000000000001");
     expect((await POST(new Request("http://localhost/api/resume-qa", { method: "POST", body: form }))).status).toBe(401);
+  });
+  it.each([
+    "not JSON",
+    '{"abstain":false,"claims":[]}',
+    '{"abstain":false,"claims":[{"text":"Claim","passageId":1,"quote":"   "}]}',
+    '{"abstain":true,"claims":[{"text":"Claim","passageId":1,"quote":"Python"}]}',
+    '{"abstain":true,"claims":[],"recommendation":"hire"}'
+  ])("rejects malformed or inconsistent structured output: %s", async response => {
+    vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(Response.json({ passageIds: [1], metadata })).mockResolvedValueOnce(Response.json({ response })));
+    const result = await answerResumeQuestion("What backend work is listed?", text);
+    expect(result.failure).toBe("invalid-output");
+    expect(result.claims).toEqual([]);
+  });
+  it("does not expose a thinking field as a final answer", async () => {
+    vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(Response.json({ passageIds: [1], metadata })).mockResolvedValueOnce(Response.json({ thinking: '{"abstain":true,"claims":[]}' })));
+    expect((await answerResumeQuestion("What backend work is listed?", text)).failure).toBe("invalid-output");
+  });
+  it("distinguishes retrieval and generation failures", async () => {
+    vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+    expect((await answerResumeQuestion("What is listed?", text)).failure).toBe("retrieval-unavailable");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(Response.json({ passageIds: [1], metadata })).mockResolvedValueOnce(new Response(null, { status: 503 })));
+    expect((await answerResumeQuestion("What is listed?", text)).failure).toBe("generation-unavailable");
+  });
+  it("abstains without generating when retrieval is empty", async () => {
+    vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
+    const fetch = vi.fn().mockResolvedValueOnce(Response.json({ passageIds: [], metadata }));
+    vi.stubGlobal("fetch", fetch);
+    expect((await answerResumeQuestion("What is listed?", text)).status).toBe("abstained");
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+  it("propagates cancellation instead of reporting an unavailable model", async () => {
+    vi.stubEnv("ENABLE_TRANSFORMER_ANALYSIS", "true");
+    const controller = new AbortController();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async () => { controller.abort(); throw controller.signal.reason; }));
+    await expect(answerResumeQuestion("What is listed?", text, controller.signal)).rejects.toMatchObject({ name: "AbortError" });
   });
   it("rejects oversized questions before contacting models", async () => {
     const fetch = vi.fn(); vi.stubGlobal("fetch", fetch);

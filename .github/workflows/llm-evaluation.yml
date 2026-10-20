@@ -3,14 +3,14 @@ on:
   workflow_dispatch:
 jobs:
   ollama:
-    # Opt-in runner with local Ollama and qwen3:4b already installed.
+    # Opt-in runner with local Ollama and deepseek-r1:7b already installed.
     runs-on: [self-hosted, ollama]
     permissions:
       contents: read
     env:
       PROMPTFOO_DISABLE_TELEMETRY: '1'
       PROMPTFOO_CONFIG_DIR: ${{ github.workspace }}/tmp/promptfoo
-      OLLAMA_ANALYSIS_MODEL: qwen3:4b
+      OLLAMA_ANALYSIS_MODEL: deepseek-r1:7b
       ENABLE_LOCAL_AI: 'true'
       ENABLE_LOCAL_AI_ANALYSIS: 'true'
     steps:

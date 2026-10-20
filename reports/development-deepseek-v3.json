@@ -1,0 +1,3020 @@
+{
+  "version": "comparison-v1",
+  "createdAt": "2026-10-20T01:02:19.611Z",
+  "engineVersion": "3.1.0",
+  "taxonomyVersion": "2026.08.2",
+  "dataset": {
+    "version": "adversarial-context-v2.0",
+    "split": "development",
+    "hash": "015068509d86deb7fb4321695a90fe0d353796ea525664f98e79e778690aabb6",
+    "uniqueCases": 10,
+    "executions": 10,
+    "annotationStatus": "Development regression fixtures; used to tune the rules."
+  },
+  "configuration": {
+    "includeModel": true,
+    "includeTransformers": false,
+    "model": "deepseek-r1:7b",
+    "promptVersion": "core-analysis-v3-grounded",
+    "alignmentVersion": "canonical-wrapper-v2",
+    "seed": 42,
+    "temperature": 0.6,
+    "timeoutMs": 180000,
+    "node": "v24.19.0",
+    "platform": "win32",
+    "generation": {
+      "think": true,
+      "options": {
+        "temperature": 0.6,
+        "seed": 42,
+        "num_ctx": 8192,
+        "num_predict": 4096
+      }
+    }
+  },
+  "examples": [
+    {
+      "challenge": "exact",
+      "job": "This role requires TypeScript and React for customer-facing products.",
+      "resume": "Synthetic Candidate 1\nSKILLS\nTypeScript, React\nEXPERIENCE\nBuilt and shipped production TypeScript services and React interfaces for 2,000 users.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "typescript": "supported",
+        "react": "supported"
+      },
+      "id": "adversarial-1"
+    },
+    {
+      "challenge": "alias",
+      "job": "We need Node.js, PostgreSQL and Docker experience.",
+      "resume": "Synthetic Candidate 2\nSUMMARY\nBackend engineer\nEXPERIENCE\nBuilt a NodeJS service backed by Postgres. Currently learning Docker through a personal course.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "node.js": "supported",
+        "postgresql": "supported",
+        "docker": "partial"
+      },
+      "id": "adversarial-2"
+    },
+    {
+      "challenge": "negation",
+      "job": "React and Docker are required for this role.",
+      "resume": "Synthetic Candidate 3\nSUMMARY\nPlatform engineer\nEXPERIENCE\nNo professional experience with React. Never used Docker in production.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "contradicted",
+        "docker": "contradicted"
+      },
+      "id": "adversarial-3"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "The role requires Terraform and Kubernetes.",
+      "resume": "Synthetic Candidate 4\nSUMMARY\nCloud support engineer\nEXPERIENCE\nCurrently learning Terraform and exploring Kubernetes in a training environment.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "terraform": "partial",
+        "kubernetes": "partial"
+      },
+      "id": "adversarial-4"
+    },
+    {
+      "challenge": "ambiguity",
+      "job": "Experience with React and Go is essential.",
+      "resume": "Synthetic Candidate 5\nSUMMARY\nOperations coordinator\nEXPERIENCE\nReact to customer incidents quickly and coordinate go-to-market planning.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "unknown",
+        "go": "unknown"
+      },
+      "id": "adversarial-5"
+    },
+    {
+      "challenge": "alias",
+      "job": "We require CI/CD, GitHub Actions and testing experience.",
+      "resume": "Synthetic Candidate 6\nSKILLS\nAutomated testing\nEXPERIENCE\nImplemented continuous integration and continuous delivery using GitHub workflows.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "ci/cd": "supported",
+        "github actions": "supported",
+        "testing": "supported"
+      },
+      "id": "adversarial-6"
+    },
+    {
+      "challenge": "missing",
+      "job": "AWS is required and GCP experience is preferred.",
+      "resume": "Synthetic Candidate 7\nSKILLS\nAWS\nEXPERIENCE\nUsed AWS to operate production services for three years.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "aws": "supported",
+        "gcp": "unknown"
+      },
+      "id": "adversarial-7"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "SQL is required. Python experience is preferred.",
+      "resume": "Synthetic Candidate 8\nSUMMARY\nData analyst\nEXPERIENCE\nBuilt SQL reporting pipelines for 900 users. Completed introductory Python coursework.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "sql": "supported",
+        "python": "partial"
+      },
+      "id": "adversarial-8"
+    },
+    {
+      "challenge": "alias",
+      "job": "Machine learning, PyTorch and vector search are required.",
+      "resume": "Synthetic Candidate 9\nSUMMARY\nML engineer\nEXPERIENCE\nDeveloped machine learning models with PyTorch and implemented pgvector semantic search.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "machine learning": "supported",
+        "pytorch": "supported",
+        "vector search": "supported"
+      },
+      "id": "adversarial-9"
+    },
+    {
+      "challenge": "exact",
+      "job": "The position requires Next.js, REST API and accessibility experience.",
+      "resume": "Synthetic Candidate 10\nSUMMARY\nFrontend engineer\nEXPERIENCE\nDeveloped accessible NextJS interfaces and designed RESTful APIs for customer products.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "next.js": "supported",
+        "rest api": "supported",
+        "accessibility": "supported"
+      },
+      "id": "adversarial-10"
+    }
+  ],
+  "results": [
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 7.262900000000002,
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 27562.4163,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "This role requires TypeScript and React for customer-facing products.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidenceText": "TypeScript, React"
+          },
+          {
+            "skill": "typescript",
+            "importance": "required",
+            "sourceText": "This role requires TypeScript and React for customer-facing products.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidenceText": "Built and shipped production TypeScript services and React interfaces for 2,000 users."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "relevant skills",
+            "score": 100,
+            "explanation": "The resume explicitly states the applicant's use of TypeScript and React in building production services, which are the required skills mentioned in the job description.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "measurable impact",
+            "score": 100,
+            "explanation": "The applicant has demonstrated the ability to build and ship production services using TypeScript and React, which shows a measurable impact.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "demonstrated experience",
+            "score": 100,
+            "explanation": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "document clarity",
+            "score": 100,
+            "explanation": "The resume provides clear and detailed information about the applicant's experience with TypeScript and React.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you elaborate on your experience building and shipping production services using TypeScript and React?"
+        ],
+        "warnings": [
+          "No warnings were identified. The information in the resume is clear and supported."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidenceId": "s2"
+          },
+          "r1": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "relevant skills",
+            "score": 100,
+            "explanation": "The resume explicitly states the applicant's use of TypeScript and React in building production services, which are the required skills mentioned in the job description.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "measurable impact",
+            "score": 100,
+            "explanation": "The applicant has demonstrated the ability to build and ship production services using TypeScript and React, which shows a measurable impact.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "demonstrated experience",
+            "score": 100,
+            "explanation": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "document clarity",
+            "score": 100,
+            "explanation": "The resume provides clear and detailed information about the applicant's experience with TypeScript and React.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you elaborate on your experience building and shipping production services using TypeScript and React?"
+        ],
+        "warnings": [
+          "No warnings were identified. The information in the resume is clear and supported."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+          "quote": "Built and shipped production TypeScript services and React interfaces for 2,000 users.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 27584.150800000007,
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+          "quote": "Built and shipped production TypeScript services and React interfaces for 2,000 users.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume explicitly states the applicant's use of TypeScript and React in building production services.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 10.761999999998807,
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 42263.46179999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "docker",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "partial",
+            "confidence": 0.7,
+            "reason": "Learning through a personal course, not professional use.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          },
+          {
+            "skill": "node.js",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "Explicit use of Node.js in the resume passage.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          },
+          {
+            "skill": "postgresql",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "Explicit mention of PostgreSQL in the resume passage.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are supported by the resume passage(s).",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The resume passage explicitly mentions Node.js and PostgreSQL experience.",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "No quantified outcomes or measurable impact is mentioned in the resume passage(s).",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 80,
+            "explanation": "The resume passage is clear and directly addresses the job requirements.",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you elaborate on your experience with Node.js and PostgreSQL? How have you applied these technologies in your work."
+        ],
+        "warnings": [
+          "The personal course mentioned in the resume passage may not provide concrete evidence of professional experience beyond learning."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "partial",
+            "confidence": 70,
+            "reason": "Learning through a personal course, not professional use.",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "Explicit use of Node.js in the resume passage.",
+            "evidenceId": "s4"
+          },
+          "r2": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "Explicit mention of PostgreSQL in the resume passage.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are supported by the resume passage(s).",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The resume passage explicitly mentions Node.js and PostgreSQL experience.",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "No quantified outcomes or measurable impact is mentioned in the resume passage(s).",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 80,
+            "explanation": "The resume passage is clear and directly addresses the job requirements.",
+            "evidence": [
+              "s4: 'Built a NodeJS service backed by Postgres.'"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you elaborate on your experience with Node.js and PostgreSQL? How have you applied these technologies in your work."
+        ],
+        "warnings": [
+          "The personal course mentioned in the resume passage may not provide concrete evidence of professional experience beyond learning."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Explicit use of Node.js in the resume passage.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Explicit mention of PostgreSQL in the resume passage.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "Learning through a personal course, not professional use.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 42275.87659999999,
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Explicit use of Node.js in the resume passage.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Explicit mention of PostgreSQL in the resume passage.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "Learning through a personal course, not professional use.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 2.212200000009034,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "No professional experience with React.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 43683.30579999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "docker",
+            "importance": "required",
+            "sourceText": "React and Docker are required for this role.",
+            "verdict": "contradicted",
+            "confidence": 0.8,
+            "reason": "The candidate explicitly states no professional experience with React.",
+            "evidenceText": "No professional experience with React. Never used Docker in production."
+          },
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "React and Docker are required for this role.",
+            "verdict": "contradicted",
+            "confidence": 0.8,
+            "reason": "The candidate explicitly states never used Docker in production.",
+            "evidenceText": "No professional experience with React. Never used Docker in production."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 0,
+            "explanation": "Evidence for React and Docker is not provided in the resume. The candidate only mentions 'no professional experience' and 'never used Docker in production,' which do not support any relevant skills beyond what is already known about the candidate's skills from the summary or education section, which is not provided here either. Therefore, the relevant skills are unknown. This is because the resume does not provide any specific evidence of the candidate's skills beyond what is already known about",
+            "evidence": []
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The candidate explicitly states no professional experience with React and never used Docker in production. Since both React and Docker are required skills, this means the candidate has demonstrated no experience with these technologies, which contradicts the job requirements. Therefore, the demonstrated experience is unknown.",
+            "evidence": []
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no information provided about the candidate's impact or achievements in their previous roles. The resume only mentions their experience and skills, but without any measurable outcomes or results, the measurable impact is unknown.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "The resume is not detailed enough to provide clear documentation about the candidate's skills, experience, or impact. Without specific evidence from the resume, the document clarity is unknown.",
+            "evidence": []
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with React?",
+          "Have you worked with Docker in any professional capacity?"
+        ],
+        "warnings": [
+          "The candidate's resume does not provide sufficient evidence to support the job requirements for React and Docker, which are both explicitly required by the job description. The candidate's responses indicate a lack of professional experience with React and Docker, which may raise concerns about their ability to perform the job duties effectively."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "contradicted",
+            "confidence": 80,
+            "reason": "The candidate explicitly states no professional experience with React.",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "contradicted",
+            "confidence": 80,
+            "reason": "The candidate explicitly states never used Docker in production.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 0,
+            "explanation": "Evidence for React and Docker is not provided in the resume. The candidate only mentions 'no professional experience' and 'never used Docker in production,' which do not support any relevant skills beyond what is already known about the candidate's skills from the summary or education section, which is not provided here either. Therefore, the relevant skills are unknown. This is because the resume does not provide any specific evidence of the candidate's skills beyond what is already known about",
+            "evidence": []
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The candidate explicitly states no professional experience with React and never used Docker in production. Since both React and Docker are required skills, this means the candidate has demonstrated no experience with these technologies, which contradicts the job requirements. Therefore, the demonstrated experience is unknown.",
+            "evidence": []
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no information provided about the candidate's impact or achievements in their previous roles. The resume only mentions their experience and skills, but without any measurable outcomes or results, the measurable impact is unknown.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "The resume is not detailed enough to provide clear documentation about the candidate's skills, experience, or impact. Without specific evidence from the resume, the document clarity is unknown.",
+            "evidence": []
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with React?",
+          "Have you worked with Docker in any professional capacity?"
+        ],
+        "warnings": [
+          "The candidate's resume does not provide sufficient evidence to support the job requirements for React and Docker, which are both explicitly required by the job description. The candidate's responses indicate a lack of professional experience with React and Docker, which may raise concerns about their ability to perform the job duties effectively."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The candidate explicitly states never used Docker in production.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The candidate explicitly states no professional experience with React.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 43685.9277,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The candidate explicitly states never used Docker in production.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The candidate explicitly states no professional experience with React.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.3607000000047265,
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 51102.69799999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "kubernetes",
+            "importance": "required",
+            "sourceText": "The role requires Terraform and Kubernetes.",
+            "verdict": "contradicted",
+            "confidence": 0.7,
+            "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+            "evidenceText": "Currently learning Terraform and exploring Kubernetes in a training environment."
+          },
+          {
+            "skill": "terraform",
+            "importance": "required",
+            "sourceText": "The role requires Terraform and Kubernetes.",
+            "verdict": "contradicted",
+            "confidence": 0.7,
+            "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+            "evidenceText": "Currently learning Terraform and exploring Kubernetes in a training environment."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 20,
+            "explanation": "The resume shows the candidate is learning Terraform and Kubernetes, which are relevant skills, but no explicit evidence of professional use or demonstration of these skills in a professional setting is present. The learning is described as part of a training environment, which suggests limited or initial exposure, not professional experience or application of these skills in a professional capacity. The candidate is described as 'currently learning' these technologies, which indicates a focus,但",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The resume does not provide any evidence of demonstrated experience with Terraform or Kubernetes. The candidate is described as 'currently learning' these technologies, which suggests limited or initial exposure, not professional experience or application of these technologies in a professional setting. The job description requires experience with these technologies, but the candidate's resume does not provide any evidence of demonstrated experience with them.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not provide any evidence of measurable impact of the candidate's experience with Terraform or Kubernetes. The candidate is described as 'currently learning' these technologies, which suggests limited or initial exposure, not professional experience or application of these technologies in a professional setting. The job description requires experience with these technologies, but the candidate's resume does not provide any evidence of measurable impact of their experience with the",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 10,
+            "explanation": "The resume passage describing the candidate's experience with Terraform and Kubernetes is a summary and does not provide detailed or specific information about their skills, experience, or achievements. The passage is brief and does not provide any evidence of the candidate's specific skills, experience, or achievements in a professional setting.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific technologies are you most comfortable with, and how have you applied them in your training environment?",
+          "Can you provide more details about your current learning experience with Terraform and Kubernetes?",
+          "How does your hands-on experience with Terraform and Kubernetes translate to real-world scenarios in the professional environment?",
+          "What steps can you take to further develop your expertise in Terraform and Kubernetes to meet the requirements of this role?"
+        ],
+        "warnings": [
+          "The candidate's experience with Terraform and Kubernetes is described as 'currently learning,' which implies limited or initial exposure, not professional experience or application of these technologies in a professional setting.",
+          "The candidate's resume does not provide any evidence of demonstrated experience with Terraform or Kubernetes, which are required by the job description. The candidate's resume focuses on their current learning and training environment, which suggests that they are in an introductory phase of learning these technologies."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "contradicted",
+            "confidence": 70,
+            "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "contradicted",
+            "confidence": 70,
+            "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 20,
+            "explanation": "The resume shows the candidate is learning Terraform and Kubernetes, which are relevant skills, but no explicit evidence of professional use or demonstration of these skills in a professional setting is present. The learning is described as part of a training environment, which suggests limited or initial exposure, not professional experience or application of these skills in a professional capacity. The candidate is described as 'currently learning' these technologies, which indicates a focus,但",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The resume does not provide any evidence of demonstrated experience with Terraform or Kubernetes. The candidate is described as 'currently learning' these technologies, which suggests limited or initial exposure, not professional experience or application of these technologies in a professional setting. The job description requires experience with these technologies, but the candidate's resume does not provide any evidence of demonstrated experience with them.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not provide any evidence of measurable impact of the candidate's experience with Terraform or Kubernetes. The candidate is described as 'currently learning' these technologies, which suggests limited or initial exposure, not professional experience or application of these technologies in a professional setting. The job description requires experience with these technologies, but the candidate's resume does not provide any evidence of measurable impact of their experience with the",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 10,
+            "explanation": "The resume passage describing the candidate's experience with Terraform and Kubernetes is a summary and does not provide detailed or specific information about their skills, experience, or achievements. The passage is brief and does not provide any evidence of the candidate's specific skills, experience, or achievements in a professional setting.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific technologies are you most comfortable with, and how have you applied them in your training environment?",
+          "Can you provide more details about your current learning experience with Terraform and Kubernetes?",
+          "How does your hands-on experience with Terraform and Kubernetes translate to real-world scenarios in the professional environment?",
+          "What steps can you take to further develop your expertise in Terraform and Kubernetes to meet the requirements of this role?"
+        ],
+        "warnings": [
+          "The candidate's experience with Terraform and Kubernetes is described as 'currently learning,' which implies limited or initial exposure, not professional experience or application of these technologies in a professional setting.",
+          "The candidate's resume does not provide any evidence of demonstrated experience with Terraform or Kubernetes, which are required by the job description. The candidate's resume focuses on their current learning and training environment, which suggests that they are in an introductory phase of learning these technologies."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "contradicted",
+          "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "contradicted",
+          "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 51104.610799999995,
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "contradicted",
+          "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "contradicted",
+          "reason": "The candidate is described as 'currently learning Terraform and exploring Kubernetes in a training environment,' which implies limited or initial exposure, not professional experience.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 2.1894000000029337,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 31806.630000000005,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "go",
+            "importance": "required",
+            "sourceText": "Experience with React and Go is essential.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "The resume passage s4 explicitly states experience with React.",
+            "evidenceText": "React to customer incidents quickly and coordinate go-to-market planning."
+          },
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "Experience with React and Go is essential.",
+            "verdict": "unknown",
+            "confidence": 0.6,
+            "reason": "No explicit evidence of Go experience.",
+            "evidenceText": null
+          },
+          {
+            "skill": "TypeScript",
+            "importance": "required",
+            "sourceText": "Job description doesn't mention TypeScript.",
+            "verdict": "unknown",
+            "confidence": 0.5,
+            "reason": "Not specified in job description.",
+            "evidenceText": "Job description doesn't mention TypeScript."
+          },
+          {
+            "skill": "Node.js",
+            "importance": "required",
+            "sourceText": "Job description doesn't mention Node.js.",
+            "verdict": "unknown",
+            "confidence": 0.5,
+            "reason": "Not specified in job description.",
+            "evidenceText": "Job description doesn't mention Node.js."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 60,
+            "explanation": "The resume shows experience with React, which is relevant, but no evidence of Go or TypeScript/Node.js, making it partially relevant overall. No direct evidence for React experience beyond the job requirement, so only 60% relevant skills score.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 40,
+            "explanation": "The resume shows experience with React, which meets the job requirement for React, but no evidence of Go. The overall demonstrated experience is partially met.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 30,
+            "explanation": "The resume shows experience with React, but no quantifiable impact or outcomes are mentioned. The impact score is low because of the lack of measurable outcomes.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 50,
+            "explanation": "The resume passage about React experience is clear and directly relevant to the job requirement, so the document clarity score is moderate.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide an example of a time you handled customer incidents using React?",
+          "Do you have experience with Go? If so, how did you use it in previous roles?"
+        ],
+        "warnings": [
+          "The resume doesn't provide evidence for Go or TypeScript/Node.js experience, so those additional skills are considered unknown.",
+          "The interview questions are relevant to the job and should be asked during the interview process."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "supported",
+            "confidence": 80,
+            "reason": "The resume passage s4 explicitly states experience with React.",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "unknown",
+            "confidence": 60,
+            "reason": "No explicit evidence of Go experience.",
+            "evidenceId": null
+          }
+        },
+        "additionalRequirements": [
+          {
+            "skill": "TypeScript",
+            "importance": "required",
+            "sourceText": "Job description doesn't mention TypeScript.",
+            "verdict": "unknown",
+            "confidence": 50,
+            "reason": "Not specified in job description.",
+            "evidenceText": "Job description doesn't mention TypeScript."
+          },
+          {
+            "skill": "Node.js",
+            "importance": "required",
+            "sourceText": "Job description doesn't mention Node.js.",
+            "verdict": "unknown",
+            "confidence": 50,
+            "reason": "Not specified in job description.",
+            "evidenceText": "Job description doesn't mention Node.js."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 60,
+            "explanation": "The resume shows experience with React, which is relevant, but no evidence of Go or TypeScript/Node.js, making it partially relevant overall. No direct evidence for React experience beyond the job requirement, so only 60% relevant skills score.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 40,
+            "explanation": "The resume shows experience with React, which meets the job requirement for React, but no evidence of Go. The overall demonstrated experience is partially met.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 30,
+            "explanation": "The resume shows experience with React, but no quantifiable impact or outcomes are mentioned. The impact score is low because of the lack of measurable outcomes.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 50,
+            "explanation": "The resume passage about React experience is clear and directly relevant to the job requirement, so the document clarity score is moderate.",
+            "evidence": [
+              "s4"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide an example of a time you handled customer incidents using React?",
+          "Do you have experience with Go? If so, how did you use it in previous roles?"
+        ],
+        "warnings": [
+          "The resume doesn't provide evidence for Go or TypeScript/Node.js experience, so those additional skills are considered unknown.",
+          "The interview questions are relevant to the job and should be asked during the interview process."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit evidence of Go experience.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states experience with React.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 31810.06090000001,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit evidence of Go experience.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states experience with React.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.724099999992177,
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "Automated testing",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 45248.76210000002,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "ci/cd",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "unknown",
+            "confidence": 0.6,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows. The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it.",
+            "evidenceText": null
+          },
+          {
+            "skill": "github actions",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "The applicant explicitly implemented continuous integration and delivery using GitHub workflows, which directly supports the GitHub Actions requirement.",
+            "evidenceText": "Implemented continuous integration and continuous delivery using GitHub workflows."
+          },
+          {
+            "skill": "testing",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "partial",
+            "confidence": 0.6,
+            "reason": "The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it or demonstrated experience with it.",
+            "evidenceText": "Automated testing"
+          },
+          {
+            "skill": "ci/cd",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "unknown",
+            "confidence": 0.6,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows.",
+            "evidenceText": "The job description requires CI/CD, GitHub Actions, and Testing experience."
+          },
+          {
+            "skill": "testing",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "unknown",
+            "confidence": 0.6,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows.",
+            "evidenceText": "The job description requires CI/CD, GitHub Actions, and Testing experience."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 60,
+            "explanation": "The applicant has relevant skills in CI/CD, GitHub Actions, and Testing as mentioned in the resume.",
+            "evidence": [
+              "s4",
+              "s2"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 40,
+            "explanation": "The applicant has demonstrated experience with CI/CD through the implementation of GitHub workflows.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 20,
+            "explanation": "The applicant has measurable impact through the implementation of CI/CD and GitHub workflows.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 50,
+            "explanation": "The resume is clear and provides specific details about the applicant's experience.",
+            "evidence": [
+              "s4",
+              "s2"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with CI/CD implementation?",
+          "Do you have any specific tools or technologies you are proficient in related to testing?"
+        ],
+        "warnings": [
+          "Do not infer the applicant's skills or experience from the job description. Only use the evidence from the resume."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "unknown",
+            "confidence": 60,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows. The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it.",
+            "evidenceId": null
+          },
+          "r1": {
+            "verdict": "supported",
+            "confidence": 80,
+            "reason": "The applicant explicitly implemented continuous integration and delivery using GitHub workflows, which directly supports the GitHub Actions requirement.",
+            "evidenceId": "s4"
+          },
+          "r2": {
+            "verdict": "partial",
+            "confidence": 60,
+            "reason": "The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it or demonstrated experience with it.",
+            "evidenceId": "s2"
+          }
+        },
+        "additionalRequirements": [
+          {
+            "skill": "ci/cd",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "unknown",
+            "confidence": 60,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows.",
+            "evidenceText": "The job description requires CI/CD, GitHub Actions, and Testing experience."
+          },
+          {
+            "skill": "testing",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "unknown",
+            "confidence": 60,
+            "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows.",
+            "evidenceText": "The job description requires CI/CD, GitHub Actions, and Testing experience."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 60,
+            "explanation": "The applicant has relevant skills in CI/CD, GitHub Actions, and Testing as mentioned in the resume.",
+            "evidence": [
+              "s4",
+              "s2"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 40,
+            "explanation": "The applicant has demonstrated experience with CI/CD through the implementation of GitHub workflows.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 20,
+            "explanation": "The applicant has measurable impact through the implementation of CI/CD and GitHub workflows.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 50,
+            "explanation": "The resume is clear and provides specific details about the applicant's experience.",
+            "evidence": [
+              "s4",
+              "s2"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with CI/CD implementation?",
+          "Do you have any specific tools or technologies you are proficient in related to testing?"
+        ],
+        "warnings": [
+          "Do not infer the applicant's skills or experience from the job description. Only use the evidence from the resume."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "unknown",
+          "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows. The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The applicant explicitly implemented continuous integration and delivery using GitHub workflows, which directly supports the GitHub Actions requirement.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "unknown",
+          "reason": "Conflicting model judgments for the same requirement; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 45251.16590000005,
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "unknown",
+          "reason": "The job description requires CI/CD, GitHub Actions, and Testing experience, but the resume does not explicitly state that the applicant has implemented continuous integration and delivery using GitHub workflows. The applicant mentions 'automated testing' as a skill but does not explicitly state that they have implemented it.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The applicant explicitly implemented continuous integration and delivery using GitHub workflows, which directly supports the GitHub Actions requirement.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "unknown",
+          "reason": "Conflicting model judgments for the same requirement; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.6886999999987893,
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "AWS",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit supporting or contradicting evidence was found; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 39986.00219999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "aws",
+            "importance": "required",
+            "sourceText": "AWS is required and GCP experience is preferred.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "Exact resume evidence of use/delivery is present.",
+            "evidenceText": "AWS"
+          },
+          {
+            "skill": "gcp",
+            "importance": "required",
+            "sourceText": "AWS is required and GCP experience is preferred.",
+            "verdict": "unknown",
+            "confidence": 0.5,
+            "reason": "No resume evidence of use/delivery is present.",
+            "evidenceText": null
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 80,
+            "explanation": "The resume mentions 'AWS' which is directly relevant to the job requirement. The score is based on the direct mention of the skill and the clarity of the passage. No additional skills are mentioned in the resume that are relevant to the job requirement for AWS or GCP.",
+            "evidence": [
+              "s2"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The resume explicitly states 'Used AWS to operate production services for three years.' This demonstrates relevant experience with the required skill. The score is based on the direct and specific mention of experience with AWS.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not mention any measurable outcomes or impacts of using AWS. The score is based on the lack of specific, quantifiable results related to the use of AWS.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 80,
+            "explanation": "The resume passages are clear and directly relevant to the job requirements. The score is based on the clarity and relevance of the information provided in the resume passages.",
+            "evidence": [
+              "s0",
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Did you use AWS to operate production services for three years?",
+          "What technologies or tools did you use in your experience with AWS?"
+        ],
+        "warnings": [
+          "No explicit negation or denial of experience with AWS or GCP is found in the resume. The job description requires both skills, but the resume only mentions AWS.",
+          "The resume does not provide any evidence of measurable impact or outcomes related to AWS usage."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "Exact resume evidence of use/delivery is present.",
+            "evidenceId": "s2"
+          },
+          "r1": {
+            "verdict": "unknown",
+            "confidence": 50,
+            "reason": "No resume evidence of use/delivery is present.",
+            "evidenceId": null
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 80,
+            "explanation": "The resume mentions 'AWS' which is directly relevant to the job requirement. The score is based on the direct mention of the skill and the clarity of the passage. No additional skills are mentioned in the resume that are relevant to the job requirement for AWS or GCP.",
+            "evidence": [
+              "s2"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The resume explicitly states 'Used AWS to operate production services for three years.' This demonstrates relevant experience with the required skill. The score is based on the direct and specific mention of experience with AWS.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not mention any measurable outcomes or impacts of using AWS. The score is based on the lack of specific, quantifiable results related to the use of AWS.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 80,
+            "explanation": "The resume passages are clear and directly relevant to the job requirements. The score is based on the clarity and relevance of the information provided in the resume passages.",
+            "evidence": [
+              "s0",
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Did you use AWS to operate production services for three years?",
+          "What technologies or tools did you use in your experience with AWS?"
+        ],
+        "warnings": [
+          "No explicit negation or denial of experience with AWS or GCP is found in the resume. The job description requires both skills, but the resume only mentions AWS.",
+          "The resume does not provide any evidence of measurable impact or outcomes related to AWS usage."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Exact resume evidence of use/delivery is present.",
+          "quote": "AWS",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No resume evidence of use/delivery is present.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 39988.36809999996,
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "Exact resume evidence of use/delivery is present.",
+          "quote": "AWS",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No resume evidence of use/delivery is present.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.9412000000011176,
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built SQL reporting pipelines for 900 users.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 32251.002299999993,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "python",
+            "importance": "preferred",
+            "sourceText": "Python experience is preferred.",
+            "verdict": "partial",
+            "confidence": 0.6,
+            "reason": "The job requires SQL, and the resume mentions being a data analyst, which may imply some SQL experience. However, it is not explicitly stated.",
+            "evidenceText": "Data analyst"
+          },
+          {
+            "skill": "sql",
+            "importance": "required",
+            "sourceText": "SQL is required.",
+            "verdict": "partial",
+            "confidence": 0.6,
+            "reason": "The job prefers Python, and the resume mentions completing introductory Python coursework. This is partial as it does not explicitly state professional use.",
+            "evidenceText": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 70,
+            "explanation": "The resume includes Python and SQL skills, though not explicitly stated for the preferred and required skills respectively. The data analyst role may imply some SQL experience, but it is not explicitly mentioned, and the Python coursework is only introductory, which may not be sufficient for a preferred skill level.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 50,
+            "explanation": "The resume mentions completing introductory Python coursework, which is a form of demonstrated experience, though it is not explicitly stated as professional experience. There is no explicit mention of SQL experience.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no mention of any measurable impact or outcomes related to the skills listed in the resume.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "The resume is unclear regarding the extent of SQL and Python experience, making it difficult to assess the clarity of the document.",
+            "evidence": []
+          }
+        ],
+        "interviewQuestions": [
+          "Do you have any experience with SQL or data analysis?",
+          "Can you provide more details about your Python coursework and its relevance to data analysis tasks?"
+        ],
+        "warnings": [
+          "The extraction of evidence for both requirements is uncertain due to the partial nature of the evidence provided in the resume.",
+          "The resume does not provide explicit evidence of Python or SQL professional experience beyond coursework and a data analyst role."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "partial",
+            "confidence": 60,
+            "reason": "The job requires SQL, and the resume mentions being a data analyst, which may imply some SQL experience. However, it is not explicitly stated.",
+            "evidenceId": "s2"
+          },
+          "r1": {
+            "verdict": "partial",
+            "confidence": 60,
+            "reason": "The job prefers Python, and the resume mentions completing introductory Python coursework. This is partial as it does not explicitly state professional use.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 70,
+            "explanation": "The resume includes Python and SQL skills, though not explicitly stated for the preferred and required skills respectively. The data analyst role may imply some SQL experience, but it is not explicitly mentioned, and the Python coursework is only introductory, which may not be sufficient for a preferred skill level.",
+            "evidence": [
+              "s2",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 50,
+            "explanation": "The resume mentions completing introductory Python coursework, which is a form of demonstrated experience, though it is not explicitly stated as professional experience. There is no explicit mention of SQL experience.",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no mention of any measurable impact or outcomes related to the skills listed in the resume.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "The resume is unclear regarding the extent of SQL and Python experience, making it difficult to assess the clarity of the document.",
+            "evidence": []
+          }
+        ],
+        "interviewQuestions": [
+          "Do you have any experience with SQL or data analysis?",
+          "Can you provide more details about your Python coursework and its relevance to data analysis tasks?"
+        ],
+        "warnings": [
+          "The extraction of evidence for both requirements is uncertain due to the partial nature of the evidence provided in the resume.",
+          "The resume does not provide explicit evidence of Python or SQL professional experience beyond coursework and a data analyst role."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "The job prefers Python, and the resume mentions completing introductory Python coursework. This is partial as it does not explicitly state professional use.",
+          "quote": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The job requires SQL, and the resume mentions being a data analyst, which may imply some SQL experience. However, it is not explicitly stated.",
+          "quote": "Data analyst",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 32254.388800000015,
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "The job prefers Python, and the resume mentions completing introductory Python coursework. This is partial as it does not explicitly state professional use.",
+          "quote": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The job requires SQL, and the resume mentions being a data analyst, which may imply some SQL experience. However, it is not explicitly stated.",
+          "quote": "Data analyst",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.957300000009127,
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "ML engineer",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 46154.61089999997,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "machine learning",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "explicit use/delivery passage",
+            "evidenceText": "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+          },
+          {
+            "skill": "pytorch",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "partial",
+            "confidence": 0.65,
+            "reason": "learning passage",
+            "evidenceText": "Synthetic Candidate 9"
+          },
+          {
+            "skill": "vector search",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "partial",
+            "confidence": 0.65,
+            "reason": "learning passage",
+            "evidenceText": "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 85,
+            "explanation": "The resume mentions PyTorch and semantic search, which are relevant to the required skills of machine learning, PyTorch, and vector search. However, PyTorch is required, so it is partially relevant in terms of demonstrated experience, but the resume does not explicitly mention vector search beyond its mention in the job description, making it only partially relevant for measurable impact. The resume does not explicitly mention any measurable impact on outcomes related to machine learning or AI/빅",
+            "evidence": [
+              "s0",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 90,
+            "explanation": "The resume provides evidence of demonstrated experience with PyTorch and semantic search, which are directly related to the job requirements. However, the resume does not explicitly mention any measurable impact or outcomes related to these skills, which is required for full demonstration of experience. The resume does not mention any measurable impact or outcomes related to these skills, which is required for full demonstration of experience. The resume does not mention any measurable impact or",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not mention any measurable impact or outcomes related to machine learning, PyTorch, or vector search. The resume only mentions experience with developing machine learning models and implementing semantic search, but does not provide any evidence of measurable impact on outcomes or results. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 75,
+            "explanation": "The resume is clear and provides a straightforward summary of the candidate's experience, skills, and education. The resume does not contain any ambiguous or unclear statements that could affect the interpretation of the candidate's qualifications. The resume is clear and provides a straightforward summary of the candidate's experience, skills, and education.",
+            "evidence": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "How did you implement semantic search in your machine learning models? Could you provide an example of how you optimized performance in this area? How would you integrate vector search into a new project? How do you stay updated with the latest advancements in machine learning and vector search?"
+        ],
+        "warnings": [
+          "The resume does not mention any measurable impact or outcomes related to machine learning, PyTorch, or vector search. The resume does not provide any specific data or metrics to support measurable impact. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅",
+          "The resume does not provide any specific data or metrics to support measurable impact on outcomes or results. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "explicit use/delivery passage",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "partial",
+            "confidence": 65,
+            "reason": "learning passage",
+            "evidenceId": "s0"
+          },
+          "r2": {
+            "verdict": "partial",
+            "confidence": 65,
+            "reason": "learning passage",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 85,
+            "explanation": "The resume mentions PyTorch and semantic search, which are relevant to the required skills of machine learning, PyTorch, and vector search. However, PyTorch is required, so it is partially relevant in terms of demonstrated experience, but the resume does not explicitly mention vector search beyond its mention in the job description, making it only partially relevant for measurable impact. The resume does not explicitly mention any measurable impact on outcomes related to machine learning or AI/빅",
+            "evidence": [
+              "s0",
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 90,
+            "explanation": "The resume provides evidence of demonstrated experience with PyTorch and semantic search, which are directly related to the job requirements. However, the resume does not explicitly mention any measurable impact or outcomes related to these skills, which is required for full demonstration of experience. The resume does not mention any measurable impact or outcomes related to these skills, which is required for full demonstration of experience. The resume does not mention any measurable impact or",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not mention any measurable impact or outcomes related to machine learning, PyTorch, or vector search. The resume only mentions experience with developing machine learning models and implementing semantic search, but does not provide any evidence of measurable impact on outcomes or results. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅",
+            "evidence": [
+              "s4"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 75,
+            "explanation": "The resume is clear and provides a straightforward summary of the candidate's experience, skills, and education. The resume does not contain any ambiguous or unclear statements that could affect the interpretation of the candidate's qualifications. The resume is clear and provides a straightforward summary of the candidate's experience, skills, and education.",
+            "evidence": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "How did you implement semantic search in your machine learning models? Could you provide an example of how you optimized performance in this area? How would you integrate vector search into a new project? How do you stay updated with the latest advancements in machine learning and vector search?"
+        ],
+        "warnings": [
+          "The resume does not mention any measurable impact or outcomes related to machine learning, PyTorch, or vector search. The resume does not provide any specific data or metrics to support measurable impact. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅",
+          "The resume does not provide any specific data or metrics to support measurable impact on outcomes or results. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅. The resume does not mention any measurable impact or outcomes related to machine learning or AI/빅."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "explicit use/delivery passage",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "learning passage",
+          "quote": "Synthetic Candidate 9",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "learning passage",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 46157.1495,
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "explicit use/delivery passage",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "learning passage",
+          "quote": "Synthetic Candidate 9",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "partial",
+          "reason": "learning passage",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.7096000000019558,
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 28309.522800000035,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "accessibility",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          },
+          {
+            "skill": "next.js",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          },
+          {
+            "skill": "rest api",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 95,
+            "explanation": "The resume demonstrates strong technical skills in Next.js, RESTful APIs, and accessibility through specific experience statements (s4). These are directly relevant to the job requirements.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 95,
+            "explanation": "The resume provides clear evidence of experience with Next.js, RESTful APIs, and accessibility (s4). This is directly tied to the job requirements.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not provide any measurable impact or outcomes related to the use of Next.js, RESTful APIs, or accessibility.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 95,
+            "explanation": "The resume passages are clear and directly address the job requirements without ambiguity.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with Next.js and RESTful APIs?"
+        ],
+        "warnings": [
+          "No warnings as all requirements are supported and relevant."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "r0": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceId": "s4"
+          },
+          "r1": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceId": "s4"
+          },
+          "r2": {
+            "verdict": "supported",
+            "confidence": 100,
+            "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+            "evidenceId": "s4"
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 95,
+            "explanation": "The resume demonstrates strong technical skills in Next.js, RESTful APIs, and accessibility through specific experience statements (s4). These are directly relevant to the job requirements.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 95,
+            "explanation": "The resume provides clear evidence of experience with Next.js, RESTful APIs, and accessibility (s4). This is directly tied to the job requirements.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "The resume does not provide any measurable impact or outcomes related to the use of Next.js, RESTful APIs, or accessibility.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 95,
+            "explanation": "The resume passages are clear and directly address the job requirements without ambiguity.",
+            "evidence": [
+              "s4: 'Developed accessible NextJS interfaces and designed RESTful APIs for customer products.'"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you provide more details about your experience with Next.js and RESTful APIs?"
+        ],
+        "warnings": [
+          "No warnings as all requirements are supported and relevant."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 28311.880400000024,
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The resume passage s4 explicitly states the use of Next.js and RESTful APIs for developing interfaces and APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    }
+  ],
+  "summaries": [
+    {
+      "pipeline": "rules",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.125,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 1.9412000000011176,
+      "p95LatencyMs": 10.761999999998807,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          15,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 9,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 4,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "llm",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 10,
+      "fallbackCases": 0,
+      "accuracy": 0.6666666666666666,
+      "macroF1": 0.612942612942613,
+      "supportPrecision": 0.9090909090909091,
+      "supportRecall": 0.6666666666666666,
+      "abstentionRate": 0.16666666666666666,
+      "unsupportedSupportRate": 0.09090909090909091,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 39986.00219999999,
+      "p95LatencyMs": 51102.69799999999,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          10,
+          3,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          2
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 5,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 1,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 1,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "hybrid",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 10,
+      "fallbackCases": 0,
+      "accuracy": 0.6666666666666666,
+      "macroF1": 0.612942612942613,
+      "supportPrecision": 0.9090909090909091,
+      "supportRecall": 0.6666666666666666,
+      "abstentionRate": 0.16666666666666666,
+      "unsupportedSupportRate": 0.09090909090909091,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 39988.36809999996,
+      "p95LatencyMs": 51104.610799999995,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          10,
+          3,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          2
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 5,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 1,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 1,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "dense-nli",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    },
+    {
+      "pipeline": "reranked-nli",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    },
+    {
+      "pipeline": "rules-transformer",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    }
+  ]
+}

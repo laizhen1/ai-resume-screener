@@ -4,6 +4,10 @@
   "private": true,
   "description": "A privacy-first, explainable candidate matching and evaluation platform.",
   "scripts": {
+    "llm:serve": "node scripts/llm.mjs serve",
+    "llm:pull": "node scripts/llm.mjs pull",
+    "llm:check": "node scripts/llm.mjs check",
+    "llm:smoke": "tsx scripts/smoke-llm.ts",
     "models:setup": "node scripts/pytorch.mjs setup",
     "models:start": "node scripts/pytorch.mjs serve",
     "models:check": "node scripts/pytorch.mjs check",
@@ -20,6 +24,7 @@
     "worker": "tsx scripts/worker.ts",
     "auth:hash": "tsx scripts/hash-password.ts",
     "compare": "tsx scripts/compare.ts",
+    "verify:reports": "tsx scripts/verify-reports.ts",
     "ml:baseline": "tsx scripts/export-evidence-baseline.ts",
     "eval:prompts": "node scripts/eval-prompts.mjs",
     "test:prompts": "node scripts/smoke-prompts.mjs"

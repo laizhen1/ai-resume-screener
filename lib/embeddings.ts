@@ -22,7 +22,8 @@ function deterministicEmbedding(text: string): number[] {
   return vector.map((value) => value / magnitude);
 }
 
-export async function embedTexts(texts: string[]): Promise<EmbeddingResult> {
+export async function embedTexts(texts: string[], signal?: AbortSignal): Promise<EmbeddingResult> {
+  signal?.throwIfAborted();
   const useOllama = process.env.ENABLE_LOCAL_EMBEDDINGS === "true";
   const model = process.env.OLLAMA_EMBEDDING_MODEL ?? "nomic-embed-text";
   if (useOllama) {
@@ -32,13 +33,14 @@ export async function embedTexts(texts: string[]): Promise<EmbeddingResult> {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ model, input: texts }),
-        signal: AbortSignal.timeout(30_000)
+        signal: AbortSignal.any([AbortSignal.timeout(30_000), ...(signal ? [signal] : [])])
       });
       if (!response.ok) throw new Error(`Ollama returned ${response.status}`);
       const payload = await response.json() as { embeddings?: number[][] };
       if (!payload.embeddings || payload.embeddings.length !== texts.length) throw new Error("Invalid embedding response");
       return { vectors: payload.embeddings, source: "ollama-embedding", model };
     } catch {
+      signal?.throwIfAborted();
       // Offline behavior is intentional: the product must remain usable without a model.
     }
   }

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { EvaluationRunRecord } from "@/lib/domain";
 import { VERDICTS, type Feedback, type Pipeline, type Split } from "@/lib/experiments/types";
 
-const names: Record<Pipeline, string> = { rules: "Rules baseline", llm: "LLM only", hybrid: "Hybrid - verified evidence", "dense-nli": "Dense retrieval + DeBERTa", "reranked-nli": "Reranker + DeBERTa", "rules-transformer": "Rules + transformers" };
+const legacyNames: Record<Pipeline, string> = { rules: "Rules baseline", llm: "Direct model verdicts", hybrid: "Model + source validation", "dense-nli": "Dense retrieval + DeBERTa", "reranked-nli": "Reranker + DeBERTa", "rules-transformer": "Rules + transformers" };
 const percent = (value: number | null) => value === null ? "N/A" : `${(value * 100).toFixed(1)}%`;
 const latency = (value: number | null) => value === null ? "N/A" : value >= 1000 ? `${(value / 1000).toFixed(2)} s` : `${value.toFixed(1)} ms`;
 function download(name: string, data: unknown) {
@@ -39,6 +39,9 @@ export default function EvaluationPage() {
   const controller = useRef<AbortController | null>(null);
   const active = runs.find(run => run.id === runId) ?? runs[0];
   const report = active?.report;
+  const names = report?.configuration.evidencePolicyVersion
+    ? { ...legacyNames, llm: "Model categories + policy", hybrid: "Model categories + policy + validation" }
+    : legacyNames;
   const selected = report?.results.find(row => row.pipeline === pipeline && row.caseId === caseId);
   const example = report?.examples.find(item => item.id === caseId);
   const [skill, setSkill] = useState("");
@@ -62,7 +65,7 @@ export default function EvaluationPage() {
   }, [active]);
 
   async function run() {
-    setBusy(true); setError(""); setNotice(""); setProgress({ completed: 0, total: split === "heldout" ? 24 : 10 });
+    setBusy(true); setError(""); setNotice(""); setProgress({ completed: 0, total: split === "development" ? 10 : 24 });
     controller.current = new AbortController();
     try {
       const response = await fetch("/api/workspace/experiments", {
@@ -109,26 +112,28 @@ export default function EvaluationPage() {
   const rows = report?.results.filter(row => row.pipeline === pipeline && (!failuresOnly || row.error || row.predictions.some(p => p.actual !== p.expected || p.missing || (p.actual !== "unknown" && !p.citationValid)))) ?? [];
   return <main className="app-shell experiment-shell">
     <header className="app-header"><Link className="brand-link" href="/">Open Resume Lab</Link><nav className="app-nav"><Link href="/workspace">Workspace</Link><Link href="/evaluation" aria-current="page">Evaluation</Link><Link href="/evaluation/regression">Regression suite</Link></nav></header>
-    <section className="page-intro experiment-intro"><p className="eyebrow">EXPERIMENT LAB</p><h1>Put the evidence to the test.</h1><p>Compare rules, raw model judgments, and verified AI evidence on the same frozen examples.</p></section>
+    <section className="page-intro experiment-intro"><p className="eyebrow">EXPERIMENT LAB</p><h1>Put the evidence to the test.</h1><p>Compare rules, model-based evidence judgments, and source validation on the same fixed examples.</p></section>
     <div className="experiment-body">
       <section className="content-card">
         <div className="experiment-controls">
-          <label>Dataset split<select value={split} disabled={busy} onChange={event => setSplit(event.target.value as Split)}><option value="heldout">Held-out - 24 unique cases</option><option value="development">Development - 10 unique cases</option></select></label>
+          <label>Dataset split<select value={split} disabled={busy} onChange={event => setSplit(event.target.value as Split)}><option value="heldout">Reused diagnostic - 24 unique cases</option><option value="development">Development - 10 unique cases</option><option value="challenge">New challenge - 24 unique cases</option></select></label>
           <label className="checkbox-label"><input type="checkbox" checked={includeModel} disabled={busy} onChange={event => setIncludeModel(event.target.checked)} />Include local LLM + hybrid</label>
           <label className="checkbox-label"><input type="checkbox" checked={includeTransformers} disabled={busy} onChange={event => setIncludeTransformers(event.target.checked)} />Include transformers + reranking</label>
           {includeModel && <label>Ollama model<input placeholder="Use server configuration" value={model} disabled={busy} onChange={event => setModel(event.target.value)} /></label>}
           <button className="primary" disabled={busy} onClick={() => void run()}>{busy ? "Running experiment..." : "Run comparison"}</button>
           {busy && <button className="secondary" onClick={() => controller.current?.abort()}>Cancel</button>}
         </div>
-        <p className="experiment-note">{includeModel ? "Uses your local Ollama model. Each example may take up to two minutes; progress appears after each example. Failed model calls are disclosed and stop further model requests for this run." : "Rules run locally without a model. Enable the comparison to measure LLM and hybrid results."}</p>
+        <p className="experiment-note">{includeModel ? "Uses your local Ollama model. Each example may take several minutes; progress appears after each example. Failed model calls are disclosed and stop further model requests for this run." : "Rules run locally without a model. Enable the comparison to measure LLM and hybrid results."}</p>
         {includeTransformers && <p className="experiment-note">Requires the local Python model service. Compares dense retrieval with reranking, then combines transformer judgments with rules. Service failures are reported as unavailable, never as model predictions.</p>}
         {busy && <div role="status"><progress max={progress.total} value={progress.completed} aria-label="Experiment progress" /><span> {progress.completed} / {progress.total} unique examples</span></div>}
       </section>
       {error && <p className="wide-error" role="alert">{error}</p>}
       {report && active ? <>
         <section className="content-card experiment-metadata">
-          <div><p className="eyebrow">{report.dataset.split === "heldout" ? "HELD-OUT EVALUATION" : "DEVELOPMENT EVALUATION"}</p><h2>{report.dataset.uniqueCases} unique examples - {report.dataset.executions} executions</h2><p>{report.dataset.annotationStatus}</p></div>
+          <div><p className="eyebrow">{report.dataset.split === "heldout" ? "DIAGNOSTIC EVALUATION" : report.dataset.split === "challenge" ? "NEW CHALLENGE EVALUATION" : "DEVELOPMENT EVALUATION"}</p><h2>{report.dataset.uniqueCases} unique examples - {report.dataset.executions} executions</h2><p>{report.dataset.annotationStatus}</p></div>
           <button className="secondary" onClick={() => download(`experiment-${active.id}.json`, report)}>Export run JSON</button>
+          {report.configuration.evidencePolicyVersion && <p>The model chooses evidence categories; a fixed policy maps them to verdicts. {report.configuration.outputSemantics}</p>}
+          {report.configuration.evidenceValidationVersion && <p>Evidence checks may abstain on ordinary-word meanings, other people&apos;s work or document instructions. Original model judgments remain in the report; these checks do not prove that all remaining interpretations are correct.</p>}
           {report.configuration.includeTransformers && <p>Transformer comparison requested. Each completed case records model names, revisions, package versions, thresholds and retrieved evidence in the JSON export.</p>}
           <dl><div><dt>Dataset</dt><dd>{report.dataset.version}</dd></div><div><dt>Model</dt><dd>{report.configuration.includeModel ? report.configuration.model : "Not requested"}</dd></div><div><dt>Engine / prompt</dt><dd>{report.engineVersion} / {report.configuration.promptVersion}</dd></div><div><dt>Dataset SHA-256</dt><dd className="hash-value">{report.dataset.hash}</dd></div></dl>
         </section>
@@ -154,6 +159,7 @@ export default function EvaluationPage() {
           {selected.predictions.length > 1 && <label>Requirement<select value={prediction?.skill ?? ""} onChange={event => { setSkill(event.target.value); setReason(""); setNotice(""); }}>{selected.predictions.map(p => <option key={p.skill}>{p.skill}</option>)}</select></label>}
           <div className="experiment-grid"><div><h3>Original resume</h3><Highlight text={example.resume} quote={prediction?.quote ?? null} /></div><div><h3>Model judgment</h3>{prediction ? <><p><strong>{prediction.skill}</strong>: {prediction.actual} / expected {prediction.expected}</p><p>{prediction.reason}</p><blockquote>{prediction.quote ?? "No evidence quote provided."}</blockquote><p>{prediction.citationValid ? "Exact quote verified in the source." : "No exact source citation verified."}</p></> : <p>{selected.error ?? "This pipeline was not run."}</p>}</div></div>
           {selected.transformerMetadata && <details><summary>Transformer model configuration and retrieved passages</summary><pre className="source-text">{JSON.stringify({ metadata: selected.transformerMetadata, evidence: selected.transformerEvidence?.filter(item => item.skill === prediction?.skill) }, null, 2)}</pre></details>}
+          {selected.evidenceChecks && <details><summary>Original model response and evidence checks</summary><pre className="source-text">{JSON.stringify({ modelOutput: report.results.find(row => row.caseId === caseId && row.pipeline === "llm")?.modelOutput, checks: selected.evidenceChecks }, null, 2)}</pre></details>}
           {prediction && <form onSubmit={event => { event.preventDefault(); void saveFeedback(); }}>
             <h3>Record a reviewer correction</h3><p>Corrections enter a development-candidate review queue. They do not rewrite this experiment or its frozen labels.</p>
             <label>Reviewer verdict<select value={verdict} disabled={saving} onChange={event => setVerdict(event.target.value as typeof verdict)}>{VERDICTS.map(v => <option key={v}>{v}</option>)}</select></label>

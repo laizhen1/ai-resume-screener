@@ -12,11 +12,14 @@ const server = createServer(async (request, response) => {
   let body = "";
   for await (const chunk of request) body += chunk;
   const payload = JSON.parse(body);
-  if (request.url !== "/api/generate" || !payload.prompt.includes("Built Python services for shipment tracking.")) {
+  if (request.url !== "/api/generate" || !payload.prompt.includes("Built Python services for shipment tracking.") || Object.keys(payload.format?.properties?.criteria?.properties ?? {}).length !== 4) {
     response.writeHead(400).end(); return;
   }
   response.setHeader("Content-Type", "application/json");
-  response.end(JSON.stringify({ response: JSON.stringify(draft) }));
+  const ids = Object.keys(payload.format.properties.requirementJudgments.properties);
+  const wire = { ...draft, criteria: Object.fromEntries(draft.criteria.map(item => [item.criterion, { score: item.score, explanation: item.explanation, evidenceIds: ["s0"] }])), requirementJudgments: Object.fromEntries(ids.map(id => [id, { category: "applicant_used_skill", confidence: 0.75, reason: "Explicit work", evidenceId: "s0" }])), additionalRequirements: [] };
+  delete wire.requirements;
+  response.end(JSON.stringify({ response: JSON.stringify(wire) }));
 });
 await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
 const child = spawn(process.execPath, ["scripts/eval-prompts.mjs", "--filter-first-n", "1"], {

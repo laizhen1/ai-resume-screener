@@ -1,21 +1,24 @@
 import { performance } from "node:perf_hooks";
+import { generationSettings, localModel, localTimeout } from "../local-llm";
 import { analyzeResume, composeAiAnalysis, DEFAULT_SCORING_WEIGHTS, ENGINE_VERSION } from "../analyzer";
-import { analyzeWithOllama } from "../ai-analysis";
-import { SKILL_ALIASES, TAXONOMY_VERSION } from "../skills";
+import { analyzeWithOllama, ANALYSIS_PROMPT_VERSION, EVIDENCE_POLICY_VERSION } from "../ai-analysis";
+import { TAXONOMY_VERSION } from "../skills";
+import { ALIGNMENT_VERSION, canonicalRequirementName, consolidateRequirements } from "../requirement-identity";
 import { getDataset } from "./dataset";
 import { summarize } from "./metrics";
 import { PIPELINES, type CaseResult, type Example, type ExperimentReport, type Prediction, type Split } from "./types";
 import { analyzeWithTransformers, combineTransformerEvidence } from "../transformers";
+import { EVIDENCE_VALIDATION_VERSION } from "../evidence-eligibility";
 
 type ModelCall = typeof analyzeWithOllama;
-function align(example: Example, assessments: { skill: string; verdict: Prediction["actual"]; reason: string; quote: string | null }[]): Prediction[] {
+export function align(example: Example, assessments: { skill: string; verdict: Prediction["actual"]; reason: string; quote: string | null }[]): Prediction[] {
+  const normalized = consolidateRequirements(assessments, item => ({ ...item, quote: null }));
   return Object.entries(example.expectedVerdicts).map(([skill, expected]) => {
-    const names = [skill, ...(SKILL_ALIASES[skill] ?? [])];
-    const prediction = assessments.find(item => names.includes(item.skill.trim().toLowerCase()));
+    const prediction = normalized.find(item => item.skill === canonicalRequirementName(skill));
     const quote = prediction?.quote ?? null;
     return {
       skill, expected, actual: prediction?.verdict ?? "unknown",
-      reason: prediction?.reason ?? "The pipeline did not extract this requirement.",
+      reason: prediction?.reason ?? "No unambiguous canonical requirement name matched the model output.",
       quote, citationValid: Boolean(quote && example.resume.includes(quote)), missing: !prediction
     };
   });
@@ -25,15 +28,16 @@ const mapped = (result: ReturnType<typeof analyzeResume>) => (result.requirement
 }));
 
 export async function runComparison(
-  options: { split: Split; includeModel: boolean; includeTransformers?: boolean; model?: string; signal?: AbortSignal },
+  options: { split: Split; includeModel: boolean; includeTransformers?: boolean; model?: string; temperature?: number; signal?: AbortSignal },
   onProgress?: (completed: number, total: number) => void,
   modelCall: ModelCall = analyzeWithOllama,
   transformerCall: typeof analyzeWithTransformers = analyzeWithTransformers
 ): Promise<ExperimentReport> {
   const { examples, metadata } = getDataset(options.split);
-  const model = options.model ?? process.env.OLLAMA_ANALYSIS_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
-  const configuredTimeout = Number(process.env.OLLAMA_ANALYSIS_TIMEOUT_MS ?? 45_000);
-  const timeoutMs = Number.isFinite(configuredTimeout) && configuredTimeout > 0 ? Math.min(configuredTimeout, 120_000) : 45_000;
+  const model = options.model ?? localModel("analysis");
+  const temperature = options.temperature ?? generationSettings(model).options.temperature;
+  if (!Number.isFinite(temperature) || temperature < 0 || temperature > 2) throw new Error("Temperature must be between 0 and 2.");
+  const timeoutMs = localTimeout();
   const results: CaseResult[] = [];
   let modelFailed = false;
   let transformerFailed = false;
@@ -49,8 +53,9 @@ export async function runComparison(
     } else {
       const started = performance.now();
       let ai: Awaited<ReturnType<ModelCall>> = null;
+      let invalidOutput: unknown;
       if (!modelFailed) {
-        try { ai = await modelCall(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, { model, seed: 42, temperature: 0, timeoutMs, signal: options.signal }); }
+        try { ai = await modelCall(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, { model, seed: 42, temperature, timeoutMs, signal: options.signal, onInvalidOutput: output => { invalidOutput = output; } }); }
         catch { ai = null; }
       }
       options.signal?.throwIfAborted();
@@ -58,14 +63,15 @@ export async function runComparison(
       if (!ai) {
         const error = modelFailed ? "Skipped after the model failed earlier in this run." : "Model disabled, unavailable, timed out, or returned invalid structured output.";
         modelFailed = true;
-        results.push({ ...base, pipeline: "llm", provider: "unavailable", latencyMs: modelMs, predictions: [], error });
+        results.push({ ...base, pipeline: "llm", provider: "unavailable", latencyMs: modelMs, predictions: [], modelOutput: invalidOutput, error });
         results.push({ ...base, pipeline: "hybrid", provider: "fallback", latencyMs: rulesMs + modelMs, predictions: align(example, mapped(rules)), error });
       } else {
-        results.push({ ...base, pipeline: "llm", provider: "ollama", latencyMs: modelMs, predictions: align(example, ai.draft.requirements.map(item => ({ ...item, quote: item.evidenceText }))) });
+        results.push({ ...base, pipeline: "llm", provider: "ollama", latencyMs: modelMs, modelDraft: ai.draft, modelOutput: ai.wireOutput, predictions: align(example, ai.draft.requirements.map(item => ({ ...item, quote: item.evidenceText }))) });
         const validationStarted = performance.now();
         try {
           const hybrid = composeAiAnalysis(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, ai.draft, ai.model);
-          results.push({ ...base, pipeline: "hybrid", provider: "ollama", latencyMs: rulesMs + modelMs + performance.now() - validationStarted, predictions: align(example, mapped(hybrid)) });
+          results.push({ ...base, pipeline: "hybrid", provider: "ollama", latencyMs: rulesMs + modelMs + performance.now() - validationStarted,
+            evidenceChecks: (hybrid.requirementAssessments ?? []).flatMap(item => item.evidenceValidation ? [{ skill: item.skill, ...item.evidenceValidation }] : []), predictions: align(example, mapped(hybrid)) });
         } catch {
           results.push({ ...base, pipeline: "hybrid", provider: "fallback", latencyMs: rulesMs + modelMs + performance.now() - validationStarted, predictions: align(example, mapped(rules)), error: "Model scoring rubric failed validation." });
         }
@@ -99,7 +105,7 @@ export async function runComparison(
   return {
     version: "comparison-v1", createdAt: new Date().toISOString(), engineVersion: ENGINE_VERSION, taxonomyVersion: TAXONOMY_VERSION,
     dataset: metadata,
-    configuration: { includeModel: options.includeModel, includeTransformers: options.includeTransformers ?? false, model, promptVersion: "core-analysis-v1", seed: 42, temperature: 0, timeoutMs, node: process.version, platform: process.platform },
+    configuration: { includeModel: options.includeModel, includeTransformers: options.includeTransformers ?? false, model, promptVersion: ANALYSIS_PROMPT_VERSION, evidencePolicyVersion: EVIDENCE_POLICY_VERSION, evidenceValidationVersion: EVIDENCE_VALIDATION_VERSION, outputSemantics: "LLM rows map model categories to verdicts. Hybrid rows additionally check source identity, ordinary-word senses, attribution and document instructions; checks only abstain and never promote verdicts.", alignmentVersion: ALIGNMENT_VERSION, seed: 42, temperature, timeoutMs, node: process.version, platform: process.platform, generation: generationSettings(model, { temperature, seed: 42 }) },
     examples, results, summaries: PIPELINES.map(pipeline => summarize(pipeline, results))
   };
 }

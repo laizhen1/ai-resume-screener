@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { randomInt } from "node:crypto";
 import type { SyntheticResume } from "./types";
+import { finalResponse, generationSettings, localModel, localTimeout } from "./local-llm";
 
 const resumeSchema = z.object({
   name: z.string().min(2),
@@ -61,7 +62,7 @@ export async function generateSyntheticResume(role: string, seniority: string) {
   if (process.env.ENABLE_LOCAL_AI === "false") return { resume: fallback, source: "built-in" as const };
 
   const baseUrl = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
-  const model = process.env.OLLAMA_MODEL ?? "qwen3:4b";
+  const model = localModel();
   const prompt = `Generate one completely fictional resume for UI testing. Role: ${role}. Seniority: ${seniority}.
 Return JSON only with: name, email, location, summary, skills, experience[{title,company,period,highlights[]}], education.
 Use example.com for email, invented employers, no real people, no phone number, and plausible but explicitly synthetic achievements.`;
@@ -70,12 +71,11 @@ Use example.com for email, invented employers, no real people, no phone number, 
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false, format: "json", think: false, options: { temperature: 0.8 } }),
-      signal: AbortSignal.timeout(30_000)
+      body: JSON.stringify({ model, prompt, stream: false, format: z.toJSONSchema(resumeSchema), ...generationSettings(model) }),
+      signal: AbortSignal.timeout(localTimeout())
     });
     if (!response.ok) throw new Error(`Ollama returned ${response.status}`);
-    const data = await response.json() as { response?: string; thinking?: string };
-    const resume = resumeSchema.parse(extractJson(data.response || data.thinking || ""));
+    const resume = resumeSchema.parse(extractJson(finalResponse(await response.json())));
     if (!resume.email.endsWith("@example.com")) resume.email = fallback.email;
     return { resume, source: "ollama" as const };
   } catch {

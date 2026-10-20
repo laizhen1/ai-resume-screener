@@ -63,7 +63,7 @@ services:
       QUEUE_MODE: redis
       REDIS_URL: redis://redis:6379
       OLLAMA_BASE_URL: http://host.docker.internal:11434
-      OLLAMA_MODEL: qwen3:4b
+      OLLAMA_MODEL: deepseek-r1:7b
       ENABLE_LOCAL_AI: "true"
       ENABLE_LOCAL_EMBEDDINGS: "false"
       AUTH_DISABLED: "true"

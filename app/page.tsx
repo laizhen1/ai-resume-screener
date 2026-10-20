@@ -1,10 +1,11 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnalysisResult } from "@/lib/types";
 import { TransformerEvidencePanel } from "./components/transformer-evidence";
 import { ResumeQa } from "./components/resume-qa";
+import { EVIDENCE_DEMO } from "@/lib/demo";
 
 const SAMPLE_JOB = `We are seeking a Software Engineer to build reliable customer-facing products. The role requires TypeScript, React, Next.js, Node.js, PostgreSQL, Docker, testing and GitHub Actions. You will design REST APIs, improve application performance, collaborate with an agile team and communicate technical trade-offs.`;
 
@@ -19,9 +20,23 @@ export default function Home() {
   const [loading, setLoading] = useState<"generate" | "analyze" | null>(null);
   const [error, setError] = useState("");
   const [analysisSource, setAnalysisSource] = useState<{ text: string; file: File | null }>({ text: "", file: null });
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [demoLoaded, setDemoLoaded] = useState(false);
+  const analysisController = useRef<AbortController | null>(null);
+  useEffect(() => () => analysisController.current?.abort(), []);
+
+  function clearAnalysis() {
+    setResult(null); setError(""); setSource(null); setDemoLoaded(false);
+  }
+
+  function loadDemo() {
+    clearAnalysis(); setJobDescription(EVIDENCE_DEMO.job); setResumeText(EVIDENCE_DEMO.resume);
+    setFile(null); setDemoLoaded(true);
+    if (fileInput.current) fileInput.current.value = "";
+  }
 
   async function generateResume() {
-    setLoading("generate"); setError(""); setResult(null);
+    setLoading("generate"); clearAnalysis();
     try {
       const response = await fetch("/api/generate", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -30,6 +45,7 @@ export default function Home() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResumeText(data.text); setFile(null); setSource(data.source);
+      if (fileInput.current) fileInput.current.value = "";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed.");
     } finally { setLoading(null); }
@@ -37,18 +53,19 @@ export default function Home() {
 
   async function analyze(event: FormEvent) {
     event.preventDefault(); setLoading("analyze"); setError(""); setResult(null);
+    const controller = new AbortController(); analysisController.current = controller;
     try {
       const form = new FormData();
       form.set("jobDescription", jobDescription);
       form.set("resumeText", resumeText);
       if (file) form.set("resumeFile", file);
-      const response = await fetch("/api/analyze", { method: "POST", body: form });
+      const response = await fetch("/api/analyze", { method: "POST", body: form, signal: controller.signal });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       setResult(data.analysis);
       setAnalysisSource({ text: resumeText, file });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Analysis failed.");
+      if (!controller.signal.aborted) setError(err instanceof Error ? err.message : "Analysis failed.");
     } finally { setLoading(null); }
   }
 
@@ -59,32 +76,41 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow">LOCAL-FIRST · EVIDENCE-GROUNDED · OPEN SOURCE</p>
           <h1>Inspect candidate evidence<br /><em>without automating decisions.</em></h1>
-          <p className="lede">The contextual engine separates demonstrated, learning-only, contradicted and unknown requirements, then shows the exact résumé evidence behind every judgment.</p>
+          <p className="lede">Use a local LLM to interpret job requirements and résumé evidence, verify its source quotes, and review what is demonstrated, still being learned, contradicted or unknown. An offline rules engine keeps the workflow available.</p>
           <div className="trust"><span>✓ No paid API required</span><span>✓ Explicit abstention</span><span>✓ Human review required</span></div>
         </div>
       </header>
 
       <form onSubmit={analyze} className="workspace">
         <section className="panel generator">
-          <div className="section-heading"><div><span className="step">01</span><h2>Create test data</h2></div><span className="badge">Privacy-safe</span></div>
-          <p>Generate an entirely fictional profile using free local AI or the built-in generator.</p>
+          <div className="section-heading"><div><span className="step">01</span><h2>Try the evidence demo</h2></div></div>
+          <p>Start with a fictional profile that shows why a keyword match is only the beginning of a review.</p>
+          <button type="button" className="primary" onClick={loadDemo} disabled={loading !== null}>Load guided example<span aria-hidden="true">→</span></button>
+          <p className="demo-explanation">{EVIDENCE_DEMO.explanation}</p>
+          {demoLoaded && <p className="status" role="status">Example loaded. Select Analyse match to inspect its evidence.</p>}
+          <details className="demo-generator"><summary>Create another fictional profile</summary>
+          <p>Use local AI when available, or the built-in offline generator.</p>
           <div className="inline-fields">
-            <label>Target role<input value={role} onChange={(e) => setRole(e.target.value)} /></label>
-            <label>Level<select value={seniority} onChange={(e) => setSeniority(e.target.value)}><option>Entry-level</option><option>Intermediate</option><option>Senior</option></select></label>
+            <label>Target role<input disabled={loading !== null} value={role} onChange={(e) => setRole(e.target.value)} /></label>
+            <label>Level<select disabled={loading !== null} value={seniority} onChange={(e) => setSeniority(e.target.value)}><option>Entry-level</option><option>Intermediate</option><option>Senior</option></select></label>
           </div>
           <button type="button" className="secondary" onClick={generateResume} disabled={loading !== null}>{loading === "generate" ? "Generating…" : "Generate fictional resume"}</button>
           {source && <p className="status">Generated by {source === "ollama" ? "your local Ollama model" : "the built-in offline generator"}.</p>}
+          </details>
+          <Link className="demo-evaluation-link" href="/evaluation">Compare pipelines in the evaluation lab →</Link>
         </section>
 
         <section className="panel inputs">
           <div className="section-heading"><div><span className="step">02</span><h2>Add role and resume</h2></div></div>
-          <label>Job description<textarea rows={8} value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} /></label>
-          <label>Resume text<textarea rows={13} value={resumeText} onChange={(e) => { setResumeText(e.target.value); setFile(null); }} placeholder="Generate a fictional resume above, paste text, or upload a file." /></label>
+          <label>Job description<textarea disabled={loading !== null} rows={8} value={jobDescription} onChange={(e) => { clearAnalysis(); setJobDescription(e.target.value); }} /></label>
+          <label>Resume text<textarea disabled={loading !== null} rows={13} value={resumeText} onChange={(e) => { clearAnalysis(); setResumeText(e.target.value); setFile(null); if (fileInput.current) fileInput.current.value = ""; }} placeholder="Load the guided example, paste text, or upload a file." /></label>
           <div className="upload-row">
-            <label className="file-button">Upload PDF, DOCX, TXT or image<input type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" onChange={(e) => { setFile(e.target.files?.[0] ?? null); setResumeText(""); }} /></label>
+            <label className="file-button">Upload PDF, DOCX, TXT or image<input ref={fileInput} disabled={loading !== null} type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" onChange={(e) => { const selected = e.target.files?.[0]; if (!selected) return; clearAnalysis(); setFile(selected); setResumeText(""); }} /></label>
             <span>{file ? file.name : "Maximum 5 MB · processed in memory"}</span>
           </div>
-          <button className="primary" disabled={loading !== null}>{loading === "analyze" ? "Analysing…" : "Analyse match"}<span>→</span></button>
+          <button className="primary" disabled={loading !== null || jobDescription.trim().length < 40 || (!file && resumeText.trim().length < 80)}>{loading === "analyze" ? "Analysing…" : "Analyse match"}<span aria-hidden="true">→</span></button>
+          {loading === "analyze" && <p className="status" role="status">Reviewing the evidence locally. The first request may take longer while the model loads.</p>}
+          {loading === "analyze" && <button type="button" className="secondary" onClick={() => analysisController.current?.abort()}>Cancel analysis</button>}
           {error && <div className="error" role="alert">{error}</div>}
         </section>
       </form>
@@ -103,7 +129,7 @@ export default function Home() {
           <div><span>Review status</span><strong>{result.reliability.status === "review-ready" ? "Evidence found—review still required" : "Human verification required"}</strong></div>
           <div><span>Evidence coverage</span><strong>{Math.round(result.reliability.evidenceCoverage * 100)}%</strong></div>
           <div><span>Extraction quality</span><strong>{result.reliability.extractionQuality}</strong></div>
-          <div><span>Rule confidence</span><strong>{Math.round(result.reliability.averageConfidence * 100)}%</strong></div>
+          <div><span>{result.analysisProvider === "ollama" ? "Model confidence (uncalibrated)" : "Rule confidence"}</span><strong>{Math.round(result.reliability.averageConfidence * 100)}%</strong></div>
         </div>}
         {result.aiReview && <section className="semantic-note ai-review">
           <h3>Local AI reviewer summary</h3>
@@ -116,7 +142,7 @@ export default function Home() {
         <TransformerEvidencePanel result={result.transformerEvidence} />
         {result.transformerEvidence && <ResumeQa resumeText={analysisSource.text} file={analysisSource.file} />}
         {result.requirementAssessments?.length ? <section className="requirement-section">
-          <div className="section-copy"><h3>Requirement evidence</h3><p>Confidence describes the rule judgment, not a probability that a person is qualified.</p></div>
+          <div className="section-copy"><h3>Requirement evidence</h3><p>{result.analysisProvider === "ollama" ? "Model confidence is uncalibrated. Check each judgment against its source evidence." : "Confidence describes the rule judgment, not a probability that a person is qualified."}</p></div>
           <div className="requirement-grid">{result.requirementAssessments.map((assessment) => <article className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}>
             <div><strong>{assessment.skill}</strong><span>{assessment.importance}</span></div>
             <p className="verdict-label">{assessment.verdict} · {Math.round(assessment.confidence * 100)}%</p>

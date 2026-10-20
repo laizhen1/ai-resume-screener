@@ -59,7 +59,7 @@ The existing `/evaluation` six-way experiment remains unchanged; new fine-tuned 
 ## 3. Promptfoo regression tests
 
 ```sh
-# Requires a running local Ollama with qwen3:4b installed
+# Requires a running local Ollama with deepseek-r1:7b installed
 npm run eval:prompts
 # Requires no Ollama: tests the CLI/provider/assertion path against an HTTP fixture
 npm run test:prompts

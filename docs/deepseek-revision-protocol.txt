@@ -1,0 +1,20 @@
+DeepSeek v2 evaluation protocol — 2026-10-20
+
+Freeze one prompt revision core-analysis-v2, shared alignment canonical-wrapper-v2, engine 3.1.0.
+Use the installed deepseek-r1:7b digest and existing preset: temperature 0.6, seed 42, reasoning on, context 8192, output 4096, timeout 180 seconds.
+Do not select the best of repeated runs or change labels to fit predictions.
+
+1. Reprocess all saved v1 production-preset drafts through corrected alignment and current validation; record zero live inference calls and no inference latency. This isolates a useful postprocessing baseline and must not be called a newly generated v1 run.
+2. Run v2 once on the 10-document development set (24 requirement judgments).
+3. Run the same frozen v2 once on the 24-document previously inspected set. Retain its legacy CLI split name for compatibility but call it a diagnostic, not an untouched holdout.
+4. Keep all prior artifacts. Verify dataset hashes, coverage, model/fallback counts, missing names, confusion matrices, source citation validity and metric recalculation.
+5. Compare v2 with both the corrected v1 replay and rules. Never attribute the old exact-name metric correction to improved model reasoning.
+6. Retain failures and negative results. Update Chinese STAR only with actual measurements and explain that these are provisional synthetic examples, not real recruitment outcomes.
+
+Prompt v2 uses general decision rules informed by previously observed errors: source separation, explicit negation, learning, attribution, aspirations, injection instructions, duplicate verdicts and calibrated language about scores. No reference labels or expected verdicts are passed to inference.
+Known skill identifiers supplied to the prompt come solely from the job description. Normalization uses exact aliases and a bounded grammar for prefixes/suffixes, never fuzzy substring matching or expected verdicts.
+Fresh independent human annotation and a new frozen test set are still needed for generalization claims.
+
+Development amendment: core-analysis-v2 completed all 10 documents but scored raw 16/24 and validated 8/24, with source-sentence rewriting and one missing requirement. Preserve that failed approach. Before running the 24-document diagnostic, revise once to core-analysis-v3-grounded: required requirement-ID judgments, constrained passage selection, application-owned names/source text. Run development and then diagnostic sequentially at the unchanged model preset. No v2 diagnostic was run, and no v3 diagnostic results were viewed before freezing v3. This development revision is not a retrospectively selected holdout result.
+
+Final amendment after v3: the full diagnostic scored 14/24 raw and 15/24 validated (versus corrected v1 15/24 and 13/24); the public walkthrough regressed to 2/4. Preserve all of those results. The final v4 contract uses semantic skill-name keys, excludes standalone section headings from evidence choices, and orders evidence selection/explanation before verdict generation to address cross-requirement confusion observed in development. Freeze v4 and run the full 10-document development, 24-document diagnostic, and public walkthrough once each, at unchanged inference settings. This is explicitly an iterative diagnostic on reused synthetic examples, not an independent test or a best-of-many undisclosed result. No further model/prompt revisions are planned in this pass.

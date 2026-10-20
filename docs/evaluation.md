@@ -1,6 +1,8 @@
-# Evaluation laboratory
+# Repeated-fixture regression evaluation
 
 Dataset version: **adversarial-context-v2.0**.
+
+This page documents the repeated-fixture regression suite at `/evaluation/regression`, not the current six-pipeline comparison at `/evaluation`. For the development, reused diagnostic and new challenge datasets, see [comparison methodology](experiments.md) and [current progress/results](progress.md). Repetition counts do not create new independent examples.
 
 The evaluation laboratory is a reproducible regression harness, not a hiring-validity or fairness study. `npm run evaluate -- 120` deterministically repeats a versioned set of adversarial fixtures so latency and regression behavior can be compared at different run sizes.
 

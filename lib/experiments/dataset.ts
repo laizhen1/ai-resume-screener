@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
 import { generateBenchmarkDataset } from "../evaluation";
 import type { Example, Split } from "./types";
+import { CHALLENGE } from "./challenge";
 
-// Frozen before running the new comparison. Agent-authored labels; human adjudication pending.
-// Do not tune prompts or rules on this split. Promote discovered cases into a future development version.
+// Frozen example content; agent-authored labels, human adjudication pending.
+// Retired as an untouched holdout after DeepSeek revisions used observed errors. The legacy split name remains for replay compatibility; new runs are diagnostics.
 export const HELDOUT: Example[] = [
   { id: "holdout-01", challenge: "delivery", job: "Python experience is required.", resume: "Fictional Applicant A\nEXPERIENCE\nImplemented Python batch jobs that reconciled warehouse invoices.", expectedVerdicts: { python: "supported" } },
   { id: "holdout-02", challenge: "alias", job: "Kubernetes experience is required.", resume: "Fictional Applicant B\nEXPERIENCE\nOperated k8s clusters and resolved failed rollouts during on-call shifts.", expectedVerdicts: { kubernetes: "supported" } },
@@ -32,16 +33,16 @@ export const HELDOUT: Example[] = [
 ];
 
 export function getDataset(split: Split) {
-  const examples = split === "heldout" ? structuredClone(HELDOUT) : generateBenchmarkDataset(10);
+  const examples = split === "challenge" ? structuredClone(CHALLENGE) : split === "heldout" ? structuredClone(HELDOUT) : generateBenchmarkDataset(10);
   return {
     examples,
     metadata: {
-      version: split === "heldout" ? "heldout-evidence-v1.0" : "adversarial-context-v2.0",
+      version: split === "challenge" ? "evidence-challenge-v1.0" : split === "heldout" ? "heldout-evidence-v1.0" : "adversarial-context-v2.0",
       split,
       hash: createHash("sha256").update(JSON.stringify(examples)).digest("hex"),
       uniqueCases: examples.length,
       executions: examples.length,
-      annotationStatus: split === "heldout" ? "Provisional agent-authored labels; independent human review pending." : "Development regression fixtures; used to tune the rules."
+      annotationStatus: split === "challenge" ? "New agent-authored challenge frozen before live inference; provisional labels, not independent human review." : split === "heldout" ? "Previously inspected diagnostic set; provisional agent-authored labels; independent human review pending." : "Development regression fixtures; used to tune the rules."
     }
   };
 }

@@ -18,8 +18,8 @@ The evaluation UI, streaming API and `scripts/compare.ts` support six pipelines:
 | ID | Pipeline |
 | --- | --- |
 | `rules` | Existing deterministic baseline |
-| `llm` | Raw Ollama judgments |
-| `hybrid` | Ollama judgments with source validation |
+| `llm` | Model-selected categories mapped by a fixed policy, before evidence checks |
+| `hybrid` | The same category-policy output with identity, source and v8 eligibility checks |
 | `dense-nli` | Sentence Transformers retrieval + DeBERTa |
 | `reranked-nli` | Sentence Transformers + cross-encoder + DeBERTa |
 | `rules-transformer` | Reranked NLI combined with rules |
@@ -31,10 +31,10 @@ The last variant preserves rule-detected partial and contradicted verdicts. An u
 Start the [model service](../services/model-service/README.md). With the default loopback URL no environment file is needed for the comparison CLI:
 
 ```sh
-npm run compare -- --split development --with-transformers --output reports/development-transformers.json
-npm run compare -- --split heldout --with-transformers --output reports/heldout-transformers.json
+npm run compare -- --split development --with-transformers --output reports/development-transformers-repeat.json
+npm run compare -- --split heldout --with-transformers --output reports/diagnostic-transformers-repeat.json
 # Add the existing Ollama pair once that model is running:
-npm run compare -- --split heldout --with-transformers --with-model --model qwen3:4b --output reports/all-models.json
+npm run compare -- --split heldout --with-transformers --with-model --model deepseek-r1:7b --output reports/all-models-repeat.json
 ```
 
 For a nondefault service URL or token, export `MODEL_SERVICE_URL` and `MODEL_SERVICE_TOKEN` in the CLI shell; the standalone `tsx` script does not load `.env.local`. Next.js does. A comparison explicitly selects transformer models with the flag or UI checkbox; `ENABLE_TRANSFORMER_ANALYSIS` controls only the main application's advisory panel and Q&A.

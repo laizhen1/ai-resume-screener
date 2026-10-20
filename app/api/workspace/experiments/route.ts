@@ -6,9 +6,10 @@ import { runComparison } from "@/lib/experiments/runner";
 
 export const runtime = "nodejs";
 const input = z.object({
-  split: z.enum(["development", "heldout"]),
+  split: z.enum(["development", "heldout", "challenge"]),
   includeModel: z.boolean(),
   includeTransformers: z.boolean().optional(),
+  temperature: z.number().min(0).max(2).optional(),
   model: z.string().trim().min(1).max(120).regex(/^[a-zA-Z0-9_.:/-]+$/).optional()
 }).strict();
 
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
     async start(controller) {
       const send = (message: unknown) => { if (!signal.aborted) controller.enqueue(encoder.encode(JSON.stringify(message) + "\n")); };
       try {
-        send({ type: "progress", completed: 0, total: parsed.data.split === "heldout" ? 24 : 10 });
+        send({ type: "progress", completed: 0, total: parsed.data.split === "development" ? 10 : 24 });
         const report = await runComparison({ ...parsed.data, signal }, (completed, total) => send({ type: "progress", completed, total }));
         signal.throwIfAborted();
         const repository = await getRepository();

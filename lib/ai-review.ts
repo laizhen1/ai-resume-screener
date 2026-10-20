@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { AiReviewSummary, RequirementAssessment } from "./types";
+import { finalResponse, generationSettings, localModel, localTimeout } from "./local-llm";
 
 const reviewSchema = z.object({
   summary: z.string().trim().min(1).max(700),
@@ -24,12 +25,13 @@ function evidenceContext(assessments: RequirementAssessment[]) {
   }));
 }
 
-export async function createAiReview(input: ReviewInput): Promise<AiReviewSummary | null> {
+export async function createAiReview(input: ReviewInput, signal?: AbortSignal): Promise<AiReviewSummary | null> {
+  signal?.throwIfAborted();
   if (process.env.ENABLE_LOCAL_AI_REVIEW === "false") return null;
   if (process.env.NODE_ENV === "test" || process.env.VITEST) return null;
 
   const baseUrl = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
-  const model = process.env.OLLAMA_REVIEW_MODEL ?? process.env.OLLAMA_MODEL ?? "qwen3:4b";
+  const model = localModel("review");
   const prompt = `You are a resume-evidence review assistant. Produce a concise, neutral reviewer aid from the supplied material.
 
 Safety rules:
@@ -52,16 +54,14 @@ Return JSON only with this exact shape:
     const response = await fetch(`${baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false, format: "json", think: false, options: { temperature: 0.1 } }),
-      signal: AbortSignal.timeout(45_000)
+      body: JSON.stringify({ model, prompt, stream: false, format: z.toJSONSchema(reviewSchema), ...generationSettings(model) }),
+      signal: AbortSignal.any([AbortSignal.timeout(localTimeout()), ...(signal ? [signal] : [])])
     });
     if (!response.ok) throw new Error(`Ollama returned ${response.status}`);
-    const payload = await response.json() as { response?: string; thinking?: string };
-    // Some reasoning-capable Ollama models return the structured answer in `thinking`
-    // when their completion body is empty. Both fields stay local to the same request.
-    const review = reviewSchema.parse(JSON.parse(payload.response || payload.thinking || ""));
+    const review = reviewSchema.parse(JSON.parse(finalResponse(await response.json())));
     return { ...review, source: "ollama", model };
   } catch {
+    signal?.throwIfAborted();
     // Local AI is optional. Deterministic analysis remains available when Ollama is unavailable or returns invalid data.
     return null;
   }

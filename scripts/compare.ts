@@ -7,16 +7,19 @@ async function main() {
   const { values } = parseArgs({ options: {
     split: { type: "string", default: "development" },
     model: { type: "string" },
+    temperature: { type: "string" },
     "with-model": { type: "boolean", default: false },
     "with-transformers": { type: "boolean", default: false },
     output: { type: "string" },
     "min-accuracy": { type: "string" }
   } });
-  if (values.split !== "heldout" && values.split !== "development") throw new Error("--split must be development or heldout.");
+  if (values.split !== "heldout" && values.split !== "development" && values.split !== "challenge") throw new Error("--split must be development, heldout or challenge.");
+  const temperature = values.temperature === undefined ? undefined : Number(values.temperature);
+  if (temperature !== undefined && (!Number.isFinite(temperature) || temperature < 0 || temperature > 2)) throw new Error("--temperature must be between 0 and 2.");
   const minimum = values["min-accuracy"] === undefined ? undefined : Number(values["min-accuracy"]);
   if (minimum !== undefined && (!Number.isFinite(minimum) || minimum < 0 || minimum > 1)) throw new Error("--min-accuracy must be between 0 and 1.");
   if (minimum !== undefined && values.split !== "development") throw new Error("Release gates use development data. Do not optimize against held-out scores.");
-  const report = await runComparison({ split: values.split, includeModel: values["with-model"] || Boolean(values.model), includeTransformers: values["with-transformers"], model: values.model }, (done, total) => console.error(`Evaluated ${done}/${total} unique cases`));
+  const report = await runComparison({ split: values.split, includeModel: values["with-model"] || Boolean(values.model), includeTransformers: values["with-transformers"], model: values.model, temperature }, (done, total) => console.error(`Evaluated ${done}/${total} unique cases`));
   if (values.output) {
     const target = resolve(values.output); await mkdir(dirname(target), { recursive: true }); await writeFile(target, JSON.stringify(report, null, 2) + "\n");
     console.error(`Saved report: ${target}`);

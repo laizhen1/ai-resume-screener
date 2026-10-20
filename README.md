@@ -4,17 +4,29 @@ Open Resume Lab is a privacy-first, explainable candidate-evidence and evaluatio
 
 It is a learning and decision-support system, not an automated hiring system. Use fictional or properly consented data only.
 
+## Portfolio walkthrough
+
+Open the homepage, select **Load guided example**, then **Analyse match**. Inspect Python delivery, Docker learning, explicitly absent Kubernetes experience and unknown Terraform evidence. The visible provider badge tells you whether the result came from DeepSeek or the offline rules engine. Editing the source clears the old result. Continue to the evaluation lab to inspect errors and export immutable experiment evidence.
+
+```sh
+npm test
+npm run test:e2e
+npm run verify:reports
+npm run llm:smoke -- --output reports/deepseek-demo-repeat.json
+```
+
+`verify:reports` checks the internal consistency of saved datasets, labels, source-quote flags and metrics; it does not rerun archived models or certify label quality. See [portfolio scope and evidence](docs/portfolio.md).
 ## What it demonstrates
 
 - PDF, DOCX, TXT, PNG and JPEG ingestion with signature validation and a 5 MB limit
 - Structured résumé sections, job requirements and exact evidence provenance
 - Context-aware requirement verdicts for supported, partial, contradicted and unknown evidence
 - Explicit abstention, extraction-quality signals and evidence-coverage reporting
-- Ollama-powered requirement extraction, evidence judgments, scoring explanations and interview prompts with a deterministic offline fallback
+- Dictionary-based requirement extraction/normalization, Ollama evidence-category selection and explanations, fixed category-to-verdict mapping, and an explicit deterministic fallback
 - Optional Ollama generation and embedding adapters with deterministic offline fallbacks
 - Sentence Transformers retrieval, cross-encoder reranking and DeBERTa NLI evidence review through an optional local Python service
 - Cited résumé Q&A and configurable fine-tuned BERT/DistilBERT entity-extraction inference
-- Six-way evaluation of rules, LLM, verified LLM, dense NLI, reranked NLI and rules/transformer outputs
+- Six-way evaluation of rules, LLM categories + policy, evidence-checked LLM, dense NLI, reranked NLI and rules/transformer outputs
 - Job workspaces, batches of up to ten resumes, review states, notes and comparisons
 - In-memory private demo mode or opt-in PostgreSQL/pgvector persistence
 - Redis-backed background analysis with an inline local fallback
@@ -70,14 +82,18 @@ See `.env.example` and [operations](docs/operations.md).
 
 ## Optional local AI and OCR
 
-Synthetic generation can use `qwen3:4b`; semantic evidence can use `nomic-embed-text` through Ollama. Both paths fall back safely when unavailable.
+DeepSeek-R1-Distill-Qwen-7B is the default local LLM for requirement analysis, explanations, reviewer summaries, fictional generation and cited Q&A. Ollama runs the quantized model; the separate transformer service handles retrieval and NLI. See [DeepSeek setup, response validation and measured-run instructions](docs/deepseek.md). The result badge distinguishes actual AI output from the deterministic fallback.
 
 ```bash
-ollama pull qwen3:4b
+npm run llm:serve  # separate terminal if Ollama is not running
+npm run llm:pull
+npm run llm:check
 ollama pull nomic-embed-text
 ```
 
 PNG and JPEG OCR runs locally through Tesseract.js. Text PDFs are parsed locally. Scanned PDFs require a configured `OCR_ENDPOINT` or conversion to page images; this boundary avoids silently accepting empty extraction results.
+
+The application supports fully local inference with Ollama and the local Python transformer service. This depends on deployment configuration: model URLs, OCR and storage can point to other machines. Model and OCR resources may need downloading before offline use. See [data handling and local-processing conditions](docs/privacy.md); do not promise that every possible configuration keeps data on one machine.
 
 ## AI/ML experiment lab
 
@@ -117,17 +133,17 @@ docker compose -f docker-compose.yml -f docker-compose.models.yml up --build
 The first start downloads model weights; subsequent starts reuse the model cache. Ollama remains a separate local service and is needed for generated Q&A answers, not transformer classification. For a Python-only model service alongside `npm run dev`, see [model-service setup, configuration and API](services/model-service/README.md).
 
 ```bash
-npm run compare -- --split development --with-transformers --output reports/development-transformers.json
-npm run compare -- --split heldout --with-transformers --with-model --model qwen3:4b --output reports/all-models.json
+npm run compare -- --split development --with-transformers --output reports/development-transformers-repeat.json
+npm run compare -- --split heldout --with-transformers --with-model --model deepseek-r1:7b --output reports/all-models-repeat.json
 ```
 
 On `/evaluation`, enable **Include transformers + reranking** to compare dense retrieval, reranking and the rules/transformer hybrid. Model failures stay visible as unavailable results. Exports include model names, resolved revisions, runtime versions, raw NLI probabilities and source passages. See [transformer methodology and limitations](docs/transformer-experiments.md). Actual CPU runs showed pure NLI below the rules baseline. Rules + transformers matched rules on development (24/24) and got 21/24 provisional held-out judgments correct versus rules' 20/24. This is one additional correct judgment on a small, provisionally labeled set, not established real-world improvement. See [complete measured results](reports/README.md); transformer results remain advisory.
 
 ### Existing baseline and LLM comparisons
 
-Open `/evaluation` to compare rules, LLM-only judgments, evidence-validated hybrid outputs and the optional transformer variants on the same examples.
+Open `/evaluation` to compare rules, LLM category-policy output before evidence checks, the checked hybrid output, and optional transformer variants on the same examples.
 
-- **Separate datasets:** 10 unique development documents and 24 unique provisional held-out documents, identified by SHA-256 fingerprints.
+- **Versioned datasets:** 10 development documents (24 judgments), 24 reused diagnostic documents, and 24 new synthetic challenge documents, identified by SHA-256 fingerprints. The diagnostic is no longer an untouched holdout; the challenge is not independently annotated.
 - **Quality and performance:** confusion matrices, macro F1, support precision/recall, abstention, citation validity, error categories and p50/p95 latency.
 - **Evidence review:** inspect highlighted source quotes and record audited reviewer corrections without changing frozen labels or historical metrics.
 - **Reproducible experiments:** export JSON reports, compare saved runs and run a development accuracy gate in CI.
@@ -137,14 +153,16 @@ Open `/evaluation` to compare rules, LLM-only judgments, evidence-validated hybr
 
 ```bash
 # Rules baseline; no model required
-npm run compare -- --split development --min-accuracy 0.90 --output reports/development.json
-npm run compare -- --split heldout --output reports/heldout-rules.json
+npm run compare -- --split development --min-accuracy 0.90 --output reports/development-rules-repeat.json
+npm run compare -- --split heldout --output reports/diagnostic-rules-repeat.json
 
 # Requires an installed model running in local Ollama
-npm run compare -- --split heldout --with-model --model qwen3:4b --output reports/heldout-comparison.json
+node --env-file=.env.local --import tsx scripts/compare.ts --split heldout --with-model --model deepseek-r1:7b --output reports/diagnostic-deepseek-v8-repeat.json
 ```
 
-The measured rules baseline achieved **24/24 correct development judgments** and **20/24 correct held-out judgments (83.3%)**. The held-out set exposed four errors despite every prediction having an exact source citation. These are small, fictional, agent-authored datasets with provisional labels; independent human annotation is still pending. LLM performance was not measured because Ollama was unavailable during verification.
+The v8 evidence-check pipeline records **22/24 development**, **23/24 reused diagnostic**, and **23/24 new-challenge judgments**, with no rule fallback. On the challenge (**n=24**), rules and DeepSeek categories + policy each score **15/24 (62.5%)**; adding evidence checks reaches **23/24 (95.8%)**, with **four-class macro F1 0.9496**. On development, rules score **24/24**, versus **22/24** for the checked model pipeline, so the model path does not outperform rules across all sets. The checks only abstain; there was no model training or fine-tuning. The guided example remains **4/4**. The same agent authored the challenge and checks; labels are provisional and this is not independent annotation or a blind test. See [actual results](reports/deepseek-revision.md) and [current project progress](docs/progress.md).
+
+The [Chinese resume version](docs/resume-project-zh.txt) contains the approved concise STAR wording. The [interview preparation](docs/STAR-resume-zh.txt) explains challenges, solutions, baseline comparisons and remaining work. Error analysis is supported by the evaluation page, per-case report tables and versioned v1–v8 revisions with failed runs retained; there is no separate Bad Case module.
 
 See [measured results and portfolio talking points](reports/README.md) and [experiment methodology, dataset card and metric definitions](docs/experiments.md).
 
@@ -164,22 +182,22 @@ The benchmark is a deterministic regression suite, not evidence of real-world hi
 
 ## Evidence Intelligence engine
 
-The version 3 pipeline is evidence-first and AI-assisted when Ollama is available:
+Engine **3.2.0** uses the v7 structured prompt and v8 source-evidence checks:
 
-1. Extract canonical skills from each job sentence and label them required, preferred or unspecified.
-2. Find exact or aliased résumé evidence with section and character-offset provenance.
-3. Ask the configured local Ollama model to classify each requirement as supported, partial, contradicted or unknown; every quoted evidence fragment is verified against the original resume.
-4. Abstain when a term is missing or ambiguous instead of converting uncertainty into a match.
-5. Ask Ollama to score the configured criteria and explain its evidence; the weighted overall score is calculated from those validated criterion scores. If Ollama is unavailable or returns unverifiable JSON, the versioned deterministic engine is used.
-6. Optionally retrieve advisory semantic candidates with a local Ollama embedding model. Semantic candidates never alter the score.
+1. Extract and normalize known job skills with the skill dictionary and attach required/preferred/unspecified importance and job-source text. The model may propose additional source-cited requirements; the benchmark scores reference requirements only.
+2. Supply canonical requirement keys and exact résumé passage IDs to Ollama.
+3. Ask the model to select passages, semantic evidence categories and explanations. The fixed `evidence-category-v1` policy maps seven categories to supported, partial, contradicted or unknown.
+4. Verify source quotes and requirement identity. The `evidence-eligibility-v1` checks abstain on ordinary-word senses, others' work without applicant involvement, and recognizable document instructions, preserving original output and check reasons.
+5. Calculate the weighted total from the model's four criterion scores. Evidence checks do not recalibrate those scores. Invalid or unavailable core generation uses an explicitly labeled deterministic fallback.
+6. Optionally display advisory embedding/NLI evidence and offer cited Q&A through BM25 + vector retrieval, RRF fusion and cross-encoder reranking.
 
-The displayed rule confidence is the strength of the contextual rule judgment—not a probability that a candidate is qualified. Transformer panels display uncalibrated model probabilities separately. See [evidence intelligence](docs/evidence-intelligence.md), [scoring](docs/scoring-method.md), [evaluation](docs/evaluation.md) and [transformer experiments](docs/transformer-experiments.md).
+Confidence values are uncalibrated model self-assessments or rule-strength estimates, not candidate-quality probabilities. See [evidence intelligence](docs/evidence-intelligence.md), [scoring](docs/scoring-method.md), [comparison methodology](docs/experiments.md) and [transformer experiments](docs/transformer-experiments.md).
 
 ## Architecture
 
 ```text
 Browser
-  |-- private analyzer ---------- extraction -> requirement evidence -> deterministic score
+  |-- private analyzer ---------- extraction -> categories/policy -> evidence checks -> review
   |-- review workspace ---------- jobs -> candidates -> evidence -> human review
   |                                  |                     |
   |                                  |                     +-> audit + retention
@@ -199,7 +217,7 @@ Do not use the score as the sole basis for an employment decision. The system do
 
 ## Future implementation
 
-- **Step 5 — Standardize structured outputs:** extend JSON Schema-constrained generation to Q&A, evidence review, and synthetic generation; share schema definitions with runtime validation; distinguish schema failures from unsupported claims. Main analysis already uses structured output, but this cross-application standardization is future work.
+- **Independent annotation and calibration:** collect a family-disjoint, independently reviewed evidence dataset before tuning prompts, abstention settings or a domain classifier. Main analysis, Q&A, reviewer summaries and fictional generation now derive JSON Schema constraints from their Zod validators.
 - **Step 6 — MCP server:** expose authenticated, workspace-scoped, read-only tools such as `search_resume_evidence`, `get_analysis_report`, and `compare_experiment_runs`, returning source references and preserving existing access controls. No MCP server is implemented yet.
 
 ## License

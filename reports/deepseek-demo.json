@@ -1,0 +1,297 @@
+{
+  "scope": "One public fictional walkthrough; integration check, not a held-out quality benchmark.",
+  "createdAt": "2026-10-19T22:47:16.563Z",
+  "model": "deepseek-r1:7b",
+  "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+  "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen2",
+    "families": [
+      "qwen2"
+    ],
+    "parameter_size": "7.6B",
+    "quantization_level": "Q4_K_M",
+    "context_length": 131072,
+    "embedding_length": 3584,
+    "runner": "ggml"
+  },
+  "generation": {
+    "think": true,
+    "options": {
+      "temperature": 0.6,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": 4096
+    }
+  },
+  "elapsedMs": 108082.9817,
+  "expected": {
+    "python": "supported",
+    "docker": "partial",
+    "kubernetes": "contradicted",
+    "terraform": "unknown"
+  },
+  "observed": {
+    "python": "supported",
+    "docker": "partial",
+    "kubernetes": "contradicted",
+    "terraform": "unknown"
+  },
+  "correct": 4,
+  "total": 4,
+  "inputs": {
+    "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+    "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+    "explanation": "Inspect four different evidence states: Python delivery, Docker learning, explicitly absent Kubernetes experience, and no Terraform evidence. Model judgments can differ; verify the original quotes."
+  },
+  "analysis": {
+    "overallScore": 79,
+    "matchedSkills": [
+      "python"
+    ],
+    "missingSkills": [
+      "docker",
+      "kubernetes",
+      "terraform"
+    ],
+    "criteria": [
+      {
+        "criterion": "Relevant skills",
+        "weight": 55,
+        "score": 85,
+        "explanation": "Alex Example has relevant Python and Docker experience, but no Kubernetes or Terraform experience.",
+        "evidence": [
+          "Built Python services that tracked book loans and sent reminder emails.",
+          "Currently learning Docker through guided container tutorials."
+        ],
+        "provenance": [
+          {
+            "text": "Built Python services that tracked book loans and sent reminder emails.",
+            "section": "experience",
+            "start": 143,
+            "end": 214
+          },
+          {
+            "text": "Currently learning Docker through guided container tutorials.",
+            "section": "education",
+            "start": 296,
+            "end": 357
+          }
+        ]
+      },
+      {
+        "criterion": "Demonstrated experience",
+        "weight": 20,
+        "score": 70,
+        "explanation": "Alex Example has experience building and documenting Python services, but no direct experience with Kubernetes or Terraform.",
+        "evidence": [
+          "Built Python services that tracked book loans and sent reminder emails.",
+          "Documented service endpoints and investigated failed background tasks."
+        ],
+        "provenance": [
+          {
+            "text": "Built Python services that tracked book loans and sent reminder emails.",
+            "section": "experience",
+            "start": 143,
+            "end": 214
+          },
+          {
+            "text": "Documented service endpoints and investigated failed background tasks.",
+            "section": "experience",
+            "start": 215,
+            "end": 285
+          }
+        ]
+      },
+      {
+        "criterion": "Measurable impact",
+        "weight": 15,
+        "score": 65,
+        "explanation": "Alex Example's work with Python services resulted in tracking and reminders, indicating some measurable impact.",
+        "evidence": [
+          "Built Python services that tracked book loans and sent reminder emails.",
+          "Documented service endpoints and investigated failed background tasks."
+        ],
+        "provenance": [
+          {
+            "text": "Built Python services that tracked book loans and sent reminder emails.",
+            "section": "experience",
+            "start": 143,
+            "end": 214
+          },
+          {
+            "text": "Documented service endpoints and investigated failed background tasks.",
+            "section": "experience",
+            "start": 215,
+            "end": 285
+          }
+        ]
+      },
+      {
+        "criterion": "Document clarity",
+        "weight": 10,
+        "score": 80,
+        "explanation": "Alex Example's summary and experience section provide clear evidence of his skills and achievements.",
+        "evidence": [
+          "SUMMARY\nBackend developer building internal tools for a fictional community library.",
+          "EXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks."
+        ],
+        "provenance": [
+          {
+            "text": "SUMMARY\nBackend developer building internal tools for a fictional community library.",
+            "section": "header",
+            "start": 47,
+            "end": 131
+          },
+          {
+            "text": "EXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.",
+            "section": "summary",
+            "start": 132,
+            "end": 285
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Can you provide an example of your experience with Python and how you used it in a project?",
+      "How have you worked with Docker in your current or previous roles?",
+      "Have you worked with Kubernetes? If not, do you plan to learn it in the future?",
+      "Can you discuss your experience with version control systems like Terraform and how you integrated them into your workflow?"
+    ],
+    "warnings": [
+      "The candidate's experience with Kubernetes is contradicted by the job requirement.",
+      "The candidate has no reported experience with Terraform, which is a required skill.",
+      "The resume evidence is mixed, with some requirements not being met.",
+      "The resume is limited in providing evidence for Kubernetes and Terraform.",
+      "AI-generated analysis is advisory. Review the original resume before making any decision."
+    ],
+    "disclaimer": "Decision-support only. Do not use this score as the sole basis for an employment decision.",
+    "engineVersion": "3.0.0",
+    "taxonomyVersion": "2026.08.2",
+    "structuredResume": {
+      "sections": [
+        {
+          "name": "header",
+          "text": "Alex Example — fictional demonstration profile",
+          "start": 0,
+          "end": 47
+        },
+        {
+          "name": "summary",
+          "text": "Backend developer building internal tools for a fictional community library.",
+          "start": 55,
+          "end": 132
+        },
+        {
+          "name": "experience",
+          "text": "Built Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.",
+          "start": 143,
+          "end": 286
+        },
+        {
+          "name": "education",
+          "text": "Currently learning Docker through guided container tutorials.",
+          "start": 296,
+          "end": 358
+        },
+        {
+          "name": "skills",
+          "text": "I have never used Kubernetes.",
+          "start": 365,
+          "end": 395
+        },
+        {
+          "name": "projects",
+          "text": "Created a volunteer scheduling tool and wrote its user guide.",
+          "start": 404,
+          "end": 465
+        }
+      ],
+      "skills": [
+        "docker",
+        "kubernetes",
+        "python"
+      ],
+      "experience": [
+        "Backend developer building internal tools for a fictional community library.",
+        "Built Python services that tracked book loans and sent reminder emails.",
+        "Documented service endpoints and investigated failed background tasks."
+      ],
+      "education": [
+        "Currently learning Docker through guided container tutorials."
+      ],
+      "projects": [
+        "Created a volunteer scheduling tool and wrote its user guide."
+      ],
+      "certifications": []
+    },
+    "requirementAssessments": [
+      {
+        "skill": "python",
+        "importance": "required",
+        "sourceText": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "supported",
+        "confidence": 1,
+        "reason": "Alex Example mentions building Python services that tracked book loans and sent reminder emails.",
+        "evidence": {
+          "text": "Built Python services that tracked book loans and sent reminder emails.",
+          "section": "experience",
+          "start": 143,
+          "end": 214
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "docker",
+        "importance": "preferred",
+        "sourceText": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+        "verdict": "partial",
+        "confidence": 0.75,
+        "reason": "Alex Example mentions that he is currently learning Docker through guided container tutorials.",
+        "evidence": {
+          "text": "Currently learning Docker through guided container tutorials.",
+          "section": "education",
+          "start": 296,
+          "end": 357
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "kubernetes",
+        "importance": "required",
+        "sourceText": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "contradicted",
+        "confidence": 0.6,
+        "reason": "Alex Example has never used Kubernetes.",
+        "evidence": {
+          "text": "I have never used Kubernetes.",
+          "section": "skills",
+          "start": 365,
+          "end": 394
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "terraform",
+        "importance": "required",
+        "sourceText": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "unknown",
+        "confidence": 0.5,
+        "reason": "Alex Example does not mention Terraform experience.",
+        "method": "ollama-structured-v1"
+      }
+    ],
+    "reliability": {
+      "evidenceCoverage": 0.75,
+      "averageConfidence": 0.713,
+      "extractionQuality": "medium",
+      "status": "needs-human-verification",
+      "abstainedRequirements": [
+        "terraform"
+      ]
+    },
+    "analysisProvider": "ollama",
+    "analysisModel": "deepseek-r1:7b"
+  }
+}

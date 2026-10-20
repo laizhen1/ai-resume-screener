@@ -1,8 +1,16 @@
 # Evidence Intelligence
 
-Engine version: **3.0.0**. Context method: **contextual-rules-v1**.
+Engine version: **3.2.0**. Rules method: **contextual-rules-v1**. Model category policy: **evidence-category-v1**. Evidence checks: **evidence-eligibility-v1**.
 
 The engine evaluates whether a résumé contains inspectable evidence for each recognized job requirement. It does not predict job performance, infer protected attributes, validate claims as facts, or decide who should progress.
+
+## Model path and source validation
+
+The dictionary and aliases extract known job skills, importance and source text. The model receives canonical requirement keys and bounded source-passage IDs, selects semantic evidence categories and explanations, and may propose additional source-cited job requirements.
+
+A fixed policy maps seven categories to four verdicts: personal use → supported; learning → partial; explicit denial → contradicted; future intention, others' work, unrelated wording/instructions, or missing/ambiguous evidence → unknown. The model does not directly emit the final verdict.
+
+Production composition checks requirement identity, exact quotations and evidence eligibility. Ordinary-word senses, external ownership without applicant involvement, and recognizable document instructions can cause abstention. Original model output and check reasons remain inspectable. This is bounded source validation, not learned weights or proof that every interpretation is correct.
 
 ## Requirement model
 
@@ -12,10 +20,10 @@ Each recognized requirement records:
 - required, preferred or unspecified importance inferred from the source sentence;
 - the original job-description sentence;
 - supported, partial, contradicted or unknown verdict;
-- contextual-rule confidence and a plain-language reason;
+- uncalibrated model confidence or contextual-rule strength, a reason, and any evidence-check audit;
 - exact résumé sentence, section and character offsets when evidence exists.
 
-## Verdict policy
+## Rules-baseline verdict policy
 
 | Verdict | Meaning | Score treatment |
 | --- | --- | ---: |
@@ -28,7 +36,7 @@ Contradiction takes precedence over a positive keyword in the same evidence set.
 
 ## Reliability summary
 
-Every result reports evidence coverage, average contextual-rule confidence, extraction quality and the requirements on which the system abstained. Confidence describes how strongly a deterministic pattern supports its verdict. It is not candidate-quality confidence and must not be shown as a hiring probability.
+Results report evidence coverage, extraction quality and abstained requirements. Confidence is either a rule-strength estimate or the model's uncalibrated self-assessment; it is not a hiring probability. Four model-generated criterion scores are separate from requirement verdicts and are not recalibrated after eligibility checks. See [scoring](scoring-method.md) and [current measured results](progress.md).
 
 ## Semantic boundary
 

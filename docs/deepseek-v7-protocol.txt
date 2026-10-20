@@ -1,0 +1,16 @@
+DeepSeek v5 protocol — 2026-10-20
+
+The user requested fixing the v4 guided-example regression (2/4) and remaining judgments.
+V5 changes the inference task: model-selected semantic evidence categories + fixed, public category-to-verdict policy. It does not train or fine-tune DeepSeek. The llm row now measures category-to-verdict output, not direct model verdict generation; the hybrid row additionally validates job sources, citations and duplicates. Both use the same generation. Preserve modelOutput with the original categories and passage IDs.
+
+Policy: applicant use -> supported; learning -> partial; explicit denial -> contradicted; future intention, others' work, unrelated words/instructions, missing/ambiguous -> unknown. A category requiring evidence without a passage abstains. No expected labels or rule-engine predictions are passed to inference. Added illustrative examples use different skills from the known failures, but the policy is explicitly informed by inspected failures.
+
+Scoring criteria now have fixed name keys and constrained passage IDs reconstructed as original quotations. Scores remain uncalibrated model suggestions, not validated job-performance predictions.
+
+Keep the installed deepseek-r1:7b model and temperature 0.6, seed 42, reasoning enabled, 8192 context, 4096 generation cap, 180-second timeout. First run the public guided example. Then freeze the source and run each of the full development (10 docs/24 judgments) and diagnostic (24 docs/24 judgments) once. Retain unsuccessful attempts and all older reports. These datasets were already inspected; no independent held-out or generalization claims. Do not change reference labels.
+
+Validate regression tests, HTTP prompt fixtures, browser tests, lint, production build, source hashes, and report consistency. Update Chinese STAR with actual results and residual errors. This run does not repeat Python training/transformer evaluation.
+
+V6 amendment: v5 public demo passed 4/4, but development stopped after 3/10 successful model calls because out-of-range confidence values failed validation on case 4; 7 hybrid fallbacks are not model successes. No v5 diagnostic was run. Preserve that attempt. V6 changes only numeric wire schemas to bounded numbers and explicitly instructs confidence 0..1; the category policy is unchanged. Schema-invalid parsed responses are retained on failed model rows for diagnosis. Run the guided example again, then freeze v6 for one complete development and diagnostic run.
+
+V7 amendment: v6 completed development with 22/24 judgments but its diagnostic stopped after 5/24 model documents: case 6 returned confidence 100 despite a 0..1 numeric schema. The rejected raw response is retained in diagnostic-deepseek-v6.json; its category was correct. Preserve both v6 reports. V7 uses explicit numeric enums (confidence 0/0.25/0.5/0.75/1; rubric scores in steps of 10) rather than relying on range enforcement. Evidence categories, mapping and dataset labels remain unchanged. Freeze v7 and rerun the guided example plus both complete datasets once.

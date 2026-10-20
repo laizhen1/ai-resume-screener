@@ -3,7 +3,7 @@ import type { EvidenceVerdict } from "../types";
 export const VERDICTS = ["supported", "partial", "contradicted", "unknown"] as const;
 export const PIPELINES = ["rules", "llm", "hybrid", "dense-nli", "reranked-nli", "rules-transformer"] as const;
 export type Pipeline = typeof PIPELINES[number];
-export type Split = "development" | "heldout";
+export type Split = "development" | "heldout" | "challenge";
 export type Example = {
   id: string; job: string; resume: string; challenge: string;
   expectedVerdicts: Record<string, EvidenceVerdict>;
@@ -16,6 +16,9 @@ export type CaseResult = {
   caseId: string; pipeline: Pipeline; challenge: string;
   provider: "rules" | "ollama" | "transformers" | "fallback" | "unavailable" | "not-run";
   latencyMs: number; predictions: Prediction[]; error?: string;
+  modelDraft?: import("../ai-analysis").AiAnalysisDraft;
+  modelOutput?: unknown;
+  evidenceChecks?: Array<{ skill: string; policyVersion: string; originalVerdict: import("../types").EvidenceVerdict; issues: string[] }>;
   transformerMetadata?: import("../transformers").TransformerMetadata;
   transformerEvidence?: import("../transformers").TransformerAssessment[];
 };
@@ -31,7 +34,7 @@ export type PipelineMetrics = {
 export type ExperimentReport = {
   version: "comparison-v1"; createdAt: string; engineVersion: string; taxonomyVersion: string;
   dataset: { version: string; split: Split; hash: string; uniqueCases: number; executions: number; annotationStatus: string };
-  configuration: { includeModel: boolean; includeTransformers?: boolean; model: string; promptVersion: string; seed: number; temperature: number; timeoutMs: number; node: string; platform: string };
+  configuration: { includeModel: boolean; includeTransformers?: boolean; model: string; promptVersion: string; evidencePolicyVersion?: string; evidenceValidationVersion?: string; outputSemantics?: string; alignmentVersion?: string; seed: number; temperature: number; timeoutMs: number; node: string; platform: string; generation?: ReturnType<typeof import("../local-llm").generationSettings> };
   examples: Example[]; results: CaseResult[]; summaries: PipelineMetrics[];
 };
 export type Feedback = {

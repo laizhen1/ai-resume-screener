@@ -12,7 +12,7 @@ docker compose -f docker-compose.yml -f docker-compose.models.yml up --build
 
 This starts the app, database, worker, Redis and model service. The first start downloads Python packages and model weights; allow several minutes and several GB of disk space. Subsequent starts reuse the `model_cache` volume. The service loads all configured models before reporting healthy. CPU is the default; latency depends on hardware. Docker Desktop must be running.
 
-Ollama runs separately on the host. Pull `qwen3:4b` to enable main LLM analysis and cited Q&A. Transformer classification itself does not require Ollama.
+Ollama runs separately on the host. Pull `deepseek-r1:7b` to enable main LLM analysis and cited Q&A. Transformer classification itself does not require Ollama.
 
 ## Start with Python
 

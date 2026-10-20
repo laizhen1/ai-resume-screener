@@ -1,0 +1,324 @@
+{
+  "scope": "One public fictional walkthrough; integration check, not a held-out quality benchmark.",
+  "createdAt": "2026-10-20T01:49:08.411Z",
+  "model": "deepseek-r1:7b",
+  "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+  "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen2",
+    "families": [
+      "qwen2"
+    ],
+    "parameter_size": "7.6B",
+    "quantization_level": "Q4_K_M",
+    "context_length": 131072,
+    "embedding_length": 3584,
+    "runner": "ggml"
+  },
+  "promptVersion": "core-analysis-v6-bounded-categories",
+  "evidencePolicyVersion": "evidence-category-v1",
+  "outputSemantics": "Model-selected evidence category mapped by a fixed policy; not a direct model verdict.",
+  "modelOutput": {
+    "requirementJudgments": {
+      "docker": {
+        "evidenceId": "s4",
+        "reason": "Currently learning Docker through guided container tutorials.",
+        "category": "applicant_learning_skill",
+        "confidence": 0.95
+      },
+      "kubernetes": {
+        "evidenceId": "s5",
+        "reason": "I have never used Kubernetes.",
+        "category": "applicant_explicitly_denies_skill",
+        "confidence": 0.95
+      },
+      "python": {
+        "evidenceId": "s3",
+        "reason": "Documented service endpoints and investigated failed background tasks.",
+        "category": "applicant_used_skill",
+        "confidence": 0.95
+      },
+      "terraform": {
+        "evidenceId": null,
+        "reason": "No explicit evidence of using Terraform.",
+        "category": "missing_or_ambiguous",
+        "confidence": 0.5
+      }
+    },
+    "additionalRequirements": [],
+    "criteria": {
+      "Relevant skills": {
+        "score": 0.95,
+        "explanation": "High confidence based on active learning and clear evidence of using the skill.",
+        "evidenceIds": [
+          "s4",
+          "s3"
+        ]
+      },
+      "Demonstrated experience": {
+        "score": 0.5,
+        "explanation": "Only Terraform lacks demonstrated experience.",
+        "evidenceIds": [
+          "s5"
+        ]
+      },
+      "Measurable impact": {
+        "score": 0,
+        "explanation": "No quantified impact mentioned for missing skill.",
+        "evidenceIds": []
+      },
+      "Document clarity": {
+        "score": 0.5,
+        "explanation": "Clear evidence for Docker, Kubernetes, and Python, but ambiguous for Terraform.",
+        "evidenceIds": []
+      }
+    },
+    "interviewQuestions": [
+      "What specific projects have you built using Python?",
+      "Can you share more about your learning process with Docker?",
+      "How would you integrate Terraform into your current setup?",
+      "Have you considered using Kubernetes in your past work?"
+    ],
+    "warnings": [
+      "Uncertain evidence for Terraform skill."
+    ]
+  },
+  "generation": {
+    "think": true,
+    "options": {
+      "temperature": 0.6,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": 4096
+    }
+  },
+  "elapsedMs": 32821.623999999996,
+  "expected": {
+    "python": "supported",
+    "docker": "partial",
+    "kubernetes": "contradicted",
+    "terraform": "unknown"
+  },
+  "observed": {
+    "docker": "partial",
+    "kubernetes": "contradicted",
+    "python": "supported",
+    "terraform": "unknown"
+  },
+  "correct": 4,
+  "total": 4,
+  "inputs": {
+    "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+    "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+    "explanation": "Inspect four different evidence states: Python delivery, Docker learning, explicitly absent Kubernetes experience, and no Terraform evidence. Model judgments can differ; verify the original quotes."
+  },
+  "analysis": {
+    "overallScore": 1,
+    "matchedSkills": [
+      "python"
+    ],
+    "missingSkills": [
+      "docker",
+      "kubernetes",
+      "terraform"
+    ],
+    "criteria": [
+      {
+        "criterion": "Relevant skills",
+        "weight": 55,
+        "score": 1,
+        "explanation": "High confidence based on active learning and clear evidence of using the skill.",
+        "evidence": [
+          "Currently learning Docker through guided container tutorials.",
+          "Documented service endpoints and investigated failed background tasks."
+        ],
+        "provenance": [
+          {
+            "text": "Currently learning Docker through guided container tutorials.",
+            "section": "education",
+            "start": 296,
+            "end": 357
+          },
+          {
+            "text": "Documented service endpoints and investigated failed background tasks.",
+            "section": "experience",
+            "start": 215,
+            "end": 285
+          }
+        ]
+      },
+      {
+        "criterion": "Demonstrated experience",
+        "weight": 20,
+        "score": 1,
+        "explanation": "Only Terraform lacks demonstrated experience.",
+        "evidence": [
+          "I have never used Kubernetes."
+        ],
+        "provenance": [
+          {
+            "text": "I have never used Kubernetes.",
+            "section": "skills",
+            "start": 365,
+            "end": 394
+          }
+        ]
+      },
+      {
+        "criterion": "Measurable impact",
+        "weight": 15,
+        "score": 0,
+        "explanation": "No quantified impact mentioned for missing skill.",
+        "evidence": [],
+        "provenance": []
+      },
+      {
+        "criterion": "Document clarity",
+        "weight": 10,
+        "score": 1,
+        "explanation": "Clear evidence for Docker, Kubernetes, and Python, but ambiguous for Terraform.",
+        "evidence": [],
+        "provenance": []
+      }
+    ],
+    "interviewQuestions": [
+      "What specific projects have you built using Python?",
+      "Can you share more about your learning process with Docker?",
+      "How would you integrate Terraform into your current setup?",
+      "Have you considered using Kubernetes in your past work?"
+    ],
+    "warnings": [
+      "Uncertain evidence for Terraform skill.",
+      "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated.",
+      "AI-generated analysis is advisory. Review the original resume before making any decision."
+    ],
+    "disclaimer": "Decision-support only. Do not use this score as the sole basis for an employment decision.",
+    "engineVersion": "3.1.0",
+    "taxonomyVersion": "2026.08.2",
+    "structuredResume": {
+      "sections": [
+        {
+          "name": "header",
+          "text": "Alex Example — fictional demonstration profile",
+          "start": 0,
+          "end": 47
+        },
+        {
+          "name": "summary",
+          "text": "Backend developer building internal tools for a fictional community library.",
+          "start": 55,
+          "end": 132
+        },
+        {
+          "name": "experience",
+          "text": "Built Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.",
+          "start": 143,
+          "end": 286
+        },
+        {
+          "name": "education",
+          "text": "Currently learning Docker through guided container tutorials.",
+          "start": 296,
+          "end": 358
+        },
+        {
+          "name": "skills",
+          "text": "I have never used Kubernetes.",
+          "start": 365,
+          "end": 395
+        },
+        {
+          "name": "projects",
+          "text": "Created a volunteer scheduling tool and wrote its user guide.",
+          "start": 404,
+          "end": 465
+        }
+      ],
+      "skills": [
+        "docker",
+        "kubernetes",
+        "python"
+      ],
+      "experience": [
+        "Backend developer building internal tools for a fictional community library.",
+        "Built Python services that tracked book loans and sent reminder emails.",
+        "Documented service endpoints and investigated failed background tasks."
+      ],
+      "education": [
+        "Currently learning Docker through guided container tutorials."
+      ],
+      "projects": [
+        "Created a volunteer scheduling tool and wrote its user guide."
+      ],
+      "certifications": []
+    },
+    "requirementAssessments": [
+      {
+        "skill": "docker",
+        "importance": "required",
+        "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "partial",
+        "confidence": 0.95,
+        "reason": "[evidence-category-v1: applicant_learning_skill] Currently learning Docker through guided container tutorials.",
+        "evidence": {
+          "text": "Currently learning Docker through guided container tutorials.",
+          "section": "education",
+          "start": 296,
+          "end": 357
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "kubernetes",
+        "importance": "required",
+        "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "contradicted",
+        "confidence": 0.95,
+        "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] I have never used Kubernetes.",
+        "evidence": {
+          "text": "I have never used Kubernetes.",
+          "section": "skills",
+          "start": 365,
+          "end": 394
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "python",
+        "importance": "required",
+        "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "supported",
+        "confidence": 0.95,
+        "reason": "[evidence-category-v1: applicant_used_skill] Documented service endpoints and investigated failed background tasks.",
+        "evidence": {
+          "text": "Documented service endpoints and investigated failed background tasks.",
+          "section": "experience",
+          "start": 215,
+          "end": 285
+        },
+        "method": "ollama-structured-v1"
+      },
+      {
+        "skill": "terraform",
+        "importance": "required",
+        "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+        "verdict": "unknown",
+        "confidence": 0.5,
+        "reason": "[evidence-category-v1: missing_or_ambiguous] No explicit evidence of using Terraform.",
+        "method": "ollama-structured-v1"
+      }
+    ],
+    "reliability": {
+      "evidenceCoverage": 0.75,
+      "averageConfidence": 0.837,
+      "extractionQuality": "medium",
+      "status": "needs-human-verification",
+      "abstainedRequirements": [
+        "terraform"
+      ]
+    },
+    "analysisProvider": "ollama",
+    "analysisModel": "deepseek-r1:7b"
+  }
+}

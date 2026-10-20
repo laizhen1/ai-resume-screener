@@ -1,0 +1,15 @@
+Evidence validation v8 evaluation protocol — 2026-10-20
+
+Change: engine 3.2.0 adds evidence-eligibility-v1 after the unchanged DeepSeek v7 category-to-verdict pipeline. The checks only abstain on selected source passages indicating ordinary-word meanings, others' work without applicant involvement, or document instructions. They never promote a model verdict. Original model responses, category-policy predictions and explicit evidence-check decisions remain in reports.
+
+Keep core-analysis-v7-enumerated-categories, evidence-category-v1, deepseek-r1:7b, temperature 0.6, seed 42, 8192 context, 4096 output cap, reasoning enabled, 180-second timeout unchanged. No training or fine-tuning. No expected labels enter inference or the evidence checks.
+
+Implementation regression tests include negative cases and positive controls. One attribution false positive in a work-delivered-for-another-team test was fixed before freezing the implementation. The new 24-document challenge was authored after the guard implementation and before live inference, separately from the unit fixtures. Its provisional labels are agent-authored, not independent or blind human annotation. It deliberately includes 8 unknown, 8 supported, 4 learning and 4 denial examples, including aliases, mixed ordinary/technical senses, genuine applicant involvement, clean work alongside an instruction, and legitimate security work that quotes an attack string.
+
+Preserve the previous v7 reports. First replay the saved v7 diagnostic with current postprocessing (zero model calls): original category-policy predictions remain 20/24; checked predictions are 24/24. This isolates the validation effect and is not a new inference result.
+
+Freeze source and data hashes before the live runs. Run the public guided check, complete development (10 documents/24 judgments), reused diagnostic (24/24), and new challenge (24/24) once each using the real model. LLM and checked rows share the same generation per document. Record any invalid output, skipped cases or rule fallbacks separately. Do not revise code or labels in response to the new challenge's results. Preserve failures instead of selecting the best run.
+
+Report raw category-policy and checked metrics side by side, guard benefits and harms, source validity, all remaining errors, and rules baselines. Existing sets are reused diagnostics; the new challenge is new wording but still synthetic and author-inspected, not independent generalization evidence. Aggregate rubric scores remain uncalibrated and are not an outcome metric.
+
+Verify unit tests, browser integration including the new split, lint, production build, report integrity and source hashes. Update Chinese STAR from actual results, distinguishing postprocessing improvements from model capability. Python training/transformer benchmarks are not rerun.

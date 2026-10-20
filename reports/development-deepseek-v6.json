@@ -1,0 +1,3002 @@
+{
+  "version": "comparison-v1",
+  "createdAt": "2026-10-20T01:54:14.607Z",
+  "engineVersion": "3.1.0",
+  "taxonomyVersion": "2026.08.2",
+  "dataset": {
+    "version": "adversarial-context-v2.0",
+    "split": "development",
+    "hash": "015068509d86deb7fb4321695a90fe0d353796ea525664f98e79e778690aabb6",
+    "uniqueCases": 10,
+    "executions": 10,
+    "annotationStatus": "Development regression fixtures; used to tune the rules."
+  },
+  "configuration": {
+    "includeModel": true,
+    "includeTransformers": false,
+    "model": "deepseek-r1:7b",
+    "promptVersion": "core-analysis-v6-bounded-categories",
+    "evidencePolicyVersion": "evidence-category-v1",
+    "outputSemantics": "Model-selected evidence category mapped by a fixed policy; not a direct model verdict.",
+    "alignmentVersion": "canonical-wrapper-v2",
+    "seed": 42,
+    "temperature": 0.6,
+    "timeoutMs": 180000,
+    "node": "v24.19.0",
+    "platform": "win32",
+    "generation": {
+      "think": true,
+      "options": {
+        "temperature": 0.6,
+        "seed": 42,
+        "num_ctx": 8192,
+        "num_predict": 4096
+      }
+    }
+  },
+  "examples": [
+    {
+      "challenge": "exact",
+      "job": "This role requires TypeScript and React for customer-facing products.",
+      "resume": "Synthetic Candidate 1\nSKILLS\nTypeScript, React\nEXPERIENCE\nBuilt and shipped production TypeScript services and React interfaces for 2,000 users.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "typescript": "supported",
+        "react": "supported"
+      },
+      "id": "adversarial-1"
+    },
+    {
+      "challenge": "alias",
+      "job": "We need Node.js, PostgreSQL and Docker experience.",
+      "resume": "Synthetic Candidate 2\nSUMMARY\nBackend engineer\nEXPERIENCE\nBuilt a NodeJS service backed by Postgres. Currently learning Docker through a personal course.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "node.js": "supported",
+        "postgresql": "supported",
+        "docker": "partial"
+      },
+      "id": "adversarial-2"
+    },
+    {
+      "challenge": "negation",
+      "job": "React and Docker are required for this role.",
+      "resume": "Synthetic Candidate 3\nSUMMARY\nPlatform engineer\nEXPERIENCE\nNo professional experience with React. Never used Docker in production.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "contradicted",
+        "docker": "contradicted"
+      },
+      "id": "adversarial-3"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "The role requires Terraform and Kubernetes.",
+      "resume": "Synthetic Candidate 4\nSUMMARY\nCloud support engineer\nEXPERIENCE\nCurrently learning Terraform and exploring Kubernetes in a training environment.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "terraform": "partial",
+        "kubernetes": "partial"
+      },
+      "id": "adversarial-4"
+    },
+    {
+      "challenge": "ambiguity",
+      "job": "Experience with React and Go is essential.",
+      "resume": "Synthetic Candidate 5\nSUMMARY\nOperations coordinator\nEXPERIENCE\nReact to customer incidents quickly and coordinate go-to-market planning.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "react": "unknown",
+        "go": "unknown"
+      },
+      "id": "adversarial-5"
+    },
+    {
+      "challenge": "alias",
+      "job": "We require CI/CD, GitHub Actions and testing experience.",
+      "resume": "Synthetic Candidate 6\nSKILLS\nAutomated testing\nEXPERIENCE\nImplemented continuous integration and continuous delivery using GitHub workflows.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "ci/cd": "supported",
+        "github actions": "supported",
+        "testing": "supported"
+      },
+      "id": "adversarial-6"
+    },
+    {
+      "challenge": "missing",
+      "job": "AWS is required and GCP experience is preferred.",
+      "resume": "Synthetic Candidate 7\nSKILLS\nAWS\nEXPERIENCE\nUsed AWS to operate production services for three years.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "aws": "supported",
+        "gcp": "unknown"
+      },
+      "id": "adversarial-7"
+    },
+    {
+      "challenge": "aspirational",
+      "job": "SQL is required. Python experience is preferred.",
+      "resume": "Synthetic Candidate 8\nSUMMARY\nData analyst\nEXPERIENCE\nBuilt SQL reporting pipelines for 900 users. Completed introductory Python coursework.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "sql": "supported",
+        "python": "partial"
+      },
+      "id": "adversarial-8"
+    },
+    {
+      "challenge": "alias",
+      "job": "Machine learning, PyTorch and vector search are required.",
+      "resume": "Synthetic Candidate 9\nSUMMARY\nML engineer\nEXPERIENCE\nDeveloped machine learning models with PyTorch and implemented pgvector semantic search.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "machine learning": "supported",
+        "pytorch": "supported",
+        "vector search": "supported"
+      },
+      "id": "adversarial-9"
+    },
+    {
+      "challenge": "exact",
+      "job": "The position requires Next.js, REST API and accessibility experience.",
+      "resume": "Synthetic Candidate 10\nSUMMARY\nFrontend engineer\nEXPERIENCE\nDeveloped accessible NextJS interfaces and designed RESTful APIs for customer products.\nEDUCATION\nExample University",
+      "expectedVerdicts": {
+        "next.js": "supported",
+        "rest api": "supported",
+        "accessibility": "supported"
+      },
+      "id": "adversarial-10"
+    }
+  ],
+  "results": [
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 8.078199999999981,
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 32713.214300000003,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "This role requires TypeScript and React for customer-facing products.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used React in their work.",
+            "evidenceText": "TypeScript, React"
+          },
+          {
+            "skill": "typescript",
+            "importance": "required",
+            "sourceText": "This role requires TypeScript and React for customer-facing products.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used TypeScript in their work.",
+            "evidenceText": "TypeScript, React"
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "Both TypeScript and React are explicitly mentioned and used in the resume passage s1.",
+            "evidence": [
+              "TypeScript, React",
+              "TypeScript, React"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The candidate has demonstrated experience with TypeScript and React through building production services.",
+            "evidence": [
+              "TypeScript, React",
+              "TypeScript, React"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "The candidate has shipped React interfaces for 2,000 users, indicating a significant impact.",
+            "evidence": [
+              "TypeScript, React"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The resume passage clearly states the candidate's experience with TypeScript and React.",
+            "evidence": [
+              "TypeScript, React"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific TypeScript projects have you built that demonstrate your expertise?",
+          "Can you provide an example of a React component you've developed that has impacted user experience?",
+          "How have you integrated TypeScript into the production environment?",
+          "Can you discuss a time when you used React to solve a complex problem?"
+        ],
+        "warnings": [
+          "High uncertainty due to missing measurable outcomes for TypeScript.",
+          "Unclear evidence for TypeScript's explicit use.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "react": {
+            "evidenceId": "s1",
+            "reason": "Applicant explicitly used React in their work.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          },
+          "typescript": {
+            "evidenceId": "s1",
+            "reason": "Applicant explicitly used TypeScript in their work.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "Both TypeScript and React are explicitly mentioned and used in the resume passage s1.",
+            "evidenceIds": [
+              "s1",
+              "s1"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The candidate has demonstrated experience with TypeScript and React through building production services.",
+            "evidenceIds": [
+              "s1",
+              "s1"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "The candidate has shipped React interfaces for 2,000 users, indicating a significant impact.",
+            "evidenceIds": [
+              "s1"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The resume passage clearly states the candidate's experience with TypeScript and React.",
+            "evidenceIds": [
+              "s1"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What specific TypeScript projects have you built that demonstrate your expertise?",
+          "Can you provide an example of a React component you've developed that has impacted user experience?",
+          "How have you integrated TypeScript into the production environment?",
+          "Can you discuss a time when you used React to solve a complex problem?"
+        ],
+        "warnings": [
+          "High uncertainty due to missing measurable outcomes for TypeScript.",
+          "Unclear evidence for TypeScript's explicit use."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used TypeScript in their work.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used React in their work.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 32730.156899999994,
+      "predictions": [
+        {
+          "skill": "typescript",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used TypeScript in their work.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "react",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant explicitly used React in their work.",
+          "quote": "TypeScript, React",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-1",
+      "challenge": "exact",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 4.524100000002363,
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built a NodeJS service backed by Postgres.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 32951.822,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "docker",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "partial",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_learning_skill] Currently learning Docker through a personal course.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          },
+          {
+            "skill": "node.js",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          },
+          {
+            "skill": "postgresql",
+            "importance": "required",
+            "sourceText": "We need Node.js, PostgreSQL and Docker experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+            "evidenceText": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated in the resume.",
+            "evidence": [
+              "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The candidate has hands-on experience with Node.js, PostgreSQL, and Docker.",
+            "evidence": [
+              "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "The candidate's experience has a clear measurable impact in building scalable services.",
+            "evidence": [
+              "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The resume passage clearly describes the candidate's experience.",
+            "evidence": [
+              "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific projects have you built using Node.js that you can discuss?",
+          "Can you elaborate on your experience with PostgreSQL in handling large datasets?",
+          "How has your experience with Docker contributed to your team's efficiency?"
+        ],
+        "warnings": [
+          "The candidate's experience with Docker is in a learning phase, which may affect their readiness for the role.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "docker": {
+            "evidenceId": "s2",
+            "reason": "Currently learning Docker through a personal course.",
+            "category": "applicant_learning_skill",
+            "confidence": 0.8
+          },
+          "node.js": {
+            "evidenceId": "s2",
+            "reason": "Built a NodeJS service backed by Postgres.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          },
+          "postgresql": {
+            "evidenceId": "s2",
+            "reason": "Built a NodeJS service backed by Postgres.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated in the resume.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The candidate has hands-on experience with Node.js, PostgreSQL, and Docker.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "The candidate's experience has a clear measurable impact in building scalable services.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The resume passage clearly describes the candidate's experience.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What specific projects have you built using Node.js that you can discuss?",
+          "Can you elaborate on your experience with PostgreSQL in handling large datasets?",
+          "How has your experience with Docker contributed to your team's efficiency?"
+        ],
+        "warnings": [
+          "The candidate's experience with Docker is in a learning phase, which may affect their readiness for the role."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Currently learning Docker through a personal course.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 32956.89060000001,
+      "predictions": [
+        {
+          "skill": "node.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "postgresql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built a NodeJS service backed by Postgres.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Currently learning Docker through a personal course.",
+          "quote": "Built a NodeJS service backed by Postgres. Currently learning Docker through a personal course.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-2",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.2010999999911292,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "No professional experience with React.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 24277.65000000001,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "docker",
+            "importance": "required",
+            "sourceText": "React and Docker are required for this role.",
+            "verdict": "contradicted",
+            "confidence": 0.9,
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies using Docker in production.",
+            "evidenceText": "No professional experience with React. Never used Docker in production."
+          },
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "React and Docker are required for this role.",
+            "verdict": "contradicted",
+            "confidence": 0.9,
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having professional experience with React.",
+            "evidenceText": "No professional experience with React. Never used Docker in production."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 0,
+            "explanation": "The resume does not mention React or Docker beyond what is explicitly denied.",
+            "evidence": [
+              "No professional experience with React. Never used Docker in production."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The applicant explicitly denies experience with React and Docker.",
+            "evidence": [
+              "No professional experience with React. Never used Docker in production."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no information about the impact of React or Docker usage.",
+            "evidence": [
+              "No professional experience with React. Never used Docker in production."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "The evidence is clear but does not provide measurable impact.",
+            "evidence": [
+              "No professional experience with React. Never used Docker in production."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What steps can you take to improve your React skills? Why do you want to learn Docker? How can you integrate React with Docker for better application performance? What resources would you use to learn React and Docker more effectively?"
+        ],
+        "warnings": [
+          "Uncertain about React experience.",
+          "Uncertain about Docker experience.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "docker": {
+            "evidenceId": "s2",
+            "reason": "Applicant explicitly denies using Docker in production.",
+            "category": "applicant_explicitly_denies_skill",
+            "confidence": 0.9
+          },
+          "react": {
+            "evidenceId": "s2",
+            "reason": "Applicant explicitly denies having professional experience with React.",
+            "category": "applicant_explicitly_denies_skill",
+            "confidence": 0.9
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 0,
+            "explanation": "The resume does not mention React or Docker beyond what is explicitly denied.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 0,
+            "explanation": "The applicant explicitly denies experience with React and Docker.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Measurable impact": {
+            "score": 0,
+            "explanation": "There is no information about the impact of React or Docker usage.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 0,
+            "explanation": "The evidence is clear but does not provide measurable impact.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What steps can you take to improve your React skills? Why do you want to learn Docker? How can you integrate React with Docker for better application performance? What resources would you use to learn React and Docker more effectively?"
+        ],
+        "warnings": [
+          "Uncertain about React experience.",
+          "Uncertain about Docker experience."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having professional experience with React.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies using Docker in production.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 24279.26509999999,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having professional experience with React.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies using Docker in production.",
+          "quote": "No professional experience with React. Never used Docker in production.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-3",
+      "challenge": "negation",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.4495000000024447,
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 26488.78779999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "kubernetes",
+            "importance": "required",
+            "sourceText": "The role requires Terraform and Kubernetes.",
+            "verdict": "partial",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Kubernetes in a training environment.",
+            "evidenceText": "Currently learning Terraform and exploring Kubernetes in a training environment."
+          },
+          {
+            "skill": "terraform",
+            "importance": "required",
+            "sourceText": "The role requires Terraform and Kubernetes.",
+            "verdict": "partial",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Terraform in a training environment.",
+            "evidenceText": "Currently learning Terraform and exploring Kubernetes in a training environment."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 70,
+            "explanation": "The applicant is learning both Terraform and Kubernetes, which are the required skills for the job.",
+            "evidence": [
+              "Currently learning Terraform and exploring Kubernetes in a training environment."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "The applicant has not demonstrated any demonstrated experience with the required skills.",
+            "evidence": []
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "There is no information about the measurable impact of the applicant's skills.",
+            "evidence": []
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 55,
+            "explanation": "The resume passage clearly states that the applicant is learning the required skills.",
+            "evidence": [
+              "Currently learning Terraform and exploring Kubernetes in a training environment."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What steps are you planning to take to learn Kubernetes?",
+          "How can you contribute to our Terraform implementation efforts?",
+          "What training or resources are you using to enhance your Terraform skills?",
+          "Can you provide more details on your current learning process for Kubernetes?"
+        ],
+        "warnings": [
+          "Uncertain evidence of practical application of Terraform and Kubernetes.",
+          "Uncertain demonstration of measurable impact from the applicant's learning.",
+          "Uncertain level of demonstrated experience with the required skills.",
+          "Uncertain clarity on the applicant's professional development in Terraform and Kubernetes.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "kubernetes": {
+            "evidenceId": "s2",
+            "reason": "The applicant is currently learning Kubernetes in a training environment.",
+            "category": "applicant_learning_skill",
+            "confidence": 0.8
+          },
+          "terraform": {
+            "evidenceId": "s2",
+            "reason": "The applicant is currently learning Terraform in a training environment.",
+            "category": "applicant_learning_skill",
+            "confidence": 0.8
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 70,
+            "explanation": "The applicant is learning both Terraform and Kubernetes, which are the required skills for the job.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 0,
+            "explanation": "The applicant has not demonstrated any demonstrated experience with the required skills.",
+            "evidenceIds": []
+          },
+          "Measurable impact": {
+            "score": 0,
+            "explanation": "There is no information about the measurable impact of the applicant's skills.",
+            "evidenceIds": []
+          },
+          "Document clarity": {
+            "score": 55,
+            "explanation": "The resume passage clearly states that the applicant is learning the required skills.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What steps are you planning to take to learn Kubernetes?",
+          "How can you contribute to our Terraform implementation efforts?",
+          "What training or resources are you using to enhance your Terraform skills?",
+          "Can you provide more details on your current learning process for Kubernetes?"
+        ],
+        "warnings": [
+          "Uncertain evidence of practical application of Terraform and Kubernetes.",
+          "Uncertain demonstration of measurable impact from the applicant's learning.",
+          "Uncertain level of demonstrated experience with the required skills.",
+          "Uncertain clarity on the applicant's professional development in Terraform and Kubernetes."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Terraform in a training environment.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Kubernetes in a training environment.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 26490.80660000001,
+      "predictions": [
+        {
+          "skill": "terraform",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Terraform in a training environment.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] The applicant is currently learning Kubernetes in a training environment.",
+          "quote": "Currently learning Terraform and exploring Kubernetes in a training environment.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-4",
+      "challenge": "aspirational",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.423800000004121,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "The term appears in a non-technical or ambiguous context.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 21161.1094,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "go",
+            "importance": "required",
+            "sourceText": "Experience with React and Go is essential.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant Reacted to customer incidents and coordinated go-to-market planning, demonstrating use of Go.",
+            "evidenceText": "React to customer incidents quickly and coordinate go-to-market planning."
+          },
+          {
+            "skill": "react",
+            "importance": "required",
+            "sourceText": "Experience with React and Go is essential.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant's description of Reacting to customer incidents and coordinating go-to-market planning directly relates to React.",
+            "evidenceText": "React to customer incidents quickly and coordinate go-to-market planning."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "The applicant has demonstrated the required skills of React and Go.",
+            "evidence": [
+              "React to customer incidents quickly and coordinate go-to-market planning."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The applicant has actively used React and Go in their work.",
+            "evidence": [
+              "React to customer incidents quickly and coordinate go-to-market planning."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "The applicant's use of React and Go has resulted in effective customer incident handling and strategic planning.",
+            "evidence": [
+              "React to customer incidents quickly and coordinate go-to-market planning."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The resume passage clearly demonstrates the applicant's experience with React and Go.",
+            "evidence": [
+              "React to customer incidents quickly and coordinate go-to-market planning."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Do you have experience with React and Go in your previous roles?",
+          "Can you provide examples of how you have used React and Go in real-world scenarios?",
+          "What steps can you take to further enhance your React and Go skills?",
+          "How have you integrated React and Go into your workflow to improve efficiency?"
+        ],
+        "warnings": [
+          "The applicant's experience with React and Go appears to be limited to a single passage that directly relates to their work performance.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "go": {
+            "evidenceId": "s2",
+            "reason": "The applicant Reacted to customer incidents and coordinated go-to-market planning, demonstrating use of Go.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          },
+          "react": {
+            "evidenceId": "s2",
+            "reason": "The applicant's description of Reacting to customer incidents and coordinating go-to-market planning directly relates to React.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "The applicant has demonstrated the required skills of React and Go.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The applicant has actively used React and Go in their work.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "The applicant's use of React and Go has resulted in effective customer incident handling and strategic planning.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The resume passage clearly demonstrates the applicant's experience with React and Go.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "Do you have experience with React and Go in your previous roles?",
+          "Can you provide examples of how you have used React and Go in real-world scenarios?",
+          "What steps can you take to further enhance your React and Go skills?",
+          "How have you integrated React and Go into your workflow to improve efficiency?"
+        ],
+        "warnings": [
+          "The applicant's experience with React and Go appears to be limited to a single passage that directly relates to their work performance."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant's description of Reacting to customer incidents and coordinating go-to-market planning directly relates to React.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant Reacted to customer incidents and coordinated go-to-market planning, demonstrating use of Go.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 21162.943900000013,
+      "predictions": [
+        {
+          "skill": "react",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant's description of Reacting to customer incidents and coordinating go-to-market planning directly relates to React.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "go",
+          "expected": "unknown",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant Reacted to customer incidents and coordinated go-to-market planning, demonstrating use of Go.",
+          "quote": "React to customer incidents quickly and coordinate go-to-market planning.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-5",
+      "challenge": "ambiguity",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.8250999999872874,
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "Automated testing",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 37494.68119999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "ci/cd",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 explicitly describes implementing continuous integration and delivery using GitHub workflows, which is directly related to CI/CD.",
+            "evidenceText": "Implemented continuous integration and continuous delivery using GitHub workflows."
+          },
+          {
+            "skill": "github actions",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 mentions using GitHub Actions in the implementation of continuous integration and delivery.",
+            "evidenceText": "Implemented continuous integration and continuous delivery using GitHub workflows."
+          },
+          {
+            "skill": "testing",
+            "importance": "required",
+            "sourceText": "We require CI/CD, GitHub Actions and testing experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] Passage s1 directly states 'Automated testing,' indicating experience with testing automation.",
+            "evidenceText": "Automated testing"
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are present in the resume with explicit evidence from the passages.",
+            "evidence": [
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Automated testing"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "Clear evidence of experience with CI/CD, GitHub Actions, and testing.",
+            "evidence": [
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Automated testing"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "Each skill has a specific action taken, indicating impact through implementation.",
+            "evidence": [
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Automated testing"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The evidence is clear and directly related to the skill without ambiguity.",
+            "evidence": [
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Implemented continuous integration and continuous delivery using GitHub workflows.",
+              "Automated testing"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific technologies have you used for CI/CD implementation?",
+          "Can you elaborate on your experience with automated testing?",
+          "How have you integrated GitHub Actions into your workflow processes?",
+          "Do you have any experience with implementing continuous delivery practices?"
+        ],
+        "warnings": [
+          "Uncertain evidence for CI/CD implementation details beyond the provided passages.",
+          "Potential lack of clarity in the implementation of CI/CD workflows.",
+          "Inconsistent use of GitHub Actions terminology across passages.",
+          "Ambiguity in the extent of testing automation experience.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "ci/cd": {
+            "evidenceId": "s2",
+            "reason": "Passage s2 explicitly describes implementing continuous integration and delivery using GitHub workflows, which is directly related to CI/CD.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          },
+          "github actions": {
+            "evidenceId": "s2",
+            "reason": "Passage s2 mentions using GitHub Actions in the implementation of continuous integration and delivery.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          },
+          "testing": {
+            "evidenceId": "s1",
+            "reason": "Passage s1 directly states 'Automated testing,' indicating experience with testing automation.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "All required skills are present in the resume with explicit evidence from the passages.",
+            "evidenceIds": [
+              "s2",
+              "s2",
+              "s1"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "Clear evidence of experience with CI/CD, GitHub Actions, and testing.",
+            "evidenceIds": [
+              "s2",
+              "s2",
+              "s1"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "Each skill has a specific action taken, indicating impact through implementation.",
+            "evidenceIds": [
+              "s2",
+              "s2",
+              "s1"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The evidence is clear and directly related to the skill without ambiguity.",
+            "evidenceIds": [
+              "s2",
+              "s2",
+              "s1"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What specific technologies have you used for CI/CD implementation?",
+          "Can you elaborate on your experience with automated testing?",
+          "How have you integrated GitHub Actions into your workflow processes?",
+          "Do you have any experience with implementing continuous delivery practices?"
+        ],
+        "warnings": [
+          "Uncertain evidence for CI/CD implementation details beyond the provided passages.",
+          "Potential lack of clarity in the implementation of CI/CD workflows.",
+          "Inconsistent use of GitHub Actions terminology across passages.",
+          "Ambiguity in the extent of testing automation experience."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 explicitly describes implementing continuous integration and delivery using GitHub workflows, which is directly related to CI/CD.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 mentions using GitHub Actions in the implementation of continuous integration and delivery.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s1 directly states 'Automated testing,' indicating experience with testing automation.",
+          "quote": "Automated testing",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 37496.895699999994,
+      "predictions": [
+        {
+          "skill": "ci/cd",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 explicitly describes implementing continuous integration and delivery using GitHub workflows, which is directly related to CI/CD.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "github actions",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s2 mentions using GitHub Actions in the implementation of continuous integration and delivery.",
+          "quote": "Implemented continuous integration and continuous delivery using GitHub workflows.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "testing",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Passage s1 directly states 'Automated testing,' indicating experience with testing automation.",
+          "quote": "Automated testing",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-6",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.514100000000326,
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "AWS",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit supporting or contradicting evidence was found; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 22382.28819999998,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "aws",
+            "importance": "required",
+            "sourceText": "AWS is required and GCP experience is preferred.",
+            "verdict": "supported",
+            "confidence": 0.9,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant used AWS to operate production services for three years, demonstrating practical experience.",
+            "evidenceText": "Used AWS to operate production services for three years."
+          },
+          {
+            "skill": "gcp",
+            "importance": "required",
+            "sourceText": "AWS is required and GCP experience is preferred.",
+            "verdict": "unknown",
+            "confidence": 0.5,
+            "reason": "[evidence-category-v1: missing_or_ambiguous] The applicant has not demonstrated any experience with GCP in the resume.",
+            "evidenceText": "Example University"
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 0,
+            "explanation": "AWS is explicitly required and demonstrated. GCP is required but not demonstrated.",
+            "evidence": [
+              "Used AWS to operate production services for three years.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0.9,
+            "explanation": "AWS is demonstrated. GCP is not demonstrated.",
+            "evidence": [
+              "Used AWS to operate production services for three years.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "AWS is demonstrated. GCP is not demonstrated.",
+            "evidence": [
+              "Used AWS to operate production services for three years.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0.5,
+            "explanation": "AWS is clearly demonstrated. GCP is ambiguous.",
+            "evidence": [
+              "Used AWS to operate production services for three years.",
+              "Example University"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Do you have experience operating AWS production services?",
+          "Can you provide examples of your AWS usage in production environments?",
+          "Have you worked with GCP in any capacity?",
+          "Can you discuss your experience using AWS in production services over the past three years?"
+        ],
+        "warnings": [
+          "Uncertain about GCP experience. Might need to verify with the candidate.",
+          "AWS experience is clear, but GCP is ambiguous.",
+          "Document clarity is low for GCP.",
+          "GCP experience is missing from the resume.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "aws": {
+            "evidenceId": "s2",
+            "reason": "The applicant used AWS to operate production services for three years, demonstrating practical experience.",
+            "category": "applicant_used_skill",
+            "confidence": 0.9
+          },
+          "gcp": {
+            "evidenceId": "s3",
+            "reason": "The applicant has not demonstrated any experience with GCP in the resume.",
+            "category": "missing_or_ambiguous",
+            "confidence": 0.5
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 0,
+            "explanation": "AWS is explicitly required and demonstrated. GCP is required but not demonstrated.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 0.9,
+            "explanation": "AWS is demonstrated. GCP is not demonstrated.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Measurable impact": {
+            "score": 0,
+            "explanation": "AWS is demonstrated. GCP is not demonstrated.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Document clarity": {
+            "score": 0.5,
+            "explanation": "AWS is clearly demonstrated. GCP is ambiguous.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "Do you have experience operating AWS production services?",
+          "Can you provide examples of your AWS usage in production environments?",
+          "Have you worked with GCP in any capacity?",
+          "Can you discuss your experience using AWS in production services over the past three years?"
+        ],
+        "warnings": [
+          "Uncertain about GCP experience. Might need to verify with the candidate.",
+          "AWS experience is clear, but GCP is ambiguous.",
+          "Document clarity is low for GCP.",
+          "GCP experience is missing from the resume."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant used AWS to operate production services for three years, demonstrating practical experience.",
+          "quote": "Used AWS to operate production services for three years.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "[evidence-category-v1: missing_or_ambiguous] The applicant has not demonstrated any experience with GCP in the resume.",
+          "quote": "Example University",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 22384.3272,
+      "predictions": [
+        {
+          "skill": "aws",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant used AWS to operate production services for three years, demonstrating practical experience.",
+          "quote": "Used AWS to operate production services for three years.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "gcp",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "[evidence-category-v1: missing_or_ambiguous] The applicant has not demonstrated any experience with GCP in the resume.",
+          "quote": "Example University",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-7",
+      "challenge": "missing",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.7141000000119675,
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built SQL reporting pipelines for 900 users.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 31273.23749999999,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "python",
+            "importance": "preferred",
+            "sourceText": "Python experience is preferred.",
+            "verdict": "partial",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_learning_skill] Introductory Python coursework indicates the applicant has attempted to learn Python, even if it's not explicitly stated.",
+            "evidenceText": "Example University"
+          },
+          {
+            "skill": "sql",
+            "importance": "required",
+            "sourceText": "SQL is required.",
+            "verdict": "supported",
+            "confidence": 0.9,
+            "reason": "[evidence-category-v1: applicant_used_skill] Built SQL reporting pipelines for 900 users demonstrates practical use of SQL in a professional context.",
+            "evidenceText": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 95,
+            "explanation": "The applicant has demonstrated both the required and preferred skills mentioned in the job description, with a strong emphasis on the preferred skill (Python). The candidate's experience in SQL is directly tied to the job requirement, while their coursework in Python aligns with the preferred skill.",
+            "evidence": [
+              "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The applicant has hands-on experience with SQL, which is a hard requirement, and has shown interest in Python through coursework, aligning with the preferred skill.",
+            "evidence": [
+              "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 85,
+            "explanation": "The applicant's SQL experience directly contributes to database management tasks, while their Python coursework suggests potential for developing tools or scripts that could enhance productivity.",
+            "evidence": [
+              "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+              "Example University"
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 90,
+            "explanation": "The resume passages clearly outline the applicant's skills and experiences, making it easy to evaluate their alignment with the job requirements.",
+            "evidence": [
+              "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+              "Example University"
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "How did you handle complex SQL queries to ensure accuracy?",
+          "What project would you embark on with Python that could benefit our team?",
+          "How do you stay updated with the latest Python libraries and frameworks?",
+          "Can you provide an example of a time you used Python for automation or analysis?"
+        ],
+        "warnings": [
+          "Uncertain evidence of hands-on Python experience beyond coursework.",
+          "The applicant's SQL experience is directly relevant, but the lack of quantifiable impact makes it harder to assess.",
+          "The resume passage about Python is ambiguous, as it only mentions coursework without a specific project.",
+          "The applicant's coursework is a good sign of interest but lacks concrete evidence of professional application.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "python": {
+            "evidenceId": "s3",
+            "reason": "Introductory Python coursework indicates the applicant has attempted to learn Python, even if it's not explicitly stated.",
+            "category": "applicant_learning_skill",
+            "confidence": 0.8
+          },
+          "sql": {
+            "evidenceId": "s2",
+            "reason": "Built SQL reporting pipelines for 900 users demonstrates practical use of SQL in a professional context.",
+            "category": "applicant_used_skill",
+            "confidence": 0.9
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 95,
+            "explanation": "The applicant has demonstrated both the required and preferred skills mentioned in the job description, with a strong emphasis on the preferred skill (Python). The candidate's experience in SQL is directly tied to the job requirement, while their coursework in Python aligns with the preferred skill.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The applicant has hands-on experience with SQL, which is a hard requirement, and has shown interest in Python through coursework, aligning with the preferred skill.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Measurable impact": {
+            "score": 85,
+            "explanation": "The applicant's SQL experience directly contributes to database management tasks, while their Python coursework suggests potential for developing tools or scripts that could enhance productivity.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          },
+          "Document clarity": {
+            "score": 90,
+            "explanation": "The resume passages clearly outline the applicant's skills and experiences, making it easy to evaluate their alignment with the job requirements.",
+            "evidenceIds": [
+              "s2",
+              "s3"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "How did you handle complex SQL queries to ensure accuracy?",
+          "What project would you embark on with Python that could benefit our team?",
+          "How do you stay updated with the latest Python libraries and frameworks?",
+          "Can you provide an example of a time you used Python for automation or analysis?"
+        ],
+        "warnings": [
+          "Uncertain evidence of hands-on Python experience beyond coursework.",
+          "The applicant's SQL experience is directly relevant, but the lack of quantifiable impact makes it harder to assess.",
+          "The resume passage about Python is ambiguous, as it only mentions coursework without a specific project.",
+          "The applicant's coursework is a good sign of interest but lacks concrete evidence of professional application."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built SQL reporting pipelines for 900 users demonstrates practical use of SQL in a professional context.",
+          "quote": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Introductory Python coursework indicates the applicant has attempted to learn Python, even if it's not explicitly stated.",
+          "quote": "Example University",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 31275.47529999999,
+      "predictions": [
+        {
+          "skill": "sql",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Built SQL reporting pipelines for 900 users demonstrates practical use of SQL in a professional context.",
+          "quote": "Built SQL reporting pipelines for 900 users. Completed introductory Python coursework.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "python",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Introductory Python coursework indicates the applicant has attempted to learn Python, even if it's not explicitly stated.",
+          "quote": "Example University",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-8",
+      "challenge": "aspirational",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.8359000000054948,
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+          "quote": "ML engineer",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 39908.00429999997,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "machine learning",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed machine learning models using PyTorch and pgvector semantic search, which are related to the job requirements.",
+            "evidenceText": "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+          },
+          {
+            "skill": "pytorch",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant used PyTorch in developing machine learning models, which aligns with the job requirement.",
+            "evidenceText": "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+          },
+          {
+            "skill": "vector search",
+            "importance": "required",
+            "sourceText": "Machine learning, PyTorch and vector search are required.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant implemented pgvector semantic search, which is a form of vector search used in the job description.",
+            "evidenceText": "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated in the resume.",
+            "evidence": [
+              "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The resume provides concrete examples of experience with the required skills.",
+            "evidence": [
+              "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "The applicant's work directly contributes to measurable outcomes through the use of machine learning models and vector search.",
+            "evidence": [
+              "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The resume clearly demonstrates the applicant's experience with the required skills.",
+            "evidence": [
+              "Developed machine learning models with PyTorch and implemented pgvector semantic search."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What specific machine learning models did you develop?",
+          "Can you elaborate on your experience with PyTorch?",
+          "How did you implement the semantic search functionality?",
+          "What measurable outcomes did your machine learning projects achieve?"
+        ],
+        "warnings": [
+          "There are some uncertainties in the resume that might affect the assessment of the applicant's capability in machine learning and vector search.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "machine learning": {
+            "evidenceId": "s2",
+            "reason": "The applicant developed machine learning models using PyTorch and pgvector semantic search, which are related to the job requirements.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          },
+          "pytorch": {
+            "evidenceId": "s2",
+            "reason": "The applicant used PyTorch in developing machine learning models, which aligns with the job requirement.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          },
+          "vector search": {
+            "evidenceId": "s2",
+            "reason": "The applicant implemented pgvector semantic search, which is a form of vector search used in the job description.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated in the resume.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The resume provides concrete examples of experience with the required skills.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "The applicant's work directly contributes to measurable outcomes through the use of machine learning models and vector search.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The resume clearly demonstrates the applicant's experience with the required skills.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What specific machine learning models did you develop?",
+          "Can you elaborate on your experience with PyTorch?",
+          "How did you implement the semantic search functionality?",
+          "What measurable outcomes did your machine learning projects achieve?"
+        ],
+        "warnings": [
+          "There are some uncertainties in the resume that might affect the assessment of the applicant's capability in machine learning and vector search."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed machine learning models using PyTorch and pgvector semantic search, which are related to the job requirements.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant used PyTorch in developing machine learning models, which aligns with the job requirement.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant implemented pgvector semantic search, which is a form of vector search used in the job description.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 39911.30079999997,
+      "predictions": [
+        {
+          "skill": "machine learning",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed machine learning models using PyTorch and pgvector semantic search, which are related to the job requirements.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "pytorch",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant used PyTorch in developing machine learning models, which aligns with the job requirement.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "vector search",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant implemented pgvector semantic search, which is a form of vector search used in the job description.",
+          "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-9",
+      "challenge": "alias",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 1.7752999999793246,
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 20897.963400000008,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "accessibility",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, which directly relates to accessibility experience.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          },
+          {
+            "skill": "next.js",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, demonstrating use of Next.js.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          },
+          {
+            "skill": "rest api",
+            "importance": "required",
+            "sourceText": "The position requires Next.js, REST API and accessibility experience.",
+            "verdict": "supported",
+            "confidence": 0.8,
+            "reason": "[evidence-category-v1: applicant_used_skill] The applicant designed RESTful APIs, showcasing experience with REST APIs.",
+            "evidenceText": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated by the applicant.",
+            "evidence": [
+              "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 100,
+            "explanation": "The applicant has hands-on experience with Next.js, REST APIs, and accessibility.",
+            "evidence": [
+              "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 100,
+            "explanation": "The applicant's work directly contributes to the product's functionality.",
+            "evidence": [
+              "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 100,
+            "explanation": "The applicant's experience is clearly described in a single passage.",
+            "evidence": [
+              "Developed accessible NextJS interfaces and designed RESTful APIs for customer products."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "Can you elaborate on your experience with developing RESTful APIs for customer products?",
+          "How did you ensure the interfaces were accessible in your Next.js applications?",
+          "What steps did you take to integrate these APIs into the product flow?",
+          "Can you discuss any challenges you faced while implementing accessibility features in your Next.js projects?"
+        ],
+        "warnings": [
+          "The applicant's experience is clearly demonstrated in one passage, but the impact and measurable outcomes are not explicitly stated.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "accessibility": {
+            "evidenceId": "s2",
+            "reason": "The applicant developed accessible NextJS interfaces, which directly relates to accessibility experience.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          },
+          "next.js": {
+            "evidenceId": "s2",
+            "reason": "The applicant developed accessible NextJS interfaces, demonstrating use of Next.js.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          },
+          "rest api": {
+            "evidenceId": "s2",
+            "reason": "The applicant designed RESTful APIs, showcasing experience with REST APIs.",
+            "category": "applicant_used_skill",
+            "confidence": 0.8
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "All required skills are explicitly demonstrated by the applicant.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 100,
+            "explanation": "The applicant has hands-on experience with Next.js, REST APIs, and accessibility.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Measurable impact": {
+            "score": 100,
+            "explanation": "The applicant's work directly contributes to the product's functionality.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 100,
+            "explanation": "The applicant's experience is clearly described in a single passage.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "Can you elaborate on your experience with developing RESTful APIs for customer products?",
+          "How did you ensure the interfaces were accessible in your Next.js applications?",
+          "What steps did you take to integrate these APIs into the product flow?",
+          "Can you discuss any challenges you faced while implementing accessibility features in your Next.js projects?"
+        ],
+        "warnings": [
+          "The applicant's experience is clearly demonstrated in one passage, but the impact and measurable outcomes are not explicitly stated."
+        ]
+      },
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, demonstrating use of Next.js.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant designed RESTful APIs, showcasing experience with REST APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, which directly relates to accessibility experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 20900.119799999986,
+      "predictions": [
+        {
+          "skill": "next.js",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, demonstrating use of Next.js.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "rest api",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant designed RESTful APIs, showcasing experience with REST APIs.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "accessibility",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] The applicant developed accessible NextJS interfaces, which directly relates to accessibility experience.",
+          "quote": "Developed accessible NextJS interfaces and designed RESTful APIs for customer products.",
+          "citationValid": true,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "dense-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "reranked-nli",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    },
+    {
+      "caseId": "adversarial-10",
+      "challenge": "exact",
+      "pipeline": "rules-transformer",
+      "provider": "not-run",
+      "latencyMs": 0,
+      "predictions": []
+    }
+  ],
+  "summaries": [
+    {
+      "pipeline": "rules",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.125,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 1.7141000000119675,
+      "p95LatencyMs": 8.078199999999981,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          15,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 9,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 4,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "llm",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 10,
+      "fallbackCases": 0,
+      "accuracy": 0.9166666666666666,
+      "macroF1": 0.859375,
+      "supportPrecision": 0.8823529411764706,
+      "supportRecall": 1,
+      "abstentionRate": 0.041666666666666664,
+      "unsupportedSupportRate": 0.11764705882352941,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 26488.78779999999,
+      "p95LatencyMs": 39908.00429999997,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          15,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          1
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 9,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 4,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 0,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "hybrid",
+      "status": "complete",
+      "evaluatedCases": 10,
+      "totalCases": 10,
+      "modelCases": 10,
+      "fallbackCases": 0,
+      "accuracy": 0.9166666666666666,
+      "macroF1": 0.859375,
+      "supportPrecision": 0.8823529411764706,
+      "supportRecall": 1,
+      "abstentionRate": 0.041666666666666664,
+      "unsupportedSupportRate": 0.11764705882352941,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 26490.80660000001,
+      "p95LatencyMs": 39911.30079999997,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          15,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          1
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "exact",
+          "correct": 5,
+          "total": 5
+        },
+        {
+          "challenge": "alias",
+          "correct": 9,
+          "total": 9
+        },
+        {
+          "challenge": "negation",
+          "correct": 2,
+          "total": 2
+        },
+        {
+          "challenge": "aspirational",
+          "correct": 4,
+          "total": 4
+        },
+        {
+          "challenge": "ambiguity",
+          "correct": 0,
+          "total": 2
+        },
+        {
+          "challenge": "missing",
+          "correct": 2,
+          "total": 2
+        }
+      ]
+    },
+    {
+      "pipeline": "dense-nli",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    },
+    {
+      "pipeline": "reranked-nli",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    },
+    {
+      "pipeline": "rules-transformer",
+      "status": "not-run",
+      "evaluatedCases": 0,
+      "totalCases": 10,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": null,
+      "macroF1": null,
+      "supportPrecision": null,
+      "supportRecall": null,
+      "abstentionRate": null,
+      "unsupportedSupportRate": null,
+      "invalidCitationRate": null,
+      "missingRequirementRate": null,
+      "p50LatencyMs": null,
+      "p95LatencyMs": null,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "slices": []
+    }
+  ]
+}

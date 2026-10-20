@@ -387,3 +387,14 @@ th, td { padding: 13px 11px; }
 .transformer-panel summary { cursor: pointer; font-weight: 600; }
 .transformer-panel small, .resume-qa blockquote small { display: block; margin-top: 0.4rem; }
 .resume-qa > input { width: 100%; margin: 0.5rem 0 0.8rem; }
+
+/* A repeatable evidence walkthrough before optional generation. */
+.demo-explanation { font-size:.86rem; }
+.demo-generator { border-top:1px solid var(--line); padding-top:20px; margin-top:24px; }
+.demo-generator summary { cursor:pointer; font-weight:750; line-height:1.5; }
+.demo-generator p { color:var(--muted); font-size:.86rem; line-height:1.6; }
+.demo-evaluation-link { display:block; margin-top:26px; color:var(--green); font-size:.86rem; line-height:1.6; }
+button:focus-visible,summary:focus-visible,a:focus-visible { outline:3px solid #d28b35; outline-offset:4px; }
+.file-button { position:relative; }
+.file-button input { display:block; position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer; }
+.file-button:focus-within { outline:3px solid #d28b35; outline-offset:4px; }

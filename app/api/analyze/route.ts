@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (jobDescription.length < 40) throw new Error("Add a more detailed job description (at least 40 characters).");
     if (resumeText.length < 80) throw new Error("Add a resume or upload a document containing at least 80 characters.");
 
-    return NextResponse.json({ analysis: await analyzeResumeHybrid(jobDescription, resumeText), extractedCharacters: resumeText.length });
+    return NextResponse.json({ analysis: await analyzeResumeHybrid(jobDescription, resumeText, undefined, request.signal), extractedCharacters: resumeText.length });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Analysis failed.";
     return NextResponse.json({ error: message }, { status: 400 });
