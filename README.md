@@ -162,7 +162,7 @@ node --env-file=.env.local --import tsx scripts/compare.ts --split heldout --wit
 
 The v8 evidence-check pipeline records **22/24 development**, **23/24 reused diagnostic**, and **23/24 new-challenge judgments**, with no rule fallback. On the challenge (**n=24**), rules and DeepSeek categories + policy each score **15/24 (62.5%)**; adding evidence checks reaches **23/24 (95.8%)**, with **four-class macro F1 0.9496**. On development, rules score **24/24**, versus **22/24** for the checked model pipeline, so the model path does not outperform rules across all sets. The checks only abstain; there was no model training or fine-tuning. The guided example remains **4/4**. The same agent authored the challenge and checks; labels are provisional and this is not independent annotation or a blind test. See [actual results](reports/deepseek-revision.md) and [current project progress](docs/progress.md).
 
-The [Chinese resume version](docs/resume-project-zh.txt) contains the approved concise STAR wording. The [interview preparation](docs/STAR-resume-zh.txt) explains challenges, solutions, baseline comparisons and remaining work. Error analysis is supported by the evaluation page, per-case report tables and versioned v1–v8 revisions with failed runs retained; there is no separate Bad Case module.
+Error analysis is supported by the evaluation page, per-case report tables and versioned v1–v8 revisions with failed runs retained; there is no separate Bad Case module.
 
 See [measured results and portfolio talking points](reports/README.md) and [experiment methodology, dataset card and metric definitions](docs/experiments.md).
 

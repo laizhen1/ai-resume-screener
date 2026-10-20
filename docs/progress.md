@@ -9,7 +9,7 @@ Status reviewed: **2026-10-20**. Current engine: **3.2.0**. Latest measured Deep
 - Fixed category-to-verdict mapping, source/identity validation and bounded eligibility checks. Original responses and check decisions remain inspectable. Four criterion scores are separate and are not recalibrated after abstention.
 - Optional Python retrieval/evidence service: BM25 + vectors + RRF, cross-encoder reranking, NLI evidence analysis and cited Q&A. These optional components are not the source of the v8 DeepSeek score.
 - Six comparison pipelines, review feedback, exportable per-case reports and v1–v8 revision records with failed results retained. Error attribution is supported by the evaluation page and report tables, not a separate Bad Case module.
-- [Approved Chinese resume](resume-project-zh.txt) and [STAR/interview preparation](STAR-resume-zh.txt), including the development baseline counterexample and conditional local-processing claims.
+- Public documentation records baseline comparisons, dataset provenance and conditional local-processing claims. Personal resume and interview documents are excluded from version control.
 
 ## Latest measured results
 

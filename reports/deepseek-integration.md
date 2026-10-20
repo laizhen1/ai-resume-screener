@@ -61,4 +61,4 @@ The defensible project achievement is a functioning local LLM evidence-review wo
 
 For the next iteration, constrain or normalize requirement identifiers consistently for both runtime and evaluation, handle conflicting duplicate requirements, and add score-rubric calibration. Develop these changes on a development split. Obtain independently reviewed, family-disjoint test examples before reporting a fresh accuracy improvement. The current 24-case set is retired as an untouched holdout for those changes.
 
-See [Chinese STAR résumé wording](../docs/STAR-resume-zh.txt) and [portfolio scope](../docs/portfolio.md).
+See [portfolio scope](../docs/portfolio.md).

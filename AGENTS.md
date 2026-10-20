@@ -11,4 +11,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Project documentation maintenance
 
-Keep README, relevant technical documentation, docs/progress.md and the approved Chinese resume/STAR files aligned with code changes and measured project progress. Update affected documentation in the same change. Distinguish implemented features, measured results and planned work. Preserve historical reports, failures and frozen protocols; never update old measurements to imply a new run. Follow the documentation checklist in CONTRIBUTING.md.
+Keep README, relevant technical documentation and docs/progress.md aligned with code changes and measured project progress. Personal resume and interview documents are local-only: preserve and update local copies when relevant, but never commit them or link to them from public documentation. Update affected documentation in the same change. Distinguish implemented features, measured results and planned work. Preserve historical reports, failures and frozen protocols; never update old measurements to imply a new run. Follow the documentation checklist in CONTRIBUTING.md.

@@ -20,3 +20,7 @@ datasets/private/
 .promptfoo/
 reports/promptfoo.json
 *.tsbuildinfo
+
+# Personal career documents stay local.
+/docs/resume-project-zh*.txt
+/docs/STAR-resume-zh*.txt

@@ -47,12 +47,12 @@ This is the missing evidence needed to make a stronger fine-tuning STAR claim. A
 
 ## Completed DeepSeek diagnostics
 
-See [the measured integration report](../reports/deepseek-integration.md) and [Chinese STAR wording](STAR-resume-zh.txt). Those initial runs used an exact-name protocol that missed 17/24 names. The shared identity fix removes those mismatches in replay. See [the subsequent revision results](../reports/deepseek-revision.md) for corrected baselines, live runs and retained failures; do not attribute the alignment correction to model learning.
+See [the measured integration report](../reports/deepseek-integration.md). Those initial runs used an exact-name protocol that missed 17/24 names. The shared identity fix removes those mismatches in replay. See [the subsequent revision results](../reports/deepseek-revision.md) for corrected baselines, live runs and retained failures; do not attribute the alignment correction to model learning.
 
 
-## Current v8 portfolio wording
+## Current v8 implementation and evidence
 
-The approved [Chinese resume](resume-project-zh.txt) and [STAR/interview preparation](STAR-resume-zh.txt) distinguish dictionary-based requirement extraction, model evidence-category selection, fixed four-class mapping and source eligibility checks. The [progress record](progress.md) lists current measurements, tests and remaining work.
+The current pipeline combines dictionary-based requirement extraction, model evidence-category selection, fixed four-class mapping and source eligibility checks. The [progress record](progress.md) lists current measurements, tests and remaining work.
 
 On the 24-example synthetic challenge, rules and the pre-check category-policy output both score 15/24; the checked output scores 23/24 (95.8%), with four-class macro F1 0.9496. The same agent authored the checks and provisional labels, so this is not an independent blind test. Development rules score 24/24 versus 22/24 for the checked model path. Natural-language evidence selection and explanation are product capabilities; broad generalization or superiority over rules has not been established.
 
