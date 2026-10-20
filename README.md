@@ -1,6 +1,8 @@
 # Open Resume Lab
 
-Open Resume Lab is a privacy-first, explainable candidate-evidence and evaluation platform. Its Evidence Intelligence engine extracts job requirements, distinguishes demonstrated, learning-only, contradicted and unknown résumé evidence, applies a versioned deterministic rubric, and keeps employment decisions with a human reviewer.
+**Explainable resume screening with local DeepSeek-R1-Distill-Qwen-7B, source-cited evidence, hybrid retrieval, candidate comparison, and reproducible evaluation. Built for human review.**
+
+Open Resume Lab combines Ollama-based local inference with an optional Python retrieval service. Its Evidence Intelligence engine extracts job requirements, distinguishes demonstrated, learning-only, contradicted and unknown résumé evidence, applies a versioned deterministic rubric, and keeps employment decisions with a human reviewer.
 
 It is a learning and decision-support system, not an automated hiring system. Use fictional or properly consented data only.
 

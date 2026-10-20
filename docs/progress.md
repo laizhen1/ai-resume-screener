@@ -1,6 +1,6 @@
 # Project progress
 
-Status reviewed: **2026-10-20**. Current engine: **3.2.0**. Latest measured DeepSeek revision: **v8**, retaining prompt **core-analysis-v7-enumerated-categories**, category policy **evidence-category-v1** and checks **evidence-eligibility-v1**. This documentation synchronization did not change inference code or rerun models.
+Status reviewed: **2026-10-21**. Current engine: **3.2.0**. Latest measured DeepSeek revision: **v8**, retaining prompt **core-analysis-v7-enumerated-categories**, category policy **evidence-category-v1** and checks **evidence-eligibility-v1**. The latest documentation update adds a concise GitHub project summary highlighting local DeepSeek inference, source-cited evidence, hybrid retrieval, candidate comparison and reproducible evaluation. Inference code and recorded measurements are unchanged; models were not rerun.
 
 ## Implemented
 
