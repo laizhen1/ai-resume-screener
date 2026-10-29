@@ -72,10 +72,22 @@ test("shared navigation, brand and responsive pages work at narrow widths", asyn
     await expect(page.locator("main#main-content")).toHaveCount(1);
     await expect(page.getByRole("navigation", { name: "Main navigation", exact: true })).toHaveCount(1);
     await expect(page.locator("h1")).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const dimensions = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }));
+    expect(dimensions.content, `${route}: ${JSON.stringify(dimensions)}`).toBeLessThanOrEqual(dimensions.viewport);
   }
   await expect(page.getByRole("link", { name: "New analysis", exact: true })).toHaveAttribute("aria-current", "page");
   await page.screenshot({ path: "test-results/studio-mobile.png", fullPage: true });
   await page.setViewportSize({ width: 1440, height: 1050 });
   await page.screenshot({ path: "test-results/studio-desktop.png", fullPage: true });
+});
+
+test("progress steps fit a narrow screen with wider fallback font metrics", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load guided example" }).waitFor();
+  await page.addStyleTag({ content: "body { font-family: monospace; }" });
+  const dimensions = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }));
+  expect(dimensions.content, JSON.stringify(dimensions)).toBeLessThanOrEqual(dimensions.viewport);
+  await page.getByRole("button", { name: "Load guided example" }).click();
+  await expect(page.getByRole("button", { name: "Analyse match", exact: true })).toBeEnabled();
 });

@@ -128,7 +128,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Playwright starts its own offline server; stop a server already occupying port 3000, or set `PLAYWRIGHT_PORT` to another free port. Browser installation may download Chromium.
+The current browser suite contains 16 tests, including narrow-screen fallback-font coverage. Playwright starts its own offline server; stop a server already occupying port 3000, or set `PLAYWRIGHT_PORT` to another free port. Browser installation may download Chromium.
 
 | Next step | Guide |
 |---|---|

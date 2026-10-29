@@ -124,3 +124,7 @@ Removed the daily refinement automation after reviewing the completed automated 
 ## Portfolio polish — 2026-10-29
 
 Replaced the long README history with a concise product overview, explicit offline quick start, local DeepSeek instructions, architecture diagram and current results. Added an offline configuration template, a two-minute presentation script, rendered screenshots and a reproducible WebM capture. An isolated source copy installed 1,096 packages from the npm cache, passed production build, and completed the real browser review/export/save/reload flow with no page exceptions. See [setup verification](setup-verification.md) and [demo](demo.md). Model evaluations were not rerun; historical reports remain unchanged. Nothing pushed; private career notes remain ignored.
+
+## Mobile CI follow-up — 2026-10-29
+
+The first published Quality run passed all non-browser checks but failed the 320px responsive assertion (14/15 browser tests passed). A wider-font reproduction showed the Studio's non-wrapping progress labels extending to 330px. The narrow layout now uses three equal columns with wrapping labels. A regression test failed before the fix and passed afterward; all 16 browser tests passed locally with two workers, and lint passed. CI now preserves failure screenshots/traces and reports the route and measured width. The next Linux run verifies the published fix; model behavior and evaluation results are unchanged.
