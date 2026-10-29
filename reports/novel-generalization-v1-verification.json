@@ -1,0 +1,56 @@
+{
+  "check": "Internal consistency only; saved model runs were not rerun and labels were not independently reviewed.",
+  "reports": [
+    {
+      "path": "reports/novel-generalization-v1-results.json",
+      "sha256": "7bef90d96b4833c834d4d0713dda65b2328dff17dfffa75abc0e64f0ce644e1e",
+      "dataset": {
+        "version": "novel-generalization-v1",
+        "split": "heldout",
+        "hash": "3a57406e9120cc8eae7ec3571197e6853d4e012c1ffd427b07fe5a631bd64393",
+        "uniqueCases": 24,
+        "executions": 24,
+        "annotationStatus": "New agent-authored scenarios and labels frozen before inference; not independent human annotation or blind to prior failure mechanisms."
+      },
+      "recordedAt": "2026-10-28T08:00:43.497Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 26,
+          "judgments": 48,
+          "accuracy": 0.5416666666666666,
+          "macroF1": 0.47602564102564104,
+          "supportPrecision": 0.4074074074074074
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 35,
+          "judgments": 48,
+          "accuracy": 0.7291666666666666,
+          "macroF1": 0.7105218855218856,
+          "supportPrecision": 0.7333333333333333
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 37,
+          "judgments": 48,
+          "accuracy": 0.7708333333333334,
+          "macroF1": 0.7631627196333078,
+          "supportPrecision": 0.8461538461538461
+        }
+      ]
+    }
+  ]
+}

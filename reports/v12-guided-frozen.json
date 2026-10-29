@@ -1,0 +1,33 @@
+{
+  "version": "v12-guided",
+  "frozenAt": "2026-10-28T22:08:53.086Z",
+  "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation.",
+  "sources": {
+    "lib/analyzer.ts": "05d40320a4b2f6b2c1f0b72948bd0c8d9ae1d790e7048e5227077ceb649098c3",
+    "lib/ai-analysis.ts": "485a13577c35be4c962bc01f453b25d7d13cf7a175cea3af8a290f941edeb4ed",
+    "lib/evidence-boundaries.ts": "33c33a47d1d71446267b41b56727cefcfd71a35dcd25916ae9eeb982ced5984f",
+    "lib/evidence-eligibility.ts": "6ad8a02a735328b29460d6ad719fde4f27f2ecd1ffb761379a4259d001e42ef6",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+  "examples": [
+    {
+      "id": "guided",
+      "challenge": "public-walkthrough",
+      "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+      "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "docker": "partial",
+        "kubernetes": "contradicted",
+        "terraform": "unknown"
+      }
+    }
+  ],
+  "originalFreeze": "reports/v11-guided-v6-frozen.json",
+  "originalDatasetHash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7"
+}

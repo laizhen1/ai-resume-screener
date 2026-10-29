@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { analyzeResumeHybrid } from "@/lib/analyzer";
 import { extractDocument } from "@/lib/documents";
 import { rateLimit } from "@/lib/rate-limit";
+import { issueReceipt } from "@/lib/analysis-receipt";
 
 export const runtime = "nodejs";
 
@@ -18,7 +19,10 @@ export async function POST(request: Request) {
     if (jobDescription.length < 40) throw new Error("Add a more detailed job description (at least 40 characters).");
     if (resumeText.length < 80) throw new Error("Add a resume or upload a document containing at least 80 characters.");
 
-    return NextResponse.json({ analysis: await analyzeResumeHybrid(jobDescription, resumeText, undefined, request.signal), extractedCharacters: resumeText.length });
+    const analysis = await analyzeResumeHybrid(jobDescription, resumeText, undefined, request.signal);
+    const fileName = file instanceof File && file.size > 0 ? file.name : "pasted-resume.txt";
+    const snapshot = { analysis, jobDescription, resumeText, fileName };
+    return NextResponse.json({ ...snapshot, receipt: issueReceipt(snapshot), extractedCharacters: resumeText.length }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Analysis failed.";
     return NextResponse.json({ error: message }, { status: 400 });

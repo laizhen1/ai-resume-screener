@@ -1,5 +1,37 @@
 # Measured experiment results
 
+## Latest v13 evaluation
+
+Engine **3.7.1** fresh DeepSeek rerun: inspected examples **32/32**, new synthetic controls **16/16**, guided **4/4**. **4/4** prior mismatches now match their labels. New-control four-class macro F1 **1.0000**; raw model **12/16**. New controls were frozen before inference but use familiar failure mechanisms and agent-authored labels; they are not independent or family-disjoint evaluation. [Full results](deepseek-v13-results.md).
+
+
+## Historical first-use evaluation v2
+
+On 16 first-use synthetic documents (32 judgments), unchanged engine **3.6.0** scored **28/32 (87.5%)**, four-class macro F1 **0.8576** after checks; raw DeepSeek scored **27/32**. There were **4 checked mismatches**. Documents and provisional agent labels were frozen before this single-pass run. These are new examples of partly familiar mechanisms, not independently annotated or family-disjoint evaluation. [Full results and errors](novel-generalization-v2.md).
+
+
+## Historical v12 evaluation
+
+Engine **3.6.0** fresh rerun: transfer **32/32**, controls **16/16**, temporal confirmation **4/4**, guided example **4/4**. **6/6** previously remaining case/skill errors now match their labels. These are reused, inspected synthetic regression sets; raw/checked results, any new errors and separate zero-call replays are recorded in the [v12 report](deepseek-v12-results.md). No independent generalization claim is made.
+
+
+## Historical v11 evaluation
+
+Engine **3.5.3** fixes **11/11 original mismatches**. Inspected set A: **48/48** on fresh v11 inference, unchanged in the final-check replay (previously 37/48). New transfer set B: **27/32** on first use; its check-induced temporal regression was repaired, yielding **28/32** in a clearly labeled saved-output replay. Fresh post-fix controls C: **15/16**, four-class macro F1 **0.9365**; temporal confirmations **3/4**, guided example **4/4**. These are agent-authored synthetic measurements, not independent or family-disjoint evaluation. [Full results, remaining errors and execution distinctions](deepseek-v11-results.md).
+
+
+## Historical first new-example evaluation
+
+On 24 newly authored fictional documents (48 judgments, 12 per class), the unchanged engine 3.4.1 checked pipeline scored **37/48 (77.1%)**, four-class macro F1 **0.7632**. Raw DeepSeek scored **35/48**. This was a fresh, single-pass inference run with labels and engine hashes frozen beforehand; it was not replay or independent human annotation. [Full results and errors](novel-generalization-v1.md).
+
+## Historical v10 regression results
+
+V10 live generations with paired v2 source checks (no new calls for the three-set recheck): development **24/24**, challenge **24/24**, reused diagnostic **24/24**; **0 mismatches across 72 judgments**. Guided example **4/4**. New frozen agent-authored controls **16/16**, unavailable 0. These are synthetic regression measurements, not independent or blind evaluation. [Full results](deepseek-v10-results.md).
+
+## Historical v9 integration — 2026-10-28
+
+Fresh v9 rerun (2026-10-28): checked DeepSeek 22/24 challenge (91.7%, four-class macro F1 0.8889), 18/24 development, 23/24 reused diagnostic. Challenge rules 15/24; raw model 16/24. Total checked mismatches: 9/72. All are reused, agent-labeled synthetic sets, not independent tests. See [v9 report](deepseek-v9-integration-2026-10-28.md) for paired outputs, latency, hashes and failures. Application checks: 138 unit tests, 15 browser tests, lint and production build passed.
+
 ## Current DeepSeek v8 results
 
 | Dataset | Rules | DeepSeek categories + policy | With evidence checks | Checked four-class macro F1 |

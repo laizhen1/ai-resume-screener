@@ -1,0 +1,674 @@
+{
+  "check": "Internal consistency only; saved model runs were not rerun and labels were not independently reviewed.",
+  "reports": [
+    {
+      "path": "reports/v12-transfer-results.json",
+      "sha256": "eda265ea67c78250b3fe3297e2ffb8e63161edc790f0ba9958d93752f108fa4d",
+      "dataset": {
+        "version": "v12-transfer-final",
+        "split": "heldout",
+        "hash": "857ecd3e3a789269ff720eae4acb94b2da83c72879d6c0ec30515e60f569f45f",
+        "uniqueCases": 16,
+        "executions": 16,
+        "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation."
+      },
+      "recordedAt": "2026-10-28T22:19:23.167Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 17,
+          "judgments": 32,
+          "accuracy": 0.53125,
+          "macroF1": 0.4604377104377104,
+          "supportPrecision": 0.3684210526315789
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 16,
+          "fallbackCases": 0,
+          "correct": 26,
+          "judgments": 32,
+          "accuracy": 0.8125,
+          "macroF1": 0.8049213106295149,
+          "supportPrecision": 0.875
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 16,
+          "fallbackCases": 0,
+          "correct": 32,
+          "judgments": 32,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-controls-results.json",
+      "sha256": "665315ed57d2d90943997b8f741445644758dee85fee367672643babfdc2d26d",
+      "dataset": {
+        "version": "v12-controls-final",
+        "split": "heldout",
+        "hash": "86de4028f0fcf40b461d27e3fba49702b62dd36fe28f852e054e34cc2d891948",
+        "uniqueCases": 8,
+        "executions": 8,
+        "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation."
+      },
+      "recordedAt": "2026-10-28T22:24:03.912Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 8,
+          "judgments": 16,
+          "accuracy": 0.5,
+          "macroF1": 0.4337662337662338,
+          "supportPrecision": 0.2857142857142857
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 8,
+          "fallbackCases": 0,
+          "correct": 13,
+          "judgments": 16,
+          "accuracy": 0.8125,
+          "macroF1": 0.8127705627705627,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 8,
+          "fallbackCases": 0,
+          "correct": 16,
+          "judgments": 16,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-temporal-results.json",
+      "sha256": "e7f48d43f6d0dbf3f212884a360992104c5294d7d4a1669cf61461ac127235d5",
+      "dataset": {
+        "version": "v12-temporal-final",
+        "split": "heldout",
+        "hash": "ed5e05951ce1b0dae601c3367f177b90e814c9a76692e117315db8d9c7d6be71",
+        "uniqueCases": 2,
+        "executions": 2,
+        "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation."
+      },
+      "recordedAt": "2026-10-28T22:25:13.843Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 2,
+          "judgments": 4,
+          "accuracy": 0.5,
+          "macroF1": 0.16666666666666666,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 2,
+          "fallbackCases": 0,
+          "correct": 3,
+          "judgments": 4,
+          "accuracy": 0.75,
+          "macroF1": 0.3666666666666667,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 2,
+          "fallbackCases": 0,
+          "correct": 4,
+          "judgments": 4,
+          "accuracy": 1,
+          "macroF1": 0.5,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-guided-results.json",
+      "sha256": "b0fadc92a68598df1373b6a32f24bd4992bf6cf1ac9638d45c43b95840e23aa5",
+      "dataset": {
+        "version": "v12-guided-final",
+        "split": "heldout",
+        "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+        "uniqueCases": 1,
+        "executions": 1,
+        "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation."
+      },
+      "recordedAt": "2026-10-28T22:25:52.968Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 1,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 4,
+          "judgments": 4,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 1,
+          "modelCases": 1,
+          "fallbackCases": 0,
+          "correct": 4,
+          "judgments": 4,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 1,
+          "modelCases": 1,
+          "fallbackCases": 0,
+          "correct": 4,
+          "judgments": 4,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-original-replay.json",
+      "sha256": "e3b264d2a9b389805ddbd694f4f5378b555cbade78f5afcb97f830cabdc1eacf",
+      "dataset": {
+        "version": "v11-inspected-verified",
+        "split": "heldout",
+        "hash": "3a57406e9120cc8eae7ec3571197e6853d4e012c1ffd427b07fe5a631bd64393",
+        "uniqueCases": 24,
+        "executions": 24,
+        "annotationStatus": "Previously inspected agent-authored diagnostic set; five boundary labels confirmed by user after disclosure of predictions. Not blind."
+      },
+      "recordedAt": "2026-10-28T21:20:36.358Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 26,
+          "judgments": 48,
+          "accuracy": 0.5416666666666666,
+          "macroF1": 0.47602564102564104,
+          "supportPrecision": 0.4074074074074074
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 36,
+          "judgments": 48,
+          "accuracy": 0.75,
+          "macroF1": 0.7147306531066263,
+          "supportPrecision": 0.7058823529411765
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 48,
+          "judgments": 48,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-transfer-replay.json",
+      "sha256": "921dc46ca23796167637de6f592f692031719d6af86e66f03b7085411534b872",
+      "dataset": {
+        "version": "v11-new-verified",
+        "split": "heldout",
+        "hash": "857ecd3e3a789269ff720eae4acb94b2da83c72879d6c0ec30515e60f569f45f",
+        "uniqueCases": 16,
+        "executions": 16,
+        "annotationStatus": "New fictional agent-authored examples frozen before inference. Scenario mechanisms intentionally overlap known errors; not independent or family-disjoint."
+      },
+      "recordedAt": "2026-10-28T21:29:38.271Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 17,
+          "judgments": 32,
+          "accuracy": 0.53125,
+          "macroF1": 0.4604377104377104,
+          "supportPrecision": 0.3684210526315789
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 16,
+          "fallbackCases": 0,
+          "correct": 23,
+          "judgments": 32,
+          "accuracy": 0.71875,
+          "macroF1": 0.7051169590643275,
+          "supportPrecision": 0.8
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 16,
+          "modelCases": 16,
+          "fallbackCases": 0,
+          "correct": 31,
+          "judgments": 32,
+          "accuracy": 0.96875,
+          "macroF1": 0.9686274509803923,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-controls-replay.json",
+      "sha256": "504da17a469c17238e027d17974b7c1146cb1856973f5ef2a48f04b8883b4ec3",
+      "dataset": {
+        "version": "v11-new-controls-v6",
+        "split": "heldout",
+        "hash": "86de4028f0fcf40b461d27e3fba49702b62dd36fe28f852e054e34cc2d891948",
+        "uniqueCases": 8,
+        "executions": 8,
+        "annotationStatus": "New agent-authored positive/negative controls after inspecting transfer batch B. Four judgments per class. Not blind or independent."
+      },
+      "recordedAt": "2026-10-28T21:56:50.943Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 8,
+          "judgments": 16,
+          "accuracy": 0.5,
+          "macroF1": 0.4337662337662338,
+          "supportPrecision": 0.2857142857142857
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 8,
+          "fallbackCases": 0,
+          "correct": 11,
+          "judgments": 16,
+          "accuracy": 0.6875,
+          "macroF1": 0.6472222222222223,
+          "supportPrecision": 0.8
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 8,
+          "modelCases": 8,
+          "fallbackCases": 0,
+          "correct": 16,
+          "judgments": 16,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-temporal-replay.json",
+      "sha256": "004d8955cb4fc17b68017fec409b6408dae051806ff8505c6276a7515bd1dd48",
+      "dataset": {
+        "version": "v11-temporal-confirmation",
+        "split": "heldout",
+        "hash": "ed5e05951ce1b0dae601c3367f177b90e814c9a76692e117315db8d9c7d6be71",
+        "uniqueCases": 2,
+        "executions": 2,
+        "annotationStatus": "Previously inspected temporal cases; confirmation only."
+      },
+      "recordedAt": "2026-10-28T21:57:49.655Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 2,
+          "judgments": 4,
+          "accuracy": 0.5,
+          "macroF1": 0.16666666666666666,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 2,
+          "fallbackCases": 0,
+          "correct": 3,
+          "judgments": 4,
+          "accuracy": 0.75,
+          "macroF1": 0.3666666666666667,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 2,
+          "modelCases": 2,
+          "fallbackCases": 0,
+          "correct": 4,
+          "judgments": 4,
+          "accuracy": 1,
+          "macroF1": 0.5,
+          "supportPrecision": 1
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-development-replay.json",
+      "sha256": "e29ed600252a94777a6871e8220714f1d12f9e4da51a35ab134e2eea3a0674d0",
+      "dataset": {
+        "version": "adversarial-context-v2.0",
+        "split": "development",
+        "hash": "015068509d86deb7fb4321695a90fe0d353796ea525664f98e79e778690aabb6",
+        "uniqueCases": 10,
+        "executions": 10,
+        "annotationStatus": "Development regression fixtures; used to tune the rules."
+      },
+      "recordedAt": "2026-10-28T06:57:02.452Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 10,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 24,
+          "judgments": 24,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 10,
+          "modelCases": 10,
+          "fallbackCases": 0,
+          "correct": 22,
+          "judgments": 24,
+          "accuracy": 0.9166666666666666,
+          "macroF1": 0.859375,
+          "supportPrecision": 0.8823529411764706
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 10,
+          "modelCases": 10,
+          "fallbackCases": 0,
+          "correct": 24,
+          "judgments": 24,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "dense-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "reranked-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "rules-transformer",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-challenge-replay.json",
+      "sha256": "b2ee285f70cc3d06de4e9c7d78b50644d006081979594a5fa42a90b151c5cb9a",
+      "dataset": {
+        "version": "evidence-challenge-v1.0",
+        "split": "challenge",
+        "hash": "d6432d74928e52c6902ca44ee44ad7bf4d00f9a7fd3b54f269a8987f7912a01b",
+        "uniqueCases": 24,
+        "executions": 24,
+        "annotationStatus": "New agent-authored challenge frozen before live inference; provisional labels, not independent human review."
+      },
+      "recordedAt": "2026-10-28T07:07:57.601Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 15,
+          "judgments": 24,
+          "accuracy": 0.625,
+          "macroF1": 0.6664596273291926,
+          "supportPrecision": 0.4666666666666667
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 17,
+          "judgments": 24,
+          "accuracy": 0.7083333333333334,
+          "macroF1": 0.7381987577639751,
+          "supportPrecision": 0.5333333333333333
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 24,
+          "judgments": 24,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "dense-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "reranked-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "rules-transformer",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        }
+      ]
+    },
+    {
+      "path": "reports/v12-diagnostic-replay.json",
+      "sha256": "6f7ef1f948651cf63b52fd72c21d213626a3333039d6de578fbaf7f6b93d7c70",
+      "dataset": {
+        "version": "heldout-evidence-v1.0",
+        "split": "heldout",
+        "hash": "53503a523ab8481874057868653fdb8f77a1901b52f026aba028686624ba6274",
+        "uniqueCases": 24,
+        "executions": 24,
+        "annotationStatus": "Previously inspected diagnostic set; provisional agent-authored labels; independent human review pending."
+      },
+      "recordedAt": "2026-10-28T07:17:24.586Z",
+      "results": [
+        {
+          "pipeline": "rules",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 20,
+          "judgments": 24,
+          "accuracy": 0.8333333333333334,
+          "macroF1": 0.8314393939393939,
+          "supportPrecision": 0.6
+        },
+        {
+          "pipeline": "llm",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 19,
+          "judgments": 24,
+          "accuracy": 0.7916666666666666,
+          "macroF1": 0.7705419580419581,
+          "supportPrecision": 0.6
+        },
+        {
+          "pipeline": "hybrid",
+          "status": "complete",
+          "evaluatedCases": 24,
+          "modelCases": 24,
+          "fallbackCases": 0,
+          "correct": 24,
+          "judgments": 24,
+          "accuracy": 1,
+          "macroF1": 1,
+          "supportPrecision": 1
+        },
+        {
+          "pipeline": "dense-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "reranked-nli",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        },
+        {
+          "pipeline": "rules-transformer",
+          "status": "not-run",
+          "evaluatedCases": 0,
+          "modelCases": 0,
+          "fallbackCases": 0,
+          "correct": 0,
+          "judgments": 0,
+          "accuracy": null,
+          "macroF1": null,
+          "supportPrecision": null
+        }
+      ]
+    }
+  ]
+}

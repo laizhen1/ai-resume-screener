@@ -1,0 +1,9 @@
+{
+  "status": "interrupted-not-final",
+  "engineVersion": "3.7.0",
+  "completedDocuments": 11,
+  "totalDocuments": 16,
+  "checkpoint": "v13-inspected-results.json.checkpoint.json",
+  "reason": "Angular was absent from the deterministic skill catalog. Case novel2-09 aligned a missing prediction to unknown, falsely suggesting the semantic issue was resolved. Stopped before new controls; added canonical Angular coverage and refroze unchanged labels for engine 3.7.1. This is an implementation correction, not a successful final run.",
+  "newControlsExecuted": false
+}

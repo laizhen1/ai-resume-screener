@@ -1,0 +1,12 @@
+import { afterEach,expect,it } from "vitest";
+import { execFileSync } from "node:child_process";
+import { createHash,randomUUID } from "node:crypto";
+import { mkdirSync,readFileSync,writeFileSync,existsSync,rmSync } from "node:fs";
+import { resolve } from "node:path";
+const cleanup:string[]=[];
+afterEach(()=>{for(const path of cleanup.splice(0))if(existsSync(path))rmSync(path);});
+function fixture(){const root=resolve('tmp/novel-harness-tests');mkdirSync(root,{recursive:true});const id=randomUUID();const input=resolve(root,id+'.input.json'),output=resolve(root,id+'.output.json');cleanup.push(input,output,output+'.checkpoint.json');const examples=[{id:'fixture',challenge:'test',job:'Python required.',resume:'Built Python services.',expectedVerdicts:{python:'supported'}}];const hash=(s:string|Buffer)=>createHash('sha256').update(s).digest('hex');const data={version:'test',frozenAt:new Date().toISOString(),annotationStatus:'Harness fixture only',hash:hash(JSON.stringify(examples)),sources:{'lib/analyzer.ts':hash(readFileSync('lib/analyzer.ts'))},examples};return {input,output,data};}
+function run(input:string,output:string){try{execFileSync(process.execPath,['--import','tsx','scripts/evaluate-frozen.ts',input,output],{env:{...process.env,NODE_ENV:'production',VITEST:'',ENABLE_LOCAL_AI:'false'},stdio:'pipe',timeout:20000});return 0;}catch(e){return (e as {status:number}).status;}}
+it('rejects altered labels before running a model',()=>{const f=fixture();f.data.examples[0].expectedVerdicts.python='unknown';writeFileSync(f.input,JSON.stringify(f.data));expect(run(f.input,f.output)).toBe(1);expect(existsSync(f.output)).toBe(false);});
+it('rejects an altered frozen source hash',()=>{const f=fixture();f.data.sources['lib/analyzer.ts']='0'.repeat(64);writeFileSync(f.input,JSON.stringify(f.data));expect(run(f.input,f.output)).toBe(1);expect(existsSync(f.output)).toBe(false);});
+it('never reports disabled-model fallback as successful model coverage',()=>{const f=fixture();writeFileSync(f.input,JSON.stringify(f.data));expect(run(f.input,f.output)).toBe(2);const r=JSON.parse(readFileSync(f.output,'utf8'));expect(r.summaries.find((s:{pipeline:string})=>s.pipeline==='llm')).toMatchObject({status:'unavailable',modelCases:0,evaluatedCases:0});expect(r.summaries.find((s:{pipeline:string})=>s.pipeline==='hybrid')).toMatchObject({status:'partial',modelCases:0,fallbackCases:1});});

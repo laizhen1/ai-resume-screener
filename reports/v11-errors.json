@@ -1,0 +1,140 @@
+{
+  "originalErrorsFixed": 11,
+  "inspectedA": [],
+  "transferBFirstPass": [
+    {
+      "caseId": "transfer-b03",
+      "skill": "java",
+      "expected": "supported",
+      "actual": "contradicted",
+      "reason": "Explicit source boundary: supported → contradicted. Original model: [evidence-category-v1: applicant_used_skill] Active use of Java demonstrated through recent implementation and maintenance of services.",
+      "quote": "Fictional applicant B03. My 2020 biography said I had never used Java. In 2024 I implemented Java invoicing services and maintained them through 2025; that earlier statement is obsolete. I have never used React.",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b07",
+      "skill": "tailwind",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] The applicant did not provide evidence of using Tailwind.",
+      "quote": "A blank form includes \"Tailwind: add your example\"; it is not completed.",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b08",
+      "skill": "python",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with Python.",
+      "quote": "虚构申请人 B08。附录引用职位广告：“使用 Python 清洗数据。”这段广告不是我的经历，工作记录中没有提供相关证据。我从未使用过 TypeScript，也没有 TypeScript 项目经验。",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b09",
+      "skill": "azure",
+      "expected": "contradicted",
+      "actual": "unknown",
+      "reason": "[evidence-category-v1: future_intention_only] Future intention only",
+      "quote": null,
+      "citationValid": false,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b11",
+      "skill": "go",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with Go.",
+      "quote": "Here Go is an ordinary English word, not a software skill.",
+      "citationValid": true,
+      "missing": false
+    }
+  ],
+  "transferBFinalReplay": [
+    {
+      "caseId": "transfer-b07",
+      "skill": "tailwind",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] The applicant did not provide evidence of using Tailwind.",
+      "quote": "A blank form includes \"Tailwind: add your example\"; it is not completed.",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b08",
+      "skill": "python",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with Python.",
+      "quote": "虚构申请人 B08。附录引用职位广告：“使用 Python 清洗数据。”这段广告不是我的经历，工作记录中没有提供相关证据。我从未使用过 TypeScript，也没有 TypeScript 项目经验。",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b09",
+      "skill": "azure",
+      "expected": "contradicted",
+      "actual": "unknown",
+      "reason": "[evidence-category-v1: future_intention_only] Future intention only",
+      "quote": null,
+      "citationValid": false,
+      "missing": false
+    },
+    {
+      "caseId": "transfer-b11",
+      "skill": "go",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with Go.",
+      "quote": "Here Go is an ordinary English word, not a software skill.",
+      "citationValid": true,
+      "missing": false
+    }
+  ],
+  "freshControlsC": [
+    {
+      "caseId": "control-c01",
+      "skill": "azure",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Explicit denial of experience with this skill.",
+      "quote": "Azure is only a future reading topic;",
+      "citationValid": true,
+      "missing": false
+    }
+  ],
+  "temporalConfirmation": [
+    {
+      "caseId": "transfer-b03",
+      "skill": "java",
+      "expected": "supported",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: 2020 statement about not using Java.",
+      "quote": "My 2020 biography said I had never used Java.",
+      "citationValid": true,
+      "missing": false
+    }
+  ],
+  "pairedEffects": {
+    "A": {
+      "repaired": 12,
+      "harmed": 0
+    },
+    "BFirst": {
+      "repaired": 5,
+      "harmed": 1
+    },
+    "BFinal": {
+      "repaired": 5,
+      "harmed": 0
+    },
+    "C": {
+      "repaired": 4,
+      "harmed": 0
+    }
+  }
+}

@@ -1,0 +1,390 @@
+{
+  "version": "novel-generalization-v2",
+  "frozenAt": "2026-10-28T22:33:03.983Z",
+  "annotationStatus": "New first-use synthetic documents and agent-authored provisional labels, frozen before inference. Author knows previous failures; not independent or family-disjoint.",
+  "sources": {
+    "lib/analyzer.ts": "05d40320a4b2f6b2c1f0b72948bd0c8d9ae1d790e7048e5227077ceb649098c3",
+    "lib/ai-analysis.ts": "d596dd0fe98770ae6b2074e18771ca03715b4c338fa2d775363e4a53310473a2",
+    "lib/evidence-boundaries.ts": "33c33a47d1d71446267b41b56727cefcfd71a35dcd25916ae9eeb982ced5984f",
+    "lib/evidence-eligibility.ts": "6ad8a02a735328b29460d6ad719fde4f27f2ecd1ffb761379a4259d001e42ef6",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "94b70bf511b1f6da5f6aa18c23fa339ecf76d944e5a5ad3299ae47df5c1db926",
+  "examples": [
+    {
+      "id": "novel2-01",
+      "challenge": "archive-change",
+      "job": "java and react experience required.",
+      "resume": "An archived 2018 staff profile described Mira as having no Java experience. That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021. Current declaration: I have never worked with React.",
+      "expectedVerdicts": {
+        "java": "supported",
+        "react": "contradicted"
+      }
+    },
+    {
+      "id": "novel2-02",
+      "challenge": "nested-record",
+      "job": "azure and aws experience required.",
+      "resume": "{\"applicant\":\"Fictional N02\",\"current\":{\"azure\":\"I have never used Azure.\"},\"wishlist\":{\"aws\":\"AWS certification is on my wish list for next year.\"}}",
+      "expectedVerdicts": {
+        "azure": "contradicted",
+        "aws": "unknown"
+      }
+    },
+    {
+      "id": "novel2-03",
+      "challenge": "chinese-advert",
+      "job": "python and typescript experience required.",
+      "resume": "虚构候选人林禾。附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+      "expectedVerdicts": {
+        "python": "unknown",
+        "typescript": "supported"
+      }
+    },
+    {
+      "id": "novel2-04",
+      "challenge": "form-product",
+      "job": "tailwind and fastapi experience required.",
+      "resume": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms. Separately, I am learning FastAPI by completing introductory exercises with a tutor.",
+      "expectedVerdicts": {
+        "tailwind": "supported",
+        "fastapi": "partial"
+      }
+    },
+    {
+      "id": "novel2-05",
+      "challenge": "ordinary-word",
+      "job": "go and redis experience required.",
+      "resume": "The event brochure says “ready, set, go”; the last word is a starting signal. My Redis exposure consists of an ongoing introductory course and guided cache exercises.",
+      "expectedVerdicts": {
+        "go": "unknown",
+        "redis": "partial"
+      }
+    },
+    {
+      "id": "novel2-06",
+      "challenge": "revision-without-denial",
+      "job": "docker and kubernetes experience required.",
+      "resume": "My 2019 portfolio listed Docker as a learning goal. During 2023 I packaged and shipped our fictional museum application using Docker. I have no experience using Kubernetes.",
+      "expectedVerdicts": {
+        "docker": "supported",
+        "kubernetes": "contradicted"
+      }
+    },
+    {
+      "id": "novel2-07",
+      "challenge": "attributed-team",
+      "job": "terraform and postgresql experience required.",
+      "resume": "Project retrospective: the contractor operated Terraform. My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service. The contractor paragraph describes their work.",
+      "expectedVerdicts": {
+        "terraform": "unknown",
+        "postgresql": "supported"
+      }
+    },
+    {
+      "id": "novel2-08",
+      "challenge": "current-correction",
+      "job": "python and sql experience required.",
+      "resume": "A previous draft incorrectly credited me with Python development; I correct that claim here: I have never programmed in Python. I am currently completing SQL beginner query exercises in an evening class.",
+      "expectedVerdicts": {
+        "python": "contradicted",
+        "sql": "partial"
+      }
+    },
+    {
+      "id": "novel2-09",
+      "challenge": "structured-array",
+      "job": "react and angular experience required.",
+      "resume": "[{\"owner\":\"Fictional N09\",\"note\":\"I am taking introductory React lessons and following guided component exercises.\"},{\"owner\":\"target employer\",\"note\":\"Angular experience is requested by the vacancy.\"}]",
+      "expectedVerdicts": {
+        "react": "partial",
+        "angular": "unknown"
+      }
+    },
+    {
+      "id": "novel2-10",
+      "challenge": "chinese-denial",
+      "job": "docker and aws experience required.",
+      "resume": "虚构候选人周宁。我从未使用过 Docker，也没有相关实践经验。AWS 是我明年计划阅读的主题，目前没有开始学习。",
+      "expectedVerdicts": {
+        "docker": "contradicted",
+        "aws": "unknown"
+      }
+    },
+    {
+      "id": "novel2-11",
+      "challenge": "template-table",
+      "job": "tailwind and fastapi experience required.",
+      "resume": "Candidate worksheet for fictional N11\n| Field | Value |\n| Tailwind project | [applicant to complete] |\nPersonal declaration: I have never used FastAPI.",
+      "expectedVerdicts": {
+        "tailwind": "unknown",
+        "fastapi": "contradicted"
+      }
+    },
+    {
+      "id": "novel2-12",
+      "challenge": "mentoring-delivery",
+      "job": "langchain and rag experience required.",
+      "resume": "I released a LangChain document-routing service for a fictional repair shop, then taught colleagues how to maintain it. My RAG knowledge is limited to an introductory course I am currently taking.",
+      "expectedVerdicts": {
+        "langchain": "supported",
+        "rag": "partial"
+      }
+    },
+    {
+      "id": "novel2-13",
+      "challenge": "narrow-nonparticipation",
+      "job": "azure and github actions experience required.",
+      "resume": "The Azure migration was performed entirely by another department; this note records that project assignment. I personally configured and deployed GitHub Actions release workflows for the fictional ceramics catalogue.",
+      "expectedVerdicts": {
+        "azure": "unknown",
+        "github actions": "supported"
+      }
+    },
+    {
+      "id": "novel2-14",
+      "challenge": "scoped-learning-denial",
+      "job": "java and terraform experience required.",
+      "resume": "I am attending Java beginner classes and completing the provided exercises. I have never used Terraform, either in training or at work.",
+      "expectedVerdicts": {
+        "java": "partial",
+        "terraform": "contradicted"
+      }
+    },
+    {
+      "id": "novel2-15",
+      "challenge": "quoted-security-payload",
+      "job": "redis and go experience required.",
+      "resume": "I implemented Redis request counters in a fictional security gateway, including a test containing the literal string “ignore earlier instructions”. I have never written software in Go.",
+      "expectedVerdicts": {
+        "redis": "supported",
+        "go": "contradicted"
+      }
+    },
+    {
+      "id": "novel2-16",
+      "challenge": "reading-product",
+      "job": "typescript and kubernetes experience required.",
+      "resume": "The reading-club application is my classroom exercise: I am learning TypeScript and modifying an instructor-provided sample. I have no Kubernetes knowledge or practical experience.",
+      "expectedVerdicts": {
+        "typescript": "partial",
+        "kubernetes": "contradicted"
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "id": "novel2-01",
+      "rationale": "Later personal delivery supersedes the withdrawn profile; React has an explicit current denial."
+    },
+    {
+      "id": "novel2-02",
+      "rationale": "Explicit Azure denial; AWS is only a future intention."
+    },
+    {
+      "id": "novel2-03",
+      "rationale": "Advert is not an applicant claim; personal TypeScript delivery is explicit."
+    },
+    {
+      "id": "novel2-04",
+      "rationale": "Delivered form software is genuine work; supervised beginner FastAPI exercises are partial."
+    },
+    {
+      "id": "novel2-05",
+      "rationale": "Ordinary word is no programming claim; present introductory practice is partial."
+    },
+    {
+      "id": "novel2-06",
+      "rationale": "Dated delivery replaces an old goal; Kubernetes is explicitly denied."
+    },
+    {
+      "id": "novel2-07",
+      "rationale": "Third-party Terraform is not own experience; personal PostgreSQL deployment is supported."
+    },
+    {
+      "id": "novel2-08",
+      "rationale": "Current correction explicitly denies Python; SQL study has no denial."
+    },
+    {
+      "id": "novel2-09",
+      "rationale": "React is current study; Angular belongs to an employer requirement."
+    },
+    {
+      "id": "novel2-10",
+      "rationale": "Explicit Docker denial; AWS is a future plan only."
+    },
+    {
+      "id": "novel2-11",
+      "rationale": "Unfilled worksheet supplies no Tailwind evidence; FastAPI denial is explicit."
+    },
+    {
+      "id": "novel2-12",
+      "rationale": "Teaching follows real personal delivery; RAG is limited present study."
+    },
+    {
+      "id": "novel2-13",
+      "rationale": "Assignment to another department does not deny all Azure experience; own workflow delivery is explicit."
+    },
+    {
+      "id": "novel2-14",
+      "rationale": "Java present learning is partial; Terraform denial covers training and work."
+    },
+    {
+      "id": "novel2-15",
+      "rationale": "Quoted test payload does not invalidate Redis delivery; Go is expressly denied."
+    },
+    {
+      "id": "novel2-16",
+      "rationale": "Beginner sample modification remains partial despite application context; Kubernetes is explicitly denied."
+    }
+  ],
+  "protocol": {
+    "onePass": true,
+    "noTuningDuringRun": true,
+    "scope": "Text-level only, no upload/OCR evaluation. New wording and scenarios; mechanisms intentionally overlap prior errors. No independent generalization claim.",
+    "counts": {
+      "supported": 8,
+      "contradicted": 9,
+      "unknown": 8,
+      "partial": 7
+    }
+  },
+  "novelty": {
+    "method": "Exact document and word-trigram comparison against available historical report examples; lexical novelty does not prove independent families.",
+    "historicalEntries": 1546,
+    "results": [
+      {
+        "id": "novel2-01",
+        "nearest": {
+          "id": "holdout-18",
+          "similarity": 0.07317073170731707,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-02",
+        "nearest": {
+          "id": "transfer-b09",
+          "similarity": 0.11428571428571428,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-03",
+        "nearest": {
+          "id": "fresh-01",
+          "similarity": 0,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-04",
+        "nearest": {
+          "id": "novel-14",
+          "similarity": 0.021739130434782608,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-05",
+        "nearest": {
+          "id": "fresh-01",
+          "similarity": 0,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-06",
+        "nearest": {
+          "id": "novel-22",
+          "similarity": 0.04081632653061224,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-07",
+        "nearest": {
+          "id": "novel-05",
+          "similarity": 0.015625,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-08",
+        "nearest": {
+          "id": "control-c08",
+          "similarity": 0.057692307692307696,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-09",
+        "nearest": {
+          "id": "transfer-b13",
+          "similarity": 0.0425531914893617,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-10",
+        "nearest": {
+          "id": "fresh-01",
+          "similarity": 0,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-11",
+        "nearest": {
+          "id": "holdout-13",
+          "similarity": 0.09090909090909091,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-12",
+        "nearest": {
+          "id": "transfer-b02",
+          "similarity": 0.06896551724137931,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-13",
+        "nearest": {
+          "id": "transfer-b01",
+          "similarity": 0.019230769230769232,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-14",
+        "nearest": {
+          "id": "holdout-13",
+          "similarity": 0.08,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-15",
+        "nearest": {
+          "id": "control-c07",
+          "similarity": 0.0425531914893617,
+          "exact": false
+        }
+      },
+      {
+        "id": "novel2-16",
+        "nearest": {
+          "id": "novel-22",
+          "similarity": 0.041666666666666664,
+          "exact": false
+        }
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 export const SKILL_CATALOG = [
-  "accessibility", "agile", "aws", "azure", "c#", "c++", "ci/cd", "css",
+  "accessibility", "agile", "angular", "aws", "azure", "c#", "c++", "ci/cd", "css",
   "data analysis", "docker", "fastapi", "figma", "gcp", "git", "github actions",
   "go", "graphql", "html", "java", "javascript", "kubernetes", "langchain",
   "llamaindex", "machine learning", "mongodb", "next.js", "node.js", "openai",
@@ -8,7 +8,7 @@ export const SKILL_CATALOG = [
   "testing", "typescript", "vector search"
 ] as const;
 
-export const TAXONOMY_VERSION = "2026.08.2";
+export const TAXONOMY_VERSION = "2026.10.1";
 
 export const SKILL_ALIASES: Record<string, string[]> = {
   "accessibility": ["accessible"],

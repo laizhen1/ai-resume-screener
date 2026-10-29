@@ -19,6 +19,7 @@ test("renders transformer evidence and cited Q&A on desktop and mobile", async (
   await page.route("**/api/analyze", route => route.fulfill({ json: { analysis } }));
   await page.route("**/api/resume-qa", route => route.fulfill({ json: { answer: { status: "answered", message: "AI-generated answer with source citations.", claims: [{ text: "The resume describes Python services.", evidence }], warnings: [], model: "test-model" } } }));
   await page.goto("/");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Resume text", { exact: true }).fill(resume);
   await page.getByRole("button", { name: "Analyse match" }).click();
   await expect(page.getByRole("heading", { name: "Transformer evidence review" })).toBeVisible();

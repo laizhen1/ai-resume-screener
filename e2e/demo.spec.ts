@@ -12,6 +12,7 @@ test("guided example shows four evidence states and clears stale results", async
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: "test-results/evidence-demo-mobile.png", fullPage: true });
+  await page.getByRole("button", { name: "Edit résumé" }).click();
   await page.getByRole("textbox", { name: "Resume text", exact: true }).fill("Changed document");
   await expect(page.getByRole("heading", { name: "Match analysis", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Analyse match" })).toBeDisabled();
@@ -19,6 +20,7 @@ test("guided example shows four evidence states and clears stale results", async
 
 test("loading the demo replaces a file and analysis locks the input snapshot", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.locator('input[type="file"]').setInputFiles({ name: "example.txt", mimeType: "text/plain", buffer: Buffer.from("Fictional uploaded document") });
   await page.getByRole("button", { name: "Load guided example" }).click();
   expect(await page.locator('input[type="file"]').evaluate((input: HTMLInputElement) => input.files?.length)).toBe(0);
@@ -26,7 +28,7 @@ test("loading the demo replaces a file and analysis locks the input snapshot", a
   const pending = new Promise<void>(resolve => { release = resolve; });
   await page.route("**/api/analyze", async route => { await pending; await route.fulfill({ status: 503, json: { error: "Demo service temporarily unavailable." } }); });
   await page.getByRole("button", { name: "Analyse match" }).click();
-  await expect(page.getByRole("textbox", { name: "Job description", exact: true })).toBeDisabled();
+  await expect(page.locator("#job-description")).toBeDisabled();
   await expect(page.getByRole("textbox", { name: "Resume text", exact: true })).toBeDisabled();
   release();
   await expect(page.locator("main").getByRole("alert")).toContainText("temporarily unavailable");

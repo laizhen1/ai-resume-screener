@@ -1,3 +1,4 @@
+import { explicitBoundary } from "./evidence-boundaries";
 import type { AnalysisResult, Evidence } from "./types";
 import { TAXONOMY_VERSION } from "./skills";
 import { cosineSimilarity, embedTexts } from "./embeddings";
@@ -9,7 +10,7 @@ import { analyzeWithTransformers } from "./transformers";
 import { consolidateRequirements } from "./requirement-identity";
 import { evidenceIssues, EVIDENCE_ISSUE_LABELS, EVIDENCE_VALIDATION_VERSION } from "./evidence-eligibility";
 
-export const ENGINE_VERSION = "3.2.0";
+export const ENGINE_VERSION = "3.7.1";
 
 export type ScoringWeights = {
   skills: number;
@@ -47,25 +48,58 @@ export function composeAiAnalysis(jobDescription: string, resumeText: string, we
   const structuredResume = parseResume(resumeText);
   const assessments = consolidateRequirements(draft.requirements, item => ({ ...item, evidenceText: null, confidence: 0 }))
     .map((item) => {
-      const evidence = verifiedEvidence(resumeText, item.evidenceText, structuredResume.sections);
+      let evidence = verifiedEvidence(resumeText, item.evidenceText, structuredResume.sections);
+      let contextExpanded = false;
+      if (evidence && evidenceIssues(item.skill, evidence.text).includes("other-person-work")) {
+        const start = resumeText.lastIndexOf("\n", evidence.start - 1) + 1;
+        const next = resumeText.indexOf("\n", evidence.end);
+        const parent = resumeText.slice(start, next < 0 ? resumeText.length : next).trim();
+        if (parent.length <= 1000 && evidenceIssues(item.skill, parent).length === 0) {
+          evidence = verifiedEvidence(resumeText, parent, structuredResume.sections); contextExpanded = true;
+        }
+      }
       const validJobSource = jobDescription.includes(item.sourceText);
-      const issues = evidence && item.verdict !== "unknown" ? evidenceIssues(item.skill, evidence.text) : [];
-      const verdict = !validJobSource || issues.length > 0 || (item.verdict !== "unknown" && !evidence) ? "unknown" as const : item.verdict;
+      let issues = evidence && item.verdict !== "unknown" ? evidenceIssues(item.skill, evidence.text) : [];
+      if (evidence) {
+        const start = resumeText.lastIndexOf("\n", evidence.start - 1) + 1;
+        const next = resumeText.indexOf("\n", evidence.end);
+        const parent = resumeText.slice(start, next < 0 ? resumeText.length : next);
+        if (parent.length <= 1000 && evidenceIssues(item.skill, parent).includes("document-instruction")) issues = [...new Set([...issues, "document-instruction" as const])];
+      }
+      let boundary = evidence ? explicitBoundary(item.skill, evidence.text, item.verdict) : null;
+      // A selected fragment can omit nearby learning or an explicit temporal correction.
+      // Expand only an exact, bounded line when it establishes a concrete boundary.
+      // Preserve a valid supported quote instead of importing unrelated/older denials.
+      if (evidence && item.verdict !== "unknown" && (item.verdict !== "supported" || boundary !== null)) {
+        const start = resumeText.lastIndexOf("\n", evidence.start - 1) + 1;
+        const next = resumeText.indexOf("\n", evidence.end);
+        const parent = resumeText.slice(start, next < 0 ? resumeText.length : next).trim();
+        if (parent.length <= 1000 && parent !== evidence.text && evidenceIssues(item.skill, parent).length === 0) {
+          const contextual = explicitBoundary(item.skill, parent, item.verdict);
+          if (contextual && contextual !== "unknown" && contextual !== item.verdict) {
+            evidence = verifiedEvidence(resumeText, parent, structuredResume.sections);
+            boundary = contextual;
+            contextExpanded = true;
+          }
+        }
+      }
+      const verdict = !validJobSource || issues.length > 0 || (item.verdict !== "unknown" && !evidence) ? "unknown" as const : boundary ?? item.verdict;
+      const audit = issues.length ? issues : [...(contextExpanded ? ["source-context-expanded"] : []), ...(boundary ? ["explicit-source-boundary"] : [])];
       return {
         skill: item.skill.trim().toLowerCase(),
         importance: item.importance,
         sourceText: item.sourceText,
         verdict,
         confidence: issues.length ? 0 : verdict === "unknown" && item.verdict !== "unknown" ? Math.min(item.confidence, 0.5) : item.confidence,
-        reason: issues.length ? `Evidence check abstained. ${issues.map(issue => EVIDENCE_ISSUE_LABELS[issue]).join(" ")}` : !validJobSource ? "The requirement source was not found verbatim in the job description; the system abstained." : verdict === "unknown" && item.verdict !== "unknown"
+        reason: issues.length ? `Evidence check abstained. ${issues.map(issue => EVIDENCE_ISSUE_LABELS[issue]).join(" ")}` : !validJobSource ? "The requirement source was not found verbatim in the job description; the system abstained." : boundary ? `Explicit source boundary: ${item.verdict} → ${boundary}. Original model: ${item.reason}` : verdict === "unknown" && item.verdict !== "unknown"
           ? "The AI analysis did not provide an exact resume quote, so the system abstained."
-          : item.reason,
+          : contextExpanded ? `Expanded the exact source line to include applicant involvement. ${item.reason}` : item.reason,
         evidence,
-        ...(issues.length ? { evidenceValidation: { policyVersion: EVIDENCE_VALIDATION_VERSION, originalVerdict: item.verdict, issues } } : {}),
+        ...(audit.length ? { evidenceValidation: { policyVersion: EVIDENCE_VALIDATION_VERSION, originalVerdict: item.verdict, issues: audit } } : {}),
         method: "ollama-structured-v1" as const
       };
     });
-  const criteria = draft.criteria.map((item) => {
+  const originalCriteria = draft.criteria.map((item) => {
     const evidence = item.evidence.filter((snippet) => Boolean(verifiedEvidence(resumeText, snippet, structuredResume.sections)));
     return {
       criterion: item.criterion,
@@ -76,10 +110,19 @@ export function composeAiAnalysis(jobDescription: string, resumeText: string, we
       provenance: evidence.map((snippet) => locateEvidence(resumeText, snippet, structuredResume.sections))
     };
   });
+  const skillsScore = assessments.length ? clamp(100 * assessments.reduce((sum, item) => sum + (item.verdict === "supported" ? 1 : item.verdict === "partial" ? 0.4 : 0), 0) / assessments.length) : 0;
+  const criteria = originalCriteria.map(item => item.criterion.toLowerCase() === "relevant skills" ? {
+    ...item, score: skillsScore,
+    explanation: "Checked requirements: supported = 1, partial = 0.4, contradicted/unknown = 0; equal requirement weights. No detected requirements gives 0 (insufficient evidence).",
+    evidence: assessments.flatMap(item => item.evidence ? [item.evidence.text] : []),
+    provenance: assessments.flatMap(item => item.evidence ? [item.evidence] : [])
+  } : item);
   const overallScore = clamp(criteria.reduce((total, item) => total + item.score * (item.weight / 100), 0));
   const matchedSkills = assessments.filter((item) => item.verdict === "supported").map((item) => item.skill);
   const missingSkills = assessments.filter((item) => item.verdict !== "supported").map((item) => item.skill);
   return {
+    scoringPolicy: "checked-skills-v1",
+    originalModelRubric: { criteria: originalCriteria, overallScore: clamp(originalCriteria.reduce((sum, item) => sum + item.score * item.weight / 100, 0)) },
     overallScore,
     matchedSkills,
     missingSkills,
@@ -193,8 +236,10 @@ export function analyzeResume(jobDescription: string, resumeText: string, weight
 
 export async function analyzeResumeHybrid(jobDescription: string, resumeText: string, weights = DEFAULT_SCORING_WEIGHTS, signal?: AbortSignal): Promise<AnalysisResult> {
   signal?.throwIfAborted();
+  const started = performance.now();
+  let modelStatus = "not-run";
   const deterministicResult = analyzeResume(jobDescription, resumeText, weights);
-  const aiResult = await analyzeWithOllama(jobDescription, resumeText, weights, { signal });
+  const aiResult = await analyzeWithOllama(jobDescription, resumeText, weights, { signal, onDiagnostic: status => { modelStatus = status; } });
   signal?.throwIfAborted();
   let result: AnalysisResult;
   try {
@@ -202,7 +247,7 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
       ? composeAiAnalysis(jobDescription, resumeText, weights, aiResult.draft, aiResult.model)
       : {
       ...deterministicResult,
-      warnings: [...deterministicResult.warnings, "Ollama was unavailable, so this result used the deterministic offline fallback."]
+      warnings: [...deterministicResult.warnings, `Local model status: ${modelStatus}. This result used the deterministic offline fallback.`]
       };
   } catch {
     result = {
@@ -215,6 +260,7 @@ export async function analyzeResumeHybrid(jobDescription: string, resumeText: st
     if (process.env.ENABLE_TRANSFORMER_ANALYSIS === "true") {
       analysis = { ...analysis, transformerEvidence: await analyzeWithTransformers(deterministicResult.requirementAssessments ?? [], resumeText, { includeEntities: true, signal }) };
     }
+    analysis = { ...analysis, runtimeDiagnostics: { modelStatus, elapsedMs: Math.round(performance.now() - started), provider: analysis.analysisProvider ?? "deterministic-fallback" } };
     if (analysis.analysisProvider === "ollama") return analysis;
     const aiReview = await createAiReview({
       jobDescription,

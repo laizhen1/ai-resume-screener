@@ -1,0 +1,39 @@
+{
+  "version": "v11-temporal-confirmation",
+  "frozenAt": "2026-10-28T21:30:35.795Z",
+  "annotationStatus": "Previously inspected temporal cases; confirmation only.",
+  "sources": {
+    "lib/analyzer.ts": "bdd1918d9ac2f2330b95e24622e51ae73c17e5a700f9fc70c96353fa3d9587b4",
+    "lib/ai-analysis.ts": "3d9d5e99beed854164a10e2856cf41a8b8420c91c15db79536ec2a7f8043bda6",
+    "lib/evidence-boundaries.ts": "8959a28830fc15b1f4aaa8c5aae01007a718b5eb77b82f6c1bc5f41e3974cf23",
+    "lib/evidence-eligibility.ts": "491a29ef7fcf44e186e022c7fa2a6ddee6b5e1285210bb7e7f953b2095bb1b40",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "ed5e05951ce1b0dae601c3367f177b90e814c9a76692e117315db8d9c7d6be71",
+  "examples": [
+    {
+      "id": "novel-09",
+      "challenge": "context",
+      "job": "TypeScript and Java experience are required.",
+      "resume": "Fictional applicant N09\nIn an old 2021 profile I said I had never used TypeScript. That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases. Today I still have no hands-on experience with Java.",
+      "expectedVerdicts": {
+        "typescript": "supported",
+        "java": "contradicted"
+      }
+    },
+    {
+      "id": "transfer-b03",
+      "challenge": "dated-denial",
+      "job": "Java and React experience are required.",
+      "resume": "Fictional applicant B03. My 2020 biography said I had never used Java. In 2024 I implemented Java invoicing services and maintained them through 2025; that earlier statement is obsolete. I have never used React.",
+      "expectedVerdicts": {
+        "java": "supported",
+        "react": "contradicted"
+      }
+    }
+  ]
+}

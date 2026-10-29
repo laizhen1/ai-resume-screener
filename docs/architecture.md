@@ -28,7 +28,15 @@ The App Router application exposes three experiences:
 - The review workspace owns jobs, rubrics, candidate batches, evidence, reviewer notes, comparison, retention and audit history.
 - The evaluation laboratory compares six pipelines on versioned development, reused diagnostic and new challenge sets; the repeated-fixture regression tool remains separate.
 
-Known job requirements are extracted and normalized using the skill dictionary. The model selects exact résumé passage IDs, semantic categories and explanations, with a separate field for additional source-cited requirements. A fixed policy maps categories to four verdicts; production composition validates identity, quotations and source eligibility. Criterion scoring is separate and is not recalibrated by those checks. Repository and queue interfaces isolate storage and worker concerns from UI routes.
+Known job requirements are extracted and normalized using the skill dictionary. The model selects exact résumé passage IDs, semantic categories and explanations, with a separate field for additional source-cited requirements. A fixed policy maps categories to four verdicts; production composition validates identity, quotations and source eligibility. The skills score is recalculated from checked requirement verdicts; the other criteria remain uncalibrated model suggestions, with the original rubric retained. Repository and queue interfaces isolate storage and worker concerns from UI routes.
+
+## Guided Studio frontend
+
+The root layout provides the shared header, active navigation, skip link and footer. The analyzer owns a three-step client workflow: role context, résumé input and evidence review. Job descriptions require 40 characters; pasted résumés require 80. Client file checks reject empty, unsupported or oversized uploads before submission; server signature and extraction validation remain authoritative.
+
+Step navigation retains form state. Source changes invalidate results and the Q&A snapshot; analysis locks inputs and captures the exact text/file used. Abort controllers cancel pending analysis and clean up requests on unmount, with guards against late responses. Focus moves only after an actual step change, including under React Strict Mode.
+
+The AnalysisResults component preserves all requirement quotes, provider/fallback labels, reliability details, optional transformer review/Q&A, advisory scores and interview prompts. The cobalt/light-surface stylesheet applies across all routes, reflows the workflow on mobile and keeps evaluation tables within scrollable panels. BrandMark, the public SVG and the App Router icon share the document/evidence-check mark. No external fonts or visual-asset requests were added.
 
 ## Data flow
 
@@ -56,3 +64,14 @@ See [service setup](../services/model-service/README.md) and [transformer method
 ## Fully local deployment scope
 
 Ollama and the Python transformer service support local inference; BM25 + dense retrieval, RRF and cross-encoder reranking support cited Q&A. Local data handling depends on model, OCR and storage endpoints being local. See [privacy](privacy.md) for payloads and configurable external boundaries, and [project progress](progress.md) for implementation versus measured validation.
+
+
+### Evidence-consistent scoring — 2026-10-28
+
+Engine 3.3.0 introduces `checked-skills-v1`: the LLM skills component is recomputed from final checked judgments (supported 1, partial 0.4, contradicted/unknown 0), equally weighted across requirements. No requirements gives zero evidence credit. Experience, impact and clarity remain uncalibrated model suggestions. The original model rubric and aggregate remain inspectable in the analysis and exported JSON. Reviewer corrections remain separate. Rule-only scoring is unchanged. Archived v8 measurements are preserved; this change is not a live DeepSeek evaluation rerun.
+
+
+The authenticated, rate-limited GET /api/model-status uses a five-second tags request without sending résumé text. Per-analysis diagnostics distinguish generation outcomes and expose elapsed time before optional reviewer-summary generation. scripts/compare.ts loads project configuration before running the same model pipeline; scripts/prepare-review.ts exports blinded review packets and validates provenance fields, hashes and complete judgment keys.
+
+
+Engine 3.7.1 uses exact sentence-scoped passages and per-requirement alias-aware candidate excerpts. These hints contain no verdicts. The model still selects evidence and categories; v8 checks restore bounded source context where needed and enforce explicit learning/denial boundaries with an audit trail. Valid supported quotes retain their scope instead of importing older denials from a broader line. Comparison reports include prompt/schema hashes and response metadata; runtime manifests capture Ollama/model versions.

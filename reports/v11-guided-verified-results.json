@@ -1,0 +1,537 @@
+{
+  "version": "comparison-v1",
+  "createdAt": "2026-10-28T21:30:22.023Z",
+  "engineVersion": "3.5.2",
+  "taxonomyVersion": "2026.08.2",
+  "dataset": {
+    "version": "v11-guided-verified",
+    "split": "heldout",
+    "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+    "uniqueCases": 1,
+    "executions": 1,
+    "annotationStatus": "Existing public fictional demo; not unseen or independent."
+  },
+  "configuration": {
+    "includeModel": true,
+    "includeTransformers": false,
+    "model": "deepseek-r1:7b",
+    "promptVersion": "core-analysis-v11-scope-multilingual",
+    "evidencePolicyVersion": "evidence-category-v1",
+    "evidenceValidationVersion": "evidence-boundaries-v5",
+    "alignmentVersion": "canonical-wrapper-v2",
+    "outputSemantics": "One fresh generation per document; raw and checked pipelines share that generation. No tuning during this run.",
+    "seed": 42,
+    "temperature": 0.6,
+    "timeoutMs": 180000,
+    "node": "v24.19.0",
+    "platform": "win32",
+    "generation": {
+      "think": true,
+      "options": {
+        "temperature": 0.6,
+        "seed": 42,
+        "num_ctx": 8192,
+        "num_predict": 4096
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "guided",
+      "challenge": "public-walkthrough",
+      "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+      "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "docker": "partial",
+        "kubernetes": "contradicted",
+        "terraform": "unknown"
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "guided",
+      "challenge": "public-walkthrough",
+      "pipeline": "rules",
+      "provider": "rules",
+      "latencyMs": 14.024699999999996,
+      "predictions": [
+        {
+          "skill": "python",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "The résumé links this requirement to delivery or professional experience.",
+          "quote": "Built Python services that tracked book loans and sent reminder emails.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+          "quote": "Currently learning Docker through guided container tutorials.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "The résumé explicitly limits or negates this experience.",
+          "quote": "I have never used Kubernetes.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "terraform",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "No explicit supporting or contradicting evidence was found; the system abstained.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "guided",
+      "challenge": "public-walkthrough",
+      "pipeline": "llm",
+      "provider": "ollama",
+      "latencyMs": 41447.8112,
+      "modelDraft": {
+        "requirements": [
+          {
+            "skill": "docker",
+            "importance": "required",
+            "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+            "verdict": "partial",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently learning Docker through guided container tutorials.",
+            "evidenceText": "Currently learning Docker through guided container tutorials."
+          },
+          {
+            "skill": "kubernetes",
+            "importance": "required",
+            "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+            "verdict": "contradicted",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly states they have never used Kubernetes.",
+            "evidenceText": "I have never used Kubernetes."
+          },
+          {
+            "skill": "python",
+            "importance": "required",
+            "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+            "verdict": "supported",
+            "confidence": 1,
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant built Python services that tracked book loans and sent reminder emails.",
+            "evidenceText": "Built Python services that tracked book loans and sent reminder emails."
+          },
+          {
+            "skill": "terraform",
+            "importance": "required",
+            "sourceText": "Python, Docker, Kubernetes and Terraform experience are required.",
+            "verdict": "unknown",
+            "confidence": 0,
+            "reason": "[evidence-category-v1: missing_or_ambiguous] No evidence of using or learning Terraform.",
+            "evidenceText": null
+          }
+        ],
+        "criteria": [
+          {
+            "criterion": "Relevant skills",
+            "score": 100,
+            "explanation": "All required skills from the job description are present in the resume.",
+            "evidence": [
+              "Currently learning Docker through guided container tutorials.",
+              "I have never used Kubernetes.",
+              "Built Python services that tracked book loans and sent reminder emails."
+            ]
+          },
+          {
+            "criterion": "Demonstrated experience",
+            "score": 0,
+            "explanation": "No evidence of demonstrated experience with Kubernetes or Terraform.",
+            "evidence": [
+              "I have never used Kubernetes.",
+              "Currently learning Docker through guided container tutorials.",
+              "Created a volunteer scheduling tool and wrote its user guide."
+            ]
+          },
+          {
+            "criterion": "Measurable impact",
+            "score": 0,
+            "explanation": "No evidence of measurable impact on the team or business.",
+            "evidence": [
+              "Built Python services that tracked book loans and sent reminder emails."
+            ]
+          },
+          {
+            "criterion": "Document clarity",
+            "score": 0,
+            "explanation": "No evidence of clear documentation or communication.",
+            "evidence": [
+              "Built Python services that tracked book loans and sent reminder emails."
+            ]
+          }
+        ],
+        "interviewQuestions": [
+          "What experience do you have with Docker?",
+          "Can you discuss your experience with Python?",
+          "What steps can we take to improve Kubernetes experience?",
+          "What is your understanding of Terraform?"
+        ],
+        "warnings": [
+          "Uncertain evidence for Kubernetes and Terraform experience.",
+          "Need more information on the applicant's Kubernetes and Terraform skills.",
+          "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+        ]
+      },
+      "modelOutput": {
+        "requirementJudgments": {
+          "docker": {
+            "evidenceId": "s4",
+            "reason": "Applicant is currently learning Docker through guided container tutorials.",
+            "category": "applicant_learning_skill",
+            "confidence": 1
+          },
+          "kubernetes": {
+            "evidenceId": "s5",
+            "reason": "Applicant explicitly states they have never used Kubernetes.",
+            "category": "applicant_explicitly_denies_skill",
+            "confidence": 1
+          },
+          "python": {
+            "evidenceId": "s2",
+            "reason": "Applicant built Python services that tracked book loans and sent reminder emails.",
+            "category": "applicant_used_skill",
+            "confidence": 1
+          },
+          "terraform": {
+            "evidenceId": null,
+            "reason": "No evidence of using or learning Terraform.",
+            "category": "missing_or_ambiguous",
+            "confidence": 0
+          }
+        },
+        "additionalRequirements": [],
+        "criteria": {
+          "Relevant skills": {
+            "score": 100,
+            "explanation": "All required skills from the job description are present in the resume.",
+            "evidenceIds": [
+              "s4",
+              "s5",
+              "s2"
+            ]
+          },
+          "Demonstrated experience": {
+            "score": 0,
+            "explanation": "No evidence of demonstrated experience with Kubernetes or Terraform.",
+            "evidenceIds": [
+              "s5",
+              "s4",
+              "s6"
+            ]
+          },
+          "Measurable impact": {
+            "score": 0,
+            "explanation": "No evidence of measurable impact on the team or business.",
+            "evidenceIds": [
+              "s2"
+            ]
+          },
+          "Document clarity": {
+            "score": 0,
+            "explanation": "No evidence of clear documentation or communication.",
+            "evidenceIds": [
+              "s2"
+            ]
+          }
+        },
+        "interviewQuestions": [
+          "What experience do you have with Docker?",
+          "Can you discuss your experience with Python?",
+          "What steps can we take to improve Kubernetes experience?",
+          "What is your understanding of Terraform?"
+        ],
+        "warnings": [
+          "Uncertain evidence for Kubernetes and Terraform experience.",
+          "Need more information on the applicant's Kubernetes and Terraform skills."
+        ]
+      },
+      "requestMetadata": {
+        "promptHash": "57d96cf7e0cfff50047fd5d3b50acd22f91efe46e771b3fcfcd2bdb4435f384e",
+        "schemaHash": "252212c5b6846f2317856f72d9e7a13de6804680adb39849c98a781df2096cf8",
+        "responseModel": "deepseek-r1:7b",
+        "evalCount": 832,
+        "doneReason": "stop"
+      },
+      "predictions": [
+        {
+          "skill": "python",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant built Python services that tracked book loans and sent reminder emails.",
+          "quote": "Built Python services that tracked book loans and sent reminder emails.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently learning Docker through guided container tutorials.",
+          "quote": "Currently learning Docker through guided container tutorials.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly states they have never used Kubernetes.",
+          "quote": "I have never used Kubernetes.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "terraform",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "[evidence-category-v1: missing_or_ambiguous] No evidence of using or learning Terraform.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ]
+    },
+    {
+      "caseId": "guided",
+      "challenge": "public-walkthrough",
+      "pipeline": "hybrid",
+      "provider": "ollama",
+      "latencyMs": 41476.313799999996,
+      "predictions": [
+        {
+          "skill": "python",
+          "expected": "supported",
+          "actual": "supported",
+          "reason": "[evidence-category-v1: applicant_used_skill] Applicant built Python services that tracked book loans and sent reminder emails.",
+          "quote": "Built Python services that tracked book loans and sent reminder emails.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "docker",
+          "expected": "partial",
+          "actual": "partial",
+          "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently learning Docker through guided container tutorials.",
+          "quote": "Currently learning Docker through guided container tutorials.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "kubernetes",
+          "expected": "contradicted",
+          "actual": "contradicted",
+          "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly states they have never used Kubernetes.",
+          "quote": "I have never used Kubernetes.",
+          "citationValid": true,
+          "missing": false
+        },
+        {
+          "skill": "terraform",
+          "expected": "unknown",
+          "actual": "unknown",
+          "reason": "[evidence-category-v1: missing_or_ambiguous] No evidence of using or learning Terraform.",
+          "quote": null,
+          "citationValid": false,
+          "missing": false
+        }
+      ],
+      "evidenceChecks": []
+    }
+  ],
+  "summaries": [
+    {
+      "pipeline": "rules",
+      "status": "complete",
+      "evaluatedCases": 1,
+      "totalCases": 1,
+      "modelCases": 0,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.25,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 14.024699999999996,
+      "p95LatencyMs": 14.024699999999996,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "public-walkthrough",
+          "correct": 4,
+          "total": 4
+        }
+      ]
+    },
+    {
+      "pipeline": "llm",
+      "status": "complete",
+      "evaluatedCases": 1,
+      "totalCases": 1,
+      "modelCases": 1,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.25,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 41447.8112,
+      "p95LatencyMs": 41447.8112,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "public-walkthrough",
+          "correct": 4,
+          "total": 4
+        }
+      ]
+    },
+    {
+      "pipeline": "hybrid",
+      "status": "complete",
+      "evaluatedCases": 1,
+      "totalCases": 1,
+      "modelCases": 1,
+      "fallbackCases": 0,
+      "accuracy": 1,
+      "macroF1": 1,
+      "supportPrecision": 1,
+      "supportRecall": 1,
+      "abstentionRate": 0.25,
+      "unsupportedSupportRate": 0,
+      "invalidCitationRate": 0,
+      "missingRequirementRate": 0,
+      "p50LatencyMs": 41476.313799999996,
+      "p95LatencyMs": 41476.313799999996,
+      "accuracyInterval": null,
+      "confusion": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "slices": [
+        {
+          "challenge": "public-walkthrough",
+          "correct": 4,
+          "total": 4
+        }
+      ]
+    }
+  ],
+  "protocol": {
+    "startedAt": "2026-10-28T21:29:40.535Z",
+    "frozenArtifact": "reports/v11-guided-verified-frozen.json",
+    "frozenFileHash": "5f9db4b5242f1170639ae3a5426af79bc66256b8a5dc33df67386030c0d6cd64",
+    "engineSourcesUnchanged": true,
+    "engineSources": {
+      "lib/analyzer.ts": "b6ddbd4c243a2d0bf95062e5ed4fb52cae72f126c9bfc260bc9564b5b105426e",
+      "lib/ai-analysis.ts": "3d9d5e99beed854164a10e2856cf41a8b8420c91c15db79536ec2a7f8043bda6",
+      "lib/evidence-boundaries.ts": "8959a28830fc15b1f4aaa8c5aae01007a718b5eb77b82f6c1bc5f41e3974cf23",
+      "lib/evidence-eligibility.ts": "de81ffe226c24c8e7a652aea5f2a16648adaf411f2ab5ca7741817ef9bf1260a",
+      "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+      "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+      "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+      "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+      "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+    },
+    "labelExposure": "Only job and resume supplied to inference; references used only by evaluation.",
+    "independentlyAnnotated": false,
+    "tunedDuringRun": false
+  }
+}

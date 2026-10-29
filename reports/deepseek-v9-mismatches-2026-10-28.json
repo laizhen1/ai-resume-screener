@@ -1,0 +1,83 @@
+[
+  {
+    "set": "Challenge",
+    "case": "fresh-17",
+    "skill": "docker",
+    "expected": "partial",
+    "actual": "supported",
+    "quote": "Completed beginner Docker lessons and container exercises in a supervised classroom lab.",
+    "reason": "[evidence-category-v1: applicant_used_skill] Completed beginner Docker lessons and container exercises in a supervised classroom lab."
+  },
+  {
+    "set": "Challenge",
+    "case": "fresh-20",
+    "skill": "react",
+    "expected": "partial",
+    "actual": "supported",
+    "quote": "Following introductory React tutorials to understand components and state.",
+    "reason": "[evidence-category-v1: applicant_used_skill] Applicant followed introductory React tutorials to understand components and state."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-1",
+    "skill": "react",
+    "expected": "supported",
+    "actual": "contradicted",
+    "quote": "TypeScript, React",
+    "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Direct mention of React as a skill used."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-3",
+    "skill": "react",
+    "expected": "contradicted",
+    "actual": "unknown",
+    "quote": null,
+    "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] applicant_explicitly_denies_skill No source selected; abstained."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-3",
+    "skill": "docker",
+    "expected": "contradicted",
+    "actual": "unknown",
+    "quote": null,
+    "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] applicant_explicitly_denies_skill No source selected; abstained."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-5",
+    "skill": "go",
+    "expected": "unknown",
+    "actual": "partial",
+    "quote": "Example University",
+    "reason": "[evidence-category-v1: applicant_learning_skill] The candidate mentions 'Go' but does not explicitly demonstrate professional use, so it's considered applicant_learning_skill."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-6",
+    "skill": "github actions",
+    "expected": "supported",
+    "actual": "unknown",
+    "quote": null,
+    "reason": "[evidence-category-v1: missing_or_ambiguous] No direct mention of GitHub Actions in the resume."
+  },
+  {
+    "set": "Development",
+    "case": "adversarial-9",
+    "skill": "pytorch",
+    "expected": "supported",
+    "actual": "partial",
+    "quote": "Developed machine learning models with PyTorch and implemented pgvector semantic search.",
+    "reason": "[evidence-category-v1: applicant_learning_skill] Applicant explicitly demonstrated experience with PyTorch in the context of machine learning models."
+  },
+  {
+    "set": "Reused diagnostic",
+    "case": "holdout-10",
+    "skill": "react",
+    "expected": "partial",
+    "actual": "supported",
+    "quote": "Exploring React by following a beginner tutorial.",
+    "reason": "[evidence-category-v1: applicant_used_skill] Applicant used React in a beginner tutorial."
+  }
+]

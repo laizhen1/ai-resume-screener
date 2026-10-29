@@ -1,0 +1,57 @@
+import { expect, test } from "@playwright/test";
+
+test("inspect, correct, export and save the original analysis into the workspace", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load guided example" }).click();
+  await page.getByRole("button", { name: "Analyse match", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Match analysis", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Inspect python source", exact: true }).click();
+  await expect(page.locator(".resume-source mark")).toContainText("Built Python services");
+  await page.getByLabel("Reviewer verdict", { exact: true }).selectOption("partial");
+  await page.getByLabel("Reason for reviewer judgment", { exact: true }).fill("Clarify personal delivery responsibility.");
+  await page.getByRole("button", { name: "Record reviewer judgment" }).click();
+  await expect(page.locator(".human-verdict")).toContainText("Reviewer: partial");
+  await expect(page.locator(".requirement-card.verdict-supported").filter({ has: page.locator("strong", { hasText: "python" }) })).toHaveCount(1);
+  const downloaded = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export review JSON" }).click();
+  expect((await downloaded).suggestedFilename()).toBe("resume-evidence-review.json");
+  await page.getByRole("link", { name: "Evaluation", exact: true }).click();
+  await page.getByRole("link", { name: "New analysis", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Match analysis", exact: true })).toBeVisible();
+  await expect(page.locator(".human-verdict")).toContainText("Clarify personal delivery");
+  await page.getByRole("button", { name: "Save review to workspace", exact: true }).click();
+  await page.getByRole("link", { name: "Open saved review" }).click();
+  await expect(page.getByRole("heading", { name: "Backend Engineer", exact: true })).toBeVisible();
+  await page.getByText("Inspect evidence", { exact: true }).click();
+  await expect(page.locator(".human-verdict")).toContainText("Reviewer: partial");
+  await page.getByRole("button", { name: "Inspect python source", exact: true }).click();
+  await expect(page.locator(".resume-source mark")).toContainText("Built Python services");
+  await page.getByLabel("Reviewer verdict", { exact: true }).selectOption("supported");
+  await page.getByLabel("Reason for reviewer judgment", { exact: true }).fill("Original source explicitly describes personal delivery.");
+  await page.getByRole("button", { name: "Record reviewer judgment" }).click();
+  await expect(page.locator(".human-verdict")).toContainText("Reviewer: supported");
+  await page.reload();
+  await page.getByText("Inspect evidence", { exact: true }).click();
+  await expect(page.locator(".human-verdict")).toContainText("Reviewer: supported");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: "test-results/review-workspace-mobile.png", fullPage: true });
+});
+
+test("uploaded text uses the server extraction for exact highlighting and can be cleared", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Job description", { exact: true }).fill("We need an engineer with Python experience building tested web services.");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  const source = "  FICTIONAL PERSON\r\nEXPERIENCE\r\nBuilt Python services for 200 users and maintained tested applications for an invented business.  ";
+  await page.getByLabel("Upload resume document").setInputFiles({ name: "fictional.txt", mimeType: "text/plain", buffer: Buffer.from(source) });
+  await page.getByRole("button", { name: "Analyse match", exact: true }).click();
+  await expect(page.locator(".resume-source mark")).toContainText("Built Python services");
+  await page.screenshot({ path: "test-results/review-source-desktop.png", fullPage: true });
+  await page.getByRole("button", { name: "Clear résumé and review" }).click();
+  await expect(page.getByRole("heading", { name: "Match analysis", exact: true })).toHaveCount(0);
+  await page.getByRole("link", { name: "Evaluation", exact: true }).click();
+  await page.getByRole("link", { name: "New analysis", exact: true }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByLabel("Resume text", { exact: true })).toHaveValue("");
+  await expect(page.getByRole("button", { name: "Analyse match", exact: true })).toBeDisabled();
+});

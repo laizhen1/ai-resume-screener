@@ -110,9 +110,8 @@ export default function EvaluationPage() {
     finally { setSaving(false); }
   }
   const rows = report?.results.filter(row => row.pipeline === pipeline && (!failuresOnly || row.error || row.predictions.some(p => p.actual !== p.expected || p.missing || (p.actual !== "unknown" && !p.citationValid)))) ?? [];
-  return <main className="app-shell experiment-shell">
-    <header className="app-header"><Link className="brand-link" href="/">Open Resume Lab</Link><nav className="app-nav"><Link href="/workspace">Workspace</Link><Link href="/evaluation" aria-current="page">Evaluation</Link><Link href="/evaluation/regression">Regression suite</Link></nav></header>
-    <section className="page-intro experiment-intro"><p className="eyebrow">EXPERIMENT LAB</p><h1>Put the evidence to the test.</h1><p>Compare rules, model-based evidence judgments, and source validation on the same fixed examples.</p></section>
+  return <main id="main-content" className="app-shell experiment-shell">
+    <section className="page-intro experiment-intro"><p className="eyebrow">EXPERIMENT LAB</p><h1>Put the evidence to the test.</h1><p>Compare rules, model-based evidence judgments, and source validation on the same fixed examples.</p><nav className="page-tabs" aria-label="Evaluation tools"><Link href="/evaluation" aria-current="page">Pipeline comparison</Link><Link href="/evaluation/regression">Regression suite</Link></nav></section>
     <div className="experiment-body">
       <section className="content-card">
         <div className="experiment-controls">

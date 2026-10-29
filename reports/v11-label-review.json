@@ -1,0 +1,14 @@
+{
+  "reviewedAt": "2026-10-29",
+  "source": "User confirmation in this conversation",
+  "blinded": false,
+  "independentAnnotation": false,
+  "decisions": {
+    "novel-01/redis": "partial",
+    "novel-11/github actions": "partial",
+    "novel-14/python": "unknown",
+    "novel-20/terraform": "unknown",
+    "novel-23/azure": "unknown"
+  },
+  "note": "Policy adjudication after viewing predictions. Original labels and report are preserved."
+}

@@ -1,7 +1,7 @@
 import { findSkills, termsForSkill } from "./skills";
 
 /** Conservative source checks. These only abstain; they never infer a positive verdict. */
-export const EVIDENCE_VALIDATION_VERSION = "evidence-eligibility-v1";
+export const EVIDENCE_VALIDATION_VERSION = "evidence-boundaries-v8";
 export type EvidenceIssue = "document-instruction" | "ordinary-word" | "other-person-work";
 export const EVIDENCE_ISSUE_LABELS: Record<EvidenceIssue, string> = {
   "document-instruction": "The selected passage contains directions to an AI, not reliable applicant evidence.",
@@ -13,6 +13,7 @@ const mentions = (skill: string, text: string) => termsForSkill(skill).some(term
 const clauses = (text: string) => text.split(/\r?\n|(?<=[.!?;])\s+|,\s*(?=(?:but |while |whereas )?I\b)/).map(part => part.trim()).filter(Boolean);
 
 function hasDocumentInstruction(text: string): boolean {
+  if (clauses(text).some(part => /^(?:<(?:review_result|assessment|judgment)\b[^>]*\bverdict\s*=|approve automatically\b)/i.test(part))) return true;
   return clauses(text).some(part => /^(?:(?:note|message|instruction)\s+(?:to|for)\s+(?:the\s+)?(?:ai|llm|assistant|model|screener)\b|(?:system|assistant)\s*:|<\/?(?:system|assistant)>|\[\/?INST\]|(?:please\s+)?ignore\s+(?:(?:all|the|any|prior|previous|above|job)\s+)*(?:instructions?|requirements?|rules?|prompts?)\b|(?:please\s+)?(?:output|return|mark|classify|rate)\b.{0,70}\b(?:supported|contradicted|unknown|perfect score|100\s*%)\b)/i.test(part));
 }
 
@@ -26,6 +27,7 @@ function ordinaryWordOnly(skill: string, text: string): boolean {
     const after = text.slice(match.index! + match[0].length, match.index! + match[0].length + 90);
     const usedAsTool = /\b(?:using|used|use|learning|learned|studying|with|in|via)\s*$/i.test(before);
     if (skill === "go") {
+      if (/\b(?:document|reference|record|ticket)\s+(?:code|id|number)\s*:\s*$/i.test(before) && /^[-_]\d/.test(after)) return true;
       if (/^\s*[-–—]\s*to\s*[-–—]\s*market\b/i.test(after)) return true;
       if (/golang/i.test(match[0]) || usedAsTool || /^\s*(?:language|programming|modules?|routines?|compiler|services?|APIs?|backend|client|code)\b/i.test(after)) return false;
       return /^\s*[-–—]?\s*to\b|^\s+live\b|^\s+(?:board\s+)?game\b/i.test(after)
@@ -44,6 +46,7 @@ const technicalWork = /\b(?:code|modules?|manifests?|clusters?|deployments?|serv
 function onlyOthersWork(skill: string, text: string): boolean {
   const parts = clauses(text);
   const attributed = parts.some(part => mentions(skill, part) && (externalSubject.test(part)
+    || /\b(?:belongs? to|owned by)\s+(?:(?:an?|the|our|external)\s+){0,3}(?:supplier|vendor|contractor|team)\b/i.test(part)
     || /\b(?:built|maintained|managed|operated|deployed|used|owned)\s+by\s+(?:the |our |another |my )?(?:\w+\s+){0,3}(?:team|colleague|contractor|vendor)\b/i.test(part)));
   if (!attributed) return false;
   const applicantInvolved = parts.some(part => {

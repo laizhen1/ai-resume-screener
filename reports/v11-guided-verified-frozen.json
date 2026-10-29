@@ -1,0 +1,33 @@
+{
+  "version": "v11-guided-verified",
+  "frozenAt": "2026-10-28T21:06:20.969Z",
+  "annotationStatus": "Existing public fictional demo; not unseen or independent.",
+  "sources": {
+    "lib/analyzer.ts": "b6ddbd4c243a2d0bf95062e5ed4fb52cae72f126c9bfc260bc9564b5b105426e",
+    "lib/ai-analysis.ts": "3d9d5e99beed854164a10e2856cf41a8b8420c91c15db79536ec2a7f8043bda6",
+    "lib/evidence-boundaries.ts": "8959a28830fc15b1f4aaa8c5aae01007a718b5eb77b82f6c1bc5f41e3974cf23",
+    "lib/evidence-eligibility.ts": "de81ffe226c24c8e7a652aea5f2a16648adaf411f2ab5ca7741817ef9bf1260a",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+  "examples": [
+    {
+      "id": "guided",
+      "challenge": "public-walkthrough",
+      "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+      "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "docker": "partial",
+        "kubernetes": "contradicted",
+        "terraform": "unknown"
+      }
+    }
+  ],
+  "originalFreeze": "reports/v11-guided-final-frozen.json",
+  "originalDatasetHash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7"
+}

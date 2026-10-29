@@ -41,7 +41,7 @@ describe("grounded generation contract", () => {
     const draft = contract.decode(wire());
     expect(draft.criteria[0].evidence).toEqual(["Built Python services."]);
     const result = composeAiAnalysis(job, resume, DEFAULT_SCORING_WEIGHTS, draft, "fixture");
-    expect(result.criteria[0].evidence).toEqual(["Built Python services."]);
+    expect(result.originalModelRubric?.criteria[0].evidence).toEqual(["Built Python services."]);
     const invalid = wire(); invalid.criteria["Relevant skills"].evidenceIds = ["s999"];
     expect(() => contract.decode(invalid)).toThrow();
     const missing = wire(); delete missing.criteria["Document clarity"];

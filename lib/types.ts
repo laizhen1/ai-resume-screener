@@ -87,7 +87,19 @@ export type AiReviewSummary = {
   suggestedQuestions: string[];
 };
 
+export type ReviewerCorrection = {
+  skill: string;
+  verdict: EvidenceVerdict;
+  reason: string;
+  actor: string;
+  reviewedAt: string;
+};
+
 export type AnalysisResult = {
+  runtimeDiagnostics?: { modelStatus: string; elapsedMs: number; provider: string };
+  scoringPolicy?: string;
+  originalModelRubric?: { criteria: Evidence[]; overallScore: number };
+  reviewerCorrections?: ReviewerCorrection[];
   overallScore: number;
   matchedSkills: string[];
   missingSkills: string[];

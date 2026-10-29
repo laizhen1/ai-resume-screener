@@ -1,0 +1,88 @@
+{
+  "resolved": [
+    {
+      "set": "transfer",
+      "caseId": "transfer-b07",
+      "skill": "tailwind",
+      "expected": "unknown",
+      "before": "contradicted",
+      "after": "unknown",
+      "correct": true,
+      "quote": null
+    },
+    {
+      "set": "transfer",
+      "caseId": "transfer-b08",
+      "skill": "python",
+      "expected": "unknown",
+      "before": "contradicted",
+      "after": "unknown",
+      "correct": true,
+      "quote": "附录引用职位广告：“使用 Python 清洗数据。"
+    },
+    {
+      "set": "transfer",
+      "caseId": "transfer-b09",
+      "skill": "azure",
+      "expected": "contradicted",
+      "before": "unknown",
+      "after": "contradicted",
+      "correct": true,
+      "quote": "\"I have never used Azure.\""
+    },
+    {
+      "set": "transfer",
+      "caseId": "transfer-b11",
+      "skill": "go",
+      "expected": "unknown",
+      "before": "contradicted",
+      "after": "unknown",
+      "correct": true,
+      "quote": null
+    },
+    {
+      "set": "controls",
+      "caseId": "control-c01",
+      "skill": "azure",
+      "expected": "unknown",
+      "before": "contradicted",
+      "after": "unknown",
+      "correct": true,
+      "quote": "Azure is only a future reading topic;"
+    },
+    {
+      "set": "temporal",
+      "caseId": "transfer-b03",
+      "skill": "java",
+      "expected": "supported",
+      "before": "contradicted",
+      "after": "supported",
+      "correct": true,
+      "quote": "Fictional applicant B03. My 2020 biography said I had never used Java. In 2024 I implemented Java invoicing services and maintained them through 2025; that earlier statement is obsolete. I have never used React."
+    }
+  ],
+  "remaining": {
+    "transfer": [],
+    "controls": [],
+    "temporal": [],
+    "guided": []
+  },
+  "pairedEffects": {
+    "transfer": {
+      "repaired": 6,
+      "harmed": 0
+    },
+    "controls": {
+      "repaired": 3,
+      "harmed": 0
+    },
+    "temporal": {
+      "repaired": 1,
+      "harmed": 0
+    },
+    "guided": {
+      "repaired": 0,
+      "harmed": 0
+    }
+  }
+}

@@ -34,3 +34,6 @@ Do not add protected-attribute inference, personality or emotion inference, auto
 The project supports fully local inference, not an unconditional promise that all deployments keep data on one machine. Ollama and the transformer service default to loopback addresses, but `OLLAMA_BASE_URL`, `MODEL_SERVICE_URL`, `OCR_ENDPOINT` and storage configuration can point elsewhere. A locally running app may still transmit source text to those configured services.
 
 Keep the app, model services, OCR and storage on the intended machine or trusted deployment boundary. Model weights and OCR language assets may need downloading before offline use; asset downloads are distinct from résumé uploads. Operator and provider logging/retention must also be considered. The documented capability is support for fully local inference.
+
+
+Readiness checks send no documents to the configured Ollama tags endpoint. They return the configured model name and bounded status only. Review exports contain document text: use fictional data or obtain consent. Label reviewer identifiers should be pseudonymous. Runtime diagnostics never return service URLs or raw errors.

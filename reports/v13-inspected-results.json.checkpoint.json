@@ -1,0 +1,2875 @@
+{
+  "status": "checkpoint",
+  "completedDocuments": 11,
+  "totalDocuments": 16,
+  "report": {
+    "version": "comparison-v1",
+    "createdAt": "2026-10-28T22:52:54.608Z",
+    "engineVersion": "3.7.0",
+    "taxonomyVersion": "2026.08.2",
+    "dataset": {
+      "version": "v13-inspected",
+      "split": "heldout",
+      "hash": "94b70bf511b1f6da5f6aa18c23fa339ecf76d944e5a5ad3299ae47df5c1db926",
+      "uniqueCases": 16,
+      "executions": 16,
+      "annotationStatus": "Previously inspected novel-v2 synthetic documents; unchanged provisional labels, not unseen or independent."
+    },
+    "configuration": {
+      "includeModel": true,
+      "includeTransformers": false,
+      "model": "deepseek-r1:7b",
+      "promptVersion": "core-analysis-v13-array-passages",
+      "evidencePolicyVersion": "evidence-category-v1",
+      "evidenceValidationVersion": "evidence-boundaries-v8",
+      "alignmentVersion": "canonical-wrapper-v2",
+      "outputSemantics": "One fresh generation per document; raw and checked pipelines share that generation. No tuning during this run.",
+      "seed": 42,
+      "temperature": 0.6,
+      "timeoutMs": 180000,
+      "node": "v24.19.0",
+      "platform": "win32",
+      "generation": {
+        "think": true,
+        "options": {
+          "temperature": 0.6,
+          "seed": 42,
+          "num_ctx": 8192,
+          "num_predict": 4096
+        }
+      }
+    },
+    "examples": [
+      {
+        "id": "novel2-01",
+        "challenge": "archive-change",
+        "job": "java and react experience required.",
+        "resume": "An archived 2018 staff profile described Mira as having no Java experience. That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021. Current declaration: I have never worked with React.",
+        "expectedVerdicts": {
+          "java": "supported",
+          "react": "contradicted"
+        }
+      },
+      {
+        "id": "novel2-02",
+        "challenge": "nested-record",
+        "job": "azure and aws experience required.",
+        "resume": "{\"applicant\":\"Fictional N02\",\"current\":{\"azure\":\"I have never used Azure.\"},\"wishlist\":{\"aws\":\"AWS certification is on my wish list for next year.\"}}",
+        "expectedVerdicts": {
+          "azure": "contradicted",
+          "aws": "unknown"
+        }
+      },
+      {
+        "id": "novel2-03",
+        "challenge": "chinese-advert",
+        "job": "python and typescript experience required.",
+        "resume": "虚构候选人林禾。附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+        "expectedVerdicts": {
+          "python": "unknown",
+          "typescript": "supported"
+        }
+      },
+      {
+        "id": "novel2-04",
+        "challenge": "form-product",
+        "job": "tailwind and fastapi experience required.",
+        "resume": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms. Separately, I am learning FastAPI by completing introductory exercises with a tutor.",
+        "expectedVerdicts": {
+          "tailwind": "supported",
+          "fastapi": "partial"
+        }
+      },
+      {
+        "id": "novel2-05",
+        "challenge": "ordinary-word",
+        "job": "go and redis experience required.",
+        "resume": "The event brochure says “ready, set, go”; the last word is a starting signal. My Redis exposure consists of an ongoing introductory course and guided cache exercises.",
+        "expectedVerdicts": {
+          "go": "unknown",
+          "redis": "partial"
+        }
+      },
+      {
+        "id": "novel2-06",
+        "challenge": "revision-without-denial",
+        "job": "docker and kubernetes experience required.",
+        "resume": "My 2019 portfolio listed Docker as a learning goal. During 2023 I packaged and shipped our fictional museum application using Docker. I have no experience using Kubernetes.",
+        "expectedVerdicts": {
+          "docker": "supported",
+          "kubernetes": "contradicted"
+        }
+      },
+      {
+        "id": "novel2-07",
+        "challenge": "attributed-team",
+        "job": "terraform and postgresql experience required.",
+        "resume": "Project retrospective: the contractor operated Terraform. My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service. The contractor paragraph describes their work.",
+        "expectedVerdicts": {
+          "terraform": "unknown",
+          "postgresql": "supported"
+        }
+      },
+      {
+        "id": "novel2-08",
+        "challenge": "current-correction",
+        "job": "python and sql experience required.",
+        "resume": "A previous draft incorrectly credited me with Python development; I correct that claim here: I have never programmed in Python. I am currently completing SQL beginner query exercises in an evening class.",
+        "expectedVerdicts": {
+          "python": "contradicted",
+          "sql": "partial"
+        }
+      },
+      {
+        "id": "novel2-09",
+        "challenge": "structured-array",
+        "job": "react and angular experience required.",
+        "resume": "[{\"owner\":\"Fictional N09\",\"note\":\"I am taking introductory React lessons and following guided component exercises.\"},{\"owner\":\"target employer\",\"note\":\"Angular experience is requested by the vacancy.\"}]",
+        "expectedVerdicts": {
+          "react": "partial",
+          "angular": "unknown"
+        }
+      },
+      {
+        "id": "novel2-10",
+        "challenge": "chinese-denial",
+        "job": "docker and aws experience required.",
+        "resume": "虚构候选人周宁。我从未使用过 Docker，也没有相关实践经验。AWS 是我明年计划阅读的主题，目前没有开始学习。",
+        "expectedVerdicts": {
+          "docker": "contradicted",
+          "aws": "unknown"
+        }
+      },
+      {
+        "id": "novel2-11",
+        "challenge": "template-table",
+        "job": "tailwind and fastapi experience required.",
+        "resume": "Candidate worksheet for fictional N11\n| Field | Value |\n| Tailwind project | [applicant to complete] |\nPersonal declaration: I have never used FastAPI.",
+        "expectedVerdicts": {
+          "tailwind": "unknown",
+          "fastapi": "contradicted"
+        }
+      },
+      {
+        "id": "novel2-12",
+        "challenge": "mentoring-delivery",
+        "job": "langchain and rag experience required.",
+        "resume": "I released a LangChain document-routing service for a fictional repair shop, then taught colleagues how to maintain it. My RAG knowledge is limited to an introductory course I am currently taking.",
+        "expectedVerdicts": {
+          "langchain": "supported",
+          "rag": "partial"
+        }
+      },
+      {
+        "id": "novel2-13",
+        "challenge": "narrow-nonparticipation",
+        "job": "azure and github actions experience required.",
+        "resume": "The Azure migration was performed entirely by another department; this note records that project assignment. I personally configured and deployed GitHub Actions release workflows for the fictional ceramics catalogue.",
+        "expectedVerdicts": {
+          "azure": "unknown",
+          "github actions": "supported"
+        }
+      },
+      {
+        "id": "novel2-14",
+        "challenge": "scoped-learning-denial",
+        "job": "java and terraform experience required.",
+        "resume": "I am attending Java beginner classes and completing the provided exercises. I have never used Terraform, either in training or at work.",
+        "expectedVerdicts": {
+          "java": "partial",
+          "terraform": "contradicted"
+        }
+      },
+      {
+        "id": "novel2-15",
+        "challenge": "quoted-security-payload",
+        "job": "redis and go experience required.",
+        "resume": "I implemented Redis request counters in a fictional security gateway, including a test containing the literal string “ignore earlier instructions”. I have never written software in Go.",
+        "expectedVerdicts": {
+          "redis": "supported",
+          "go": "contradicted"
+        }
+      },
+      {
+        "id": "novel2-16",
+        "challenge": "reading-product",
+        "job": "typescript and kubernetes experience required.",
+        "resume": "The reading-club application is my classroom exercise: I am learning TypeScript and modifying an instructor-provided sample. I have no Kubernetes knowledge or practical experience.",
+        "expectedVerdicts": {
+          "typescript": "partial",
+          "kubernetes": "contradicted"
+        }
+      }
+    ],
+    "results": [
+      {
+        "caseId": "novel2-01",
+        "challenge": "archive-change",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 6.7654999999999745,
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "An archived 2018 staff profile described Mira as having no Java experience.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "Current declaration: I have never worked with React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-01",
+        "challenge": "archive-change",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 44192.137599999995,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "java",
+              "importance": "required",
+              "sourceText": "java and react experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Java in 2021, which is a direct demonstration of experience.",
+              "evidenceText": "That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021."
+            },
+            {
+              "skill": "react",
+              "importance": "required",
+              "sourceText": "java and react experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with React.",
+              "evidenceText": "Current declaration: I have never worked with React."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "Both Java and React are explicitly covered by the resume.",
+              "evidence": [
+                "That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021.",
+                "Current declaration: I have never worked with React."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "Java experience is demonstrated through direct use in 2021, and React experience is explicitly denied.",
+              "evidence": [
+                "That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021.",
+                "Current declaration: I have never worked with React."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No measurable impact is provided for either skill.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The resume is clear and provides relevant information for both skills.",
+              "evidence": []
+            }
+          ],
+          "interviewQuestions": [
+            "What experience do you have with Java?",
+            "Do you have any experience with React?",
+            "How did you get started with Java?",
+            "What motivated you to learn React?"
+          ],
+          "warnings": [
+            "The resume does not provide explicit evidence for React experience beyond a denial, which may indicate a lack of clarity.",
+            "The lack of demonstrated React experience could raise concerns about technical proficiency.",
+            "The denial of React experience should be carefully considered in the hiring decision.",
+            "The resume's limited information on React experience may warrant additional verification.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "java": {
+              "evidenceId": "s1",
+              "reason": "Applicant used Java in 2021, which is a direct demonstration of experience.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            },
+            "react": {
+              "evidenceId": "s2",
+              "reason": "Applicant explicitly denies experience with React.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "Both Java and React are explicitly covered by the resume.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "Java experience is demonstrated through direct use in 2021, and React experience is explicitly denied.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No measurable impact is provided for either skill.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The resume is clear and provides relevant information for both skills.",
+              "evidenceIds": []
+            }
+          },
+          "interviewQuestions": [
+            "What experience do you have with Java?",
+            "Do you have any experience with React?",
+            "How did you get started with Java?",
+            "What motivated you to learn React?"
+          ],
+          "warnings": [
+            "The resume does not provide explicit evidence for React experience beyond a denial, which may indicate a lack of clarity.",
+            "The lack of demonstrated React experience could raise concerns about technical proficiency.",
+            "The denial of React experience should be carefully considered in the hiring decision.",
+            "The resume's limited information on React experience may warrant additional verification."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "3a9cd9bbb684b16620ee6089a0490b980e6dd82b3802a04fd2f54341e863a51f",
+          "schemaHash": "6ba00eeb8d12e3a55fdf86babae46ceefde3d22563c8eb77032400f70093b9f2",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 950,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Java in 2021, which is a direct demonstration of experience.",
+            "quote": "That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with React.",
+            "quote": "Current declaration: I have never worked with React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-01",
+        "challenge": "archive-change",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 44212.203799999996,
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Java in 2021, which is a direct demonstration of experience.",
+            "quote": "That profile was withdrawn in 2022: she personally implemented and released the Java loan-renewal service in 2021.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with React.",
+            "quote": "Current declaration: I have never worked with React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-02",
+        "challenge": "nested-record",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 5.072700000004261,
+        "predictions": [
+          {
+            "skill": "azure",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "{\"applicant\":\"Fictional N02\",\"current\":{\"azure\":\"I have never used Azure.\"},\"wishlist\":{\"aws\":\"AWS certification is on my wish list for next year.\"}}",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "{\"applicant\":\"Fictional N02\",\"current\":{\"azure\":\"I have never used Azure.\"},\"wishlist\":{\"aws\":\"AWS certification is on my wish list for next year.\"}}",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-02",
+        "challenge": "nested-record",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 37677.775100000006,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "aws",
+              "importance": "required",
+              "sourceText": "azure and aws experience required.",
+              "verdict": "unknown",
+              "confidence": 0.75,
+              "reason": "[evidence-category-v1: missing_or_ambiguous] The passage 'AWS certification is on my wish list for next year' indicates the applicant is considering learning AWS but does not explicitly deny or demonstrate current experience.",
+              "evidenceText": "\"AWS certification is on my wish list for next year.\""
+            },
+            {
+              "skill": "azure",
+              "importance": "required",
+              "sourceText": "azure and aws experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] The passage explicitly states 'I have never used Azure.', which is an explicit denial of experience.",
+              "evidenceText": "\"I have never used Azure.\""
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 50,
+              "explanation": "The resume partially addresses the required AWS and Azure skills, but the depth and specificity of the evidence is limited.",
+              "evidence": [
+                "\"AWS certification is on my wish list for next year.\"",
+                "\"I have never used Azure.\""
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 30,
+              "explanation": "The applicant has demonstrated some experience with AWS through a wish list but has not explicitly used Azure.",
+              "evidence": [
+                "\"AWS certification is on my wish list for next year.\""
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "There is no explicit evidence of measurable impact or outcomes related to these skills.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 40,
+              "explanation": "The evidence provided is somewhat clear but could be improved with more specific details about professional work or outcomes.",
+              "evidence": [
+                "\"AWS certification is on my wish list for next year.\"",
+                "\"I have never used Azure.\""
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What steps are you planning to take to enhance your AWS expertise?"
+          ],
+          "warnings": [
+            "Unclear evidence of AWS experience; potential ambiguity regarding Azure use.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "aws": {
+              "evidenceId": "s2",
+              "reason": "The passage 'AWS certification is on my wish list for next year' indicates the applicant is considering learning AWS but does not explicitly deny or demonstrate current experience.",
+              "category": "missing_or_ambiguous",
+              "confidence": 0.75
+            },
+            "azure": {
+              "evidenceId": "s1",
+              "reason": "The passage explicitly states 'I have never used Azure.', which is an explicit denial of experience.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 50,
+              "explanation": "The resume partially addresses the required AWS and Azure skills, but the depth and specificity of the evidence is limited.",
+              "evidenceIds": [
+                "s2",
+                "s1"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 30,
+              "explanation": "The applicant has demonstrated some experience with AWS through a wish list but has not explicitly used Azure.",
+              "evidenceIds": [
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "There is no explicit evidence of measurable impact or outcomes related to these skills.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 40,
+              "explanation": "The evidence provided is somewhat clear but could be improved with more specific details about professional work or outcomes.",
+              "evidenceIds": [
+                "s2",
+                "s1"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What steps are you planning to take to enhance your AWS expertise?"
+          ],
+          "warnings": [
+            "Unclear evidence of AWS experience; potential ambiguity regarding Azure use."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "23dc2a6413ca8c3ad399f637bfe086b9eecb2e05d64170fd43e60b33879814d7",
+          "schemaHash": "63228352c5a6fddcdf5e8590d5a53eb06468bc66290809edd4a795f7ae69edf2",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 877,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "azure",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] The passage explicitly states 'I have never used Azure.', which is an explicit denial of experience.",
+            "quote": "\"I have never used Azure.\"",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "[evidence-category-v1: missing_or_ambiguous] The passage 'AWS certification is on my wish list for next year' indicates the applicant is considering learning AWS but does not explicitly deny or demonstrate current experience.",
+            "quote": "\"AWS certification is on my wish list for next year.\"",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-02",
+        "challenge": "nested-record",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 37684.94360000001,
+        "predictions": [
+          {
+            "skill": "azure",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] The passage explicitly states 'I have never used Azure.', which is an explicit denial of experience.",
+            "quote": "\"I have never used Azure.\"",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "[evidence-category-v1: missing_or_ambiguous] The passage 'AWS certification is on my wish list for next year' indicates the applicant is considering learning AWS but does not explicitly deny or demonstrate current experience.",
+            "quote": "\"AWS certification is on my wish list for next year.\"",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-03",
+        "challenge": "chinese-advert",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 6.109400000001187,
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "虚构候选人林禾。附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "虚构候选人林禾。附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-03",
+        "challenge": "chinese-advert",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 33195.6277,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "python",
+              "importance": "required",
+              "sourceText": "python and typescript experience required.",
+              "verdict": "contradicted",
+              "confidence": 0.75,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] explicit denial of experience",
+              "evidenceText": "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。"
+            },
+            {
+              "skill": "typescript",
+              "importance": "required",
+              "sourceText": "python and typescript experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] direct experience in professional work",
+              "evidenceText": "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。"
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 60,
+              "explanation": "Python is not demonstrated beyond the job description, while TypeScript is explicitly used.",
+              "evidence": [
+                "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+                "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。"
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 50,
+              "explanation": "TypeScript experience is demonstrated through a project, but Python is not explicitly shown.",
+              "evidence": [
+                "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+                "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。"
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No quantified impact is provided for Python.",
+              "evidence": [
+                "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+                "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。"
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "Clarity is low due to lack of specific details for Python.",
+              "evidence": [
+                "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+                "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。"
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "Do you have any experience with TypeScript?",
+            "Can you share more about your experience with Python?",
+            "How did you ensure the accuracy of your TypeScript implementation?",
+            "What steps did you take to integrate TypeScript into your project?"
+          ],
+          "warnings": [
+            "Uncertain about the candidate's Python experience due to lack of concrete evidence.",
+            "Need more information on Python experience to assess capability accurately.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "python": {
+              "evidenceId": "s1",
+              "reason": "explicit denial of experience",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 0.75
+            },
+            "typescript": {
+              "evidenceId": "s2",
+              "reason": "direct experience in professional work",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 60,
+              "explanation": "Python is not demonstrated beyond the job description, while TypeScript is explicitly used.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 50,
+              "explanation": "TypeScript experience is demonstrated through a project, but Python is not explicitly shown.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No quantified impact is provided for Python.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "Clarity is low due to lack of specific details for Python.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "Do you have any experience with TypeScript?",
+            "Can you share more about your experience with Python?",
+            "How did you ensure the accuracy of your TypeScript implementation?",
+            "What steps did you take to integrate TypeScript into your project?"
+          ],
+          "warnings": [
+            "Uncertain about the candidate's Python experience due to lack of concrete evidence.",
+            "Need more information on Python experience to assess capability accurately."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "2ef97f88f3d0edaeb800d27b2e9b3e2f5173fc94161d70bf0f7cee38edf67036",
+          "schemaHash": "e551b63eaaaa8cf250fa6365d487fe4e2619fd567a1554c92df9a73fa5087673",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 738,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "unknown",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] explicit denial of experience",
+            "quote": "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] direct experience in professional work",
+            "quote": "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-03",
+        "challenge": "chinese-advert",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 33205.399099999995,
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "Explicit source boundary: contradicted → unknown. Original model: [evidence-category-v1: applicant_explicitly_denies_skill] explicit denial of experience",
+            "quote": "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] direct experience in professional work",
+            "quote": "我的工作：独立使用 TypeScript 开发并上线图书预约服务，持续维护了两个版本。",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": [
+          {
+            "skill": "python",
+            "policyVersion": "evidence-boundaries-v8",
+            "originalVerdict": "contradicted",
+            "issues": [
+              "explicit-source-boundary"
+            ]
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-04",
+        "challenge": "form-product",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.463000000003376,
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "The résumé links this requirement to delivery or professional experience.",
+            "quote": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "partial",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "Separately, I am learning FastAPI by completing introductory exercises with a tutor.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-04",
+        "challenge": "form-product",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 36963.98049999999,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "fastapi",
+              "importance": "required",
+              "sourceText": "tailwind and fastapi experience required.",
+              "verdict": "partial",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is learning FastAPI via introductory exercises.",
+              "evidenceText": "Separately, I am learning FastAPI by completing introductory exercises with a tutor."
+            },
+            {
+              "skill": "tailwind",
+              "importance": "required",
+              "sourceText": "tailwind and fastapi experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Tailwind to build an interface.",
+              "evidenceText": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "Tailwind and FastAPI are explicitly mentioned in the job requirements and the resume provides clear evidence of their use.",
+              "evidence": [
+                "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+                "Separately, I am learning FastAPI by completing introductory exercises with a tutor."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "The resume demonstrates direct experience with both Tailwind and FastAPI.",
+              "evidence": [
+                "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+                "Separately, I am learning FastAPI by completing introductory exercises with a tutor."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 100,
+              "explanation": "The impact of using Tailwind and FastAPI is evident in the completed project.",
+              "evidence": [
+                "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+                "Separately, I am learning FastAPI by completing introductory exercises with a tutor."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 100,
+              "explanation": "The resume clearly describes the use and learning of Tailwind and FastAPI.",
+              "evidence": [
+                "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+                "Separately, I am learning FastAPI by completing introductory exercises with a tutor."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What experience do you have with building user interfaces using Tailwind?",
+            "Can you describe your experience with FastAPI and learning it through introductory exercises?",
+            "How have you integrated Tailwind into your previous projects?",
+            "What motivated you to learn FastAPI through introductory exercises?"
+          ],
+          "warnings": [
+            "The resume provides clear evidence of experience with Tailwind and FastAPI, but it does not explicitly demonstrate measurable impact or outcomes.",
+            "The candidate has demonstrated learning through introductory exercises but has not provided evidence of professional use beyond the introductory context.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "fastapi": {
+              "evidenceId": "s1",
+              "reason": "Applicant is learning FastAPI via introductory exercises.",
+              "category": "applicant_learning_skill",
+              "confidence": 1
+            },
+            "tailwind": {
+              "evidenceId": "s0",
+              "reason": "Applicant used Tailwind to build an interface.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "Tailwind and FastAPI are explicitly mentioned in the job requirements and the resume provides clear evidence of their use.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "The resume demonstrates direct experience with both Tailwind and FastAPI.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            },
+            "Measurable impact": {
+              "score": 100,
+              "explanation": "The impact of using Tailwind and FastAPI is evident in the completed project.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            },
+            "Document clarity": {
+              "score": 100,
+              "explanation": "The resume clearly describes the use and learning of Tailwind and FastAPI.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What experience do you have with building user interfaces using Tailwind?",
+            "Can you describe your experience with FastAPI and learning it through introductory exercises?",
+            "How have you integrated Tailwind into your previous projects?",
+            "What motivated you to learn FastAPI through introductory exercises?"
+          ],
+          "warnings": [
+            "The resume provides clear evidence of experience with Tailwind and FastAPI, but it does not explicitly demonstrate measurable impact or outcomes.",
+            "The candidate has demonstrated learning through introductory exercises but has not provided evidence of professional use beyond the introductory context."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "0d4c7f6b9977ef9d6998f70b28171968c8bb6cfbc45d2a00bc9f3c7ab1bca6f7",
+          "schemaHash": "7e2abc446dcdeff660e1f46141c2e01877733d6f2ec1cb0d2c28436734ec5702",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 844,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Tailwind to build an interface.",
+            "quote": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is learning FastAPI via introductory exercises.",
+            "quote": "Separately, I am learning FastAPI by completing introductory exercises with a tutor.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-04",
+        "challenge": "form-product",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 36966.85279999999,
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Tailwind to build an interface.",
+            "quote": "At the fictional Finch cooperative, I built and released a Tailwind interface for collecting blank insurance forms.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is learning FastAPI via introductory exercises.",
+            "quote": "Separately, I am learning FastAPI by completing introductory exercises with a tutor.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-05",
+        "challenge": "ordinary-word",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.4565999999758787,
+        "predictions": [
+          {
+            "skill": "go",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "The event brochure says “ready, set, go”; the last word is a starting signal.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "redis",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+            "quote": "My Redis exposure consists of an ongoing introductory course and guided cache exercises.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-05",
+        "challenge": "ordinary-word",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 28878.769699999975,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "go",
+              "importance": "required",
+              "sourceText": "go and redis experience required.",
+              "verdict": "unknown",
+              "confidence": 0,
+              "reason": "[evidence-category-v1: missing_or_ambiguous] The text does not mention Go at all, so no evidence is found.",
+              "evidenceText": "The event brochure says “ready, set, go”; the last word is a starting signal."
+            },
+            {
+              "skill": "redis",
+              "importance": "required",
+              "sourceText": "go and redis experience required.",
+              "verdict": "partial",
+              "confidence": 0.75,
+              "reason": "[evidence-category-v1: applicant_learning_skill] The candidate mentions ongoing introductory courses and guided cache exercises, indicating some experience with Redis.",
+              "evidenceText": "My Redis exposure consists of an ongoing introductory course and guided cache exercises."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 50,
+              "explanation": "The candidate has some experience with Redis through introductory courses but shows no evidence of Go.",
+              "evidence": [
+                "My Redis exposure consists of an ongoing introductory course and guided cache exercises."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 0,
+              "explanation": "No evidence of Go experience is found; Redis experience is indicated.",
+              "evidence": [
+                "The event brochure says “ready, set, go”; the last word is a starting signal.",
+                "My Redis exposure consists of an ongoing introductory course and guided cache exercises."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "The candidate's experience with Redis is limited to introductory training, which may not directly translate to professional impact.",
+              "evidence": [
+                "My Redis exposure consists of an ongoing introductory course and guided cache exercises."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The text is unclear and does not provide specific details about Go or Redis experience.",
+              "evidence": [
+                "The event brochure says “ready, set, go”; the last word is a starting signal.",
+                "My Redis exposure consists of an ongoing introductory course and guided cache exercises."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What is your experience with Redis?",
+            "Do you have any ongoing training in Go?",
+            "Can you elaborate on your current projects involving Go?",
+            "How have you applied Redis in your previous roles?"
+          ],
+          "warnings": [
+            "Uncertain job fit due to missing Go experience.",
+            "Inconsistent Redis experience described.",
+            "Limited evidence of practical Go application.",
+            "Possible lack of clarity on experience impact.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "go": {
+              "evidenceId": "s0",
+              "reason": "The text does not mention Go at all, so no evidence is found.",
+              "category": "missing_or_ambiguous",
+              "confidence": 0
+            },
+            "redis": {
+              "evidenceId": "s1",
+              "reason": "The candidate mentions ongoing introductory courses and guided cache exercises, indicating some experience with Redis.",
+              "category": "applicant_learning_skill",
+              "confidence": 0.75
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 50,
+              "explanation": "The candidate has some experience with Redis through introductory courses but shows no evidence of Go.",
+              "evidenceIds": [
+                "s1"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 0,
+              "explanation": "No evidence of Go experience is found; Redis experience is indicated.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "The candidate's experience with Redis is limited to introductory training, which may not directly translate to professional impact.",
+              "evidenceIds": [
+                "s1"
+              ]
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The text is unclear and does not provide specific details about Go or Redis experience.",
+              "evidenceIds": [
+                "s0",
+                "s1"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What is your experience with Redis?",
+            "Do you have any ongoing training in Go?",
+            "Can you elaborate on your current projects involving Go?",
+            "How have you applied Redis in your previous roles?"
+          ],
+          "warnings": [
+            "Uncertain job fit due to missing Go experience.",
+            "Inconsistent Redis experience described.",
+            "Limited evidence of practical Go application.",
+            "Possible lack of clarity on experience impact."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "78af1ade7f72de22c6bc88c993dac2ed43461410dffb384c9f7aa3953d1a51ca",
+          "schemaHash": "01729286a8f43d77801328b61048fc1e77fb2ef1d54f8a2bca4a3eef47f7564d",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 689,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "go",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "[evidence-category-v1: missing_or_ambiguous] The text does not mention Go at all, so no evidence is found.",
+            "quote": "The event brochure says “ready, set, go”; the last word is a starting signal.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "redis",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] The candidate mentions ongoing introductory courses and guided cache exercises, indicating some experience with Redis.",
+            "quote": "My Redis exposure consists of an ongoing introductory course and guided cache exercises.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-05",
+        "challenge": "ordinary-word",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 28882.204499999934,
+        "predictions": [
+          {
+            "skill": "go",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "[evidence-category-v1: missing_or_ambiguous] The text does not mention Go at all, so no evidence is found.",
+            "quote": "The event brochure says “ready, set, go”; the last word is a starting signal.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "redis",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] The candidate mentions ongoing introductory courses and guided cache exercises, indicating some experience with Redis.",
+            "quote": "My Redis exposure consists of an ongoing introductory course and guided cache exercises.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-06",
+        "challenge": "revision-without-denial",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.285600000002887,
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "My 2019 portfolio listed Docker as a learning goal.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "kubernetes",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "I have no experience using Kubernetes.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-06",
+        "challenge": "revision-without-denial",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 36745.9302,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "docker",
+              "importance": "required",
+              "sourceText": "docker and kubernetes experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Docker in professional work (2023) as per the passage.",
+              "evidenceText": "During 2023 I packaged and shipped our fictional museum application using Docker."
+            },
+            {
+              "skill": "kubernetes",
+              "importance": "required",
+              "sourceText": "docker and kubernetes experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied experience with Kubernetes.",
+              "evidenceText": "I have no experience using Kubernetes."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "The resume demonstrates experience with Docker and Kubernetes, aligning with the job requirements.",
+              "evidence": [
+                "During 2023 I packaged and shipped our fictional museum application using Docker.",
+                "I have no experience using Kubernetes."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "The resume shows active use of Docker and explicit denial of Kubernetes experience.",
+              "evidence": [
+                "During 2023 I packaged and shipped our fictional museum application using Docker.",
+                "I have no experience using Kubernetes."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "The resume does not mention any measurable impact or outcomes related to Docker or Kubernetes.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The resume passages are clear and directly address the skills.",
+              "evidence": []
+            }
+          ],
+          "interviewQuestions": [
+            "Do you have experience with Docker?",
+            "Can you share your Kubernetes experience?",
+            "What is your experience with Docker in a team setting?",
+            "How have you used Kubernetes in your projects?"
+          ],
+          "warnings": [
+            "Unclear evidence for Kubernetes experience.",
+            "No evidence for measurable impact on Docker projects.",
+            "Ambiguity in Docker usage details.",
+            "No quantified outcomes mentioned for Docker or Kubernetes.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "docker": {
+              "evidenceId": "s1",
+              "reason": "Applicant used Docker in professional work (2023) as per the passage.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            },
+            "kubernetes": {
+              "evidenceId": "s2",
+              "reason": "Applicant explicitly denied experience with Kubernetes.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "The resume demonstrates experience with Docker and Kubernetes, aligning with the job requirements.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "The resume shows active use of Docker and explicit denial of Kubernetes experience.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "The resume does not mention any measurable impact or outcomes related to Docker or Kubernetes.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The resume passages are clear and directly address the skills.",
+              "evidenceIds": []
+            }
+          },
+          "interviewQuestions": [
+            "Do you have experience with Docker?",
+            "Can you share your Kubernetes experience?",
+            "What is your experience with Docker in a team setting?",
+            "How have you used Kubernetes in your projects?"
+          ],
+          "warnings": [
+            "Unclear evidence for Kubernetes experience.",
+            "No evidence for measurable impact on Docker projects.",
+            "Ambiguity in Docker usage details.",
+            "No quantified outcomes mentioned for Docker or Kubernetes."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "b2662f166f086f64d072366127d2dc53e0e2fe434f6be39cca25751948759aa6",
+          "schemaHash": "d19e8e7cdcafd447598da6922b013e46de0b0c503a477203d8ef181e08df5c18",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 886,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Docker in professional work (2023) as per the passage.",
+            "quote": "During 2023 I packaged and shipped our fictional museum application using Docker.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "kubernetes",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied experience with Kubernetes.",
+            "quote": "I have no experience using Kubernetes.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-06",
+        "challenge": "revision-without-denial",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 36748.225000000006,
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Docker in professional work (2023) as per the passage.",
+            "quote": "During 2023 I packaged and shipped our fictional museum application using Docker.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "kubernetes",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied experience with Kubernetes.",
+            "quote": "I have no experience using Kubernetes.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-07",
+        "challenge": "attributed-team",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 0.900099999998929,
+        "predictions": [
+          {
+            "skill": "terraform",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "The résumé links this requirement to delivery or professional experience.",
+            "quote": "Project retrospective: the contractor operated Terraform.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "postgresql",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-07",
+        "challenge": "attributed-team",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 23467.879999999976,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "postgresql",
+              "importance": "required",
+              "sourceText": "terraform and postgresql experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant used PostgreSQL for writing and deploying migrations.",
+              "evidenceText": "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service."
+            },
+            {
+              "skill": "terraform",
+              "importance": "required",
+              "sourceText": "terraform and postgresql experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Terraform as part of their work.",
+              "evidenceText": "Project retrospective: the contractor operated Terraform."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "Applicant demonstrated practical experience with both PostgreSQL and Terraform through concrete work.",
+              "evidence": [
+                "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+                "Project retrospective: the contractor operated Terraform."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "Applicant has hands-on experience with these technologies, as evidenced by specific project work.",
+              "evidence": [
+                "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+                "Project retrospective: the contractor operated Terraform."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 100,
+              "explanation": "The applicant's work directly contributes to the project's success through the implementation of essential tools.",
+              "evidence": [
+                "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+                "Project retrospective: the contractor operated Terraform."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 100,
+              "explanation": "The applicant's work is well-documented and clear, providing a solid foundation for future tasks.",
+              "evidence": [
+                "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+                "Project retrospective: the contractor operated Terraform."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What experience do you have with writing PostgreSQL migrations?",
+            "Can you share an example of your Terraform experience?"
+          ],
+          "warnings": [
+            "The applicant's experience with these technologies is clear and specific.",
+            "No evidence of conflicting claims or gaps in experience.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "postgresql": {
+              "evidenceId": "s1",
+              "reason": "Applicant used PostgreSQL for writing and deploying migrations.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            },
+            "terraform": {
+              "evidenceId": "s0",
+              "reason": "Applicant used Terraform as part of their work.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "Applicant demonstrated practical experience with both PostgreSQL and Terraform through concrete work.",
+              "evidenceIds": [
+                "s1",
+                "s0"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "Applicant has hands-on experience with these technologies, as evidenced by specific project work.",
+              "evidenceIds": [
+                "s1",
+                "s0"
+              ]
+            },
+            "Measurable impact": {
+              "score": 100,
+              "explanation": "The applicant's work directly contributes to the project's success through the implementation of essential tools.",
+              "evidenceIds": [
+                "s1",
+                "s0"
+              ]
+            },
+            "Document clarity": {
+              "score": 100,
+              "explanation": "The applicant's work is well-documented and clear, providing a solid foundation for future tasks.",
+              "evidenceIds": [
+                "s1",
+                "s0"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What experience do you have with writing PostgreSQL migrations?",
+            "Can you share an example of your Terraform experience?"
+          ],
+          "warnings": [
+            "The applicant's experience with these technologies is clear and specific.",
+            "No evidence of conflicting claims or gaps in experience."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "c56c7971894743753dd77994d9741628a38d757f358c65dcf3cb915ac3677f72",
+          "schemaHash": "4d6565ca41f1eb8de37ad288ed153a8b79e46d27b38713038565cda7d90a7c48",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 560,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "terraform",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used Terraform as part of their work.",
+            "quote": "Project retrospective: the contractor operated Terraform.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "postgresql",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used PostgreSQL for writing and deploying migrations.",
+            "quote": "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-07",
+        "challenge": "attributed-team",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 23472.304399999965,
+        "predictions": [
+          {
+            "skill": "terraform",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "Evidence check abstained. The selected passage attributes the technical work to others without establishing the applicant's involvement.",
+            "quote": "Project retrospective: the contractor operated Terraform.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "postgresql",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant used PostgreSQL for writing and deploying migrations.",
+            "quote": "My responsibility was writing and deploying PostgreSQL migrations for the fictional ferry booking service.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": [
+          {
+            "skill": "terraform",
+            "policyVersion": "evidence-boundaries-v8",
+            "originalVerdict": "supported",
+            "issues": [
+              "other-person-work"
+            ]
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-08",
+        "challenge": "current-correction",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.0904000000155065,
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "A previous draft incorrectly credited me with Python development; I correct that claim here: I have never programmed in Python.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "sql",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "The résumé indicates learning, familiarity, or limited exposure rather than demonstrated delivery.",
+            "quote": "I am currently completing SQL beginner query exercises in an evening class.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-08",
+        "challenge": "current-correction",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 26793.71609999999,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "python",
+              "importance": "required",
+              "sourceText": "python and sql experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with this skill, such as never using or no professional experience.",
+              "evidenceText": "I correct that claim here: I have never programmed in Python."
+            },
+            {
+              "skill": "sql",
+              "importance": "required",
+              "sourceText": "python and sql experience required.",
+              "verdict": "partial",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently completing SQL beginner query exercises in an evening class, indicating ongoing learning without prior use.",
+              "evidenceText": "I am currently completing SQL beginner query exercises in an evening class."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 60,
+              "explanation": "The candidate explicitly denied Python experience and is in an introductory SQL class.",
+              "evidence": [
+                "I correct that claim here: I have never programmed in Python.",
+                "I am currently completing SQL beginner query exercises in an evening class."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 0,
+              "explanation": "The candidate has no demonstrated experience with Python and is only in an introductory SQL class.",
+              "evidence": [
+                "I correct that claim here: I have never programmed in Python.",
+                "I am currently completing SQL beginner query exercises in an evening class."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "The candidate has no measurable impact evidence provided for either skill.",
+              "evidence": [
+                "I correct that claim here: I have never programmed in Python.",
+                "I am currently completing SQL beginner query exercises in an evening class."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The candidate's denial for Python and ongoing learning for SQL are not quantified.",
+              "evidence": [
+                "I correct that claim here: I have never programmed in Python.",
+                "I am currently completing SQL beginner query exercises in an evening class."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What are your plans for learning SQL? Do you have any experience with Python?"
+          ],
+          "warnings": [
+            "Be cautious about the candidate's explicit denial of Python experience.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "python": {
+              "evidenceId": "s1",
+              "reason": "Applicant explicitly denies experience with this skill, such as never using or no professional experience.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            },
+            "sql": {
+              "evidenceId": "s2",
+              "reason": "Applicant is currently completing SQL beginner query exercises in an evening class, indicating ongoing learning without prior use.",
+              "category": "applicant_learning_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 60,
+              "explanation": "The candidate explicitly denied Python experience and is in an introductory SQL class.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 0,
+              "explanation": "The candidate has no demonstrated experience with Python and is only in an introductory SQL class.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "The candidate has no measurable impact evidence provided for either skill.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The candidate's denial for Python and ongoing learning for SQL are not quantified.",
+              "evidenceIds": [
+                "s1",
+                "s2"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What are your plans for learning SQL? Do you have any experience with Python?"
+          ],
+          "warnings": [
+            "Be cautious about the candidate's explicit denial of Python experience."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "7aec5fb4b998ccb54a2cd2c4b6cff8a3891c45cd99940166f7e87fcc4299dd63",
+          "schemaHash": "9c1abbc09c98f3f49dbcdb0851b42d977005d384c6d7e7e78edf4f4dd956ef58",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 679,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with this skill, such as never using or no professional experience.",
+            "quote": "I correct that claim here: I have never programmed in Python.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "sql",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently completing SQL beginner query exercises in an evening class, indicating ongoing learning without prior use.",
+            "quote": "I am currently completing SQL beginner query exercises in an evening class.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-08",
+        "challenge": "current-correction",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 26795.886500000022,
+        "predictions": [
+          {
+            "skill": "python",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies experience with this skill, such as never using or no professional experience.",
+            "quote": "I correct that claim here: I have never programmed in Python.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "sql",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant is currently completing SQL beginner query exercises in an evening class, indicating ongoing learning without prior use.",
+            "quote": "I am currently completing SQL beginner query exercises in an evening class.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-09",
+        "challenge": "structured-array",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.1361000000033528,
+        "predictions": [
+          {
+            "skill": "react",
+            "expected": "partial",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "[{\"owner\":\"Fictional N09\",\"note\":\"I am taking introductory React lessons and following guided component exercises.\"},{\"owner\":\"target employer\",\"note\":\"Angular experience is requested by the vacancy.\"}]",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "angular",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "No unambiguous canonical requirement name matched the model output.",
+            "quote": null,
+            "citationValid": false,
+            "missing": true
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-09",
+        "challenge": "structured-array",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 23557.609200000006,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "react",
+              "importance": "required",
+              "sourceText": "react and angular experience required.",
+              "verdict": "partial",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_learning_skill] I am taking introductory React lessons and following guided component exercises.",
+              "evidenceText": "\"I am taking introductory React lessons and following guided component exercises.\""
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 50,
+              "explanation": "The candidate is explicitly learning React through guided exercises, which aligns with the requirement.",
+              "evidence": [
+                "\"I am taking introductory React lessons and following guided component exercises.\""
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 0,
+              "explanation": "No evidence of professional experience or usage provided.",
+              "evidence": []
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No quantified impact or outcome provided.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 30,
+              "explanation": "The passage is clear and provides explicit evidence of learning.",
+              "evidence": [
+                "\"I am taking introductory React lessons and following guided component exercises.\""
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What are your plans to expand your React expertise?",
+            "What resources are you planning to use for learning React?",
+            "Can you share any projects where you used React?",
+            "How do you intend to apply React in your next project?"
+          ],
+          "warnings": [
+            "There is limited evidence of professional experience with React, only introductory learning. Consider this uncertainty when assessing the candidate's readiness for roles requiring professional React experience.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "react": {
+              "evidenceId": "s1",
+              "reason": "I am taking introductory React lessons and following guided component exercises.",
+              "category": "applicant_learning_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 50,
+              "explanation": "The candidate is explicitly learning React through guided exercises, which aligns with the requirement.",
+              "evidenceIds": [
+                "s1"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 0,
+              "explanation": "No evidence of professional experience or usage provided.",
+              "evidenceIds": []
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No quantified impact or outcome provided.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 30,
+              "explanation": "The passage is clear and provides explicit evidence of learning.",
+              "evidenceIds": [
+                "s1"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What are your plans to expand your React expertise?",
+            "What resources are you planning to use for learning React?",
+            "Can you share any projects where you used React?",
+            "How do you intend to apply React in your next project?"
+          ],
+          "warnings": [
+            "There is limited evidence of professional experience with React, only introductory learning. Consider this uncertainty when assessing the candidate's readiness for roles requiring professional React experience."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "5aae1f4648a9fd871c24f49654d075e9cb293213b563a28e3272d44279631825",
+          "schemaHash": "86aa18d8dd4b1483502c9299904ca31301d97bd9eea8d6a0e4b585ef7469086d",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 623,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "react",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] I am taking introductory React lessons and following guided component exercises.",
+            "quote": "\"I am taking introductory React lessons and following guided component exercises.\"",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "angular",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "No unambiguous canonical requirement name matched the model output.",
+            "quote": null,
+            "citationValid": false,
+            "missing": true
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-09",
+        "challenge": "structured-array",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 23559.96940000006,
+        "predictions": [
+          {
+            "skill": "react",
+            "expected": "partial",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] I am taking introductory React lessons and following guided component exercises.",
+            "quote": "\"I am taking introductory React lessons and following guided component exercises.\"",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "angular",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "No unambiguous canonical requirement name matched the model output.",
+            "quote": null,
+            "citationValid": false,
+            "missing": true
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "novel2-10",
+        "challenge": "chinese-denial",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 0.969600000011269,
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "contradicted",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "虚构候选人周宁。我从未使用过 Docker，也没有相关实践经验。AWS 是我明年计划阅读的主题，目前没有开始学习。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "虚构候选人周宁。我从未使用过 Docker，也没有相关实践经验。AWS 是我明年计划阅读的主题，目前没有开始学习。",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-10",
+        "challenge": "chinese-denial",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 36904.44089999999,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "aws",
+              "importance": "required",
+              "sourceText": "docker and aws experience required.",
+              "verdict": "partial",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_learning_skill] Applicant explicitly states that they are currently learning AWS via introductory materials, which aligns with the 'applicant_learning_skill' category.",
+              "evidenceText": "AWS 是我明年计划阅读的主题，目前没有开始学习。"
+            },
+            {
+              "skill": "docker",
+              "importance": "required",
+              "sourceText": "docker and aws experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having used Docker in their professional experience, which aligns with the 'applicant_explicitly_denies_skill' category.",
+              "evidenceText": "我从未使用过 Docker，也没有相关实践经验。"
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "The resume explicitly mentions AWS, Docker, and Machine Learning as required skills.",
+              "evidence": [
+                "虚构候选人周宁。",
+                "我从未使用过 Docker，也没有相关实践经验。",
+                "AWS 是我明年计划阅读的主题，目前没有开始学习。"
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 0,
+              "explanation": "The resume does not provide specific examples of experience with AWS, Docker, or Machine Learning.",
+              "evidence": []
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "The resume does not provide information on the impact or outcomes of the applicant's experience with these skills.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The resume does not provide clear or detailed information about the applicant's experience with these skills.",
+              "evidence": []
+            }
+          ],
+          "interviewQuestions": [
+            "What is your experience with AWS? Do you plan to learn more about it?"
+          ],
+          "warnings": [
+            "There is some uncertainty in assessing the applicant's experience with AWS and Docker, as the information is limited or ambiguous.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "aws": {
+              "evidenceId": "s2",
+              "reason": "Applicant explicitly states that they are currently learning AWS via introductory materials, which aligns with the 'applicant_learning_skill' category.",
+              "category": "applicant_learning_skill",
+              "confidence": 1
+            },
+            "docker": {
+              "evidenceId": "s1",
+              "reason": "Applicant explicitly denies having used Docker in their professional experience, which aligns with the 'applicant_explicitly_denies_skill' category.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "The resume explicitly mentions AWS, Docker, and Machine Learning as required skills.",
+              "evidenceIds": [
+                "s0",
+                "s1",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 0,
+              "explanation": "The resume does not provide specific examples of experience with AWS, Docker, or Machine Learning.",
+              "evidenceIds": []
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "The resume does not provide information on the impact or outcomes of the applicant's experience with these skills.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The resume does not provide clear or detailed information about the applicant's experience with these skills.",
+              "evidenceIds": []
+            }
+          },
+          "interviewQuestions": [
+            "What is your experience with AWS? Do you plan to learn more about it?"
+          ],
+          "warnings": [
+            "There is some uncertainty in assessing the applicant's experience with AWS and Docker, as the information is limited or ambiguous."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "d51ae46ca52208768764d895e272465729bec8ba72d956db068a2c5175e04f5a",
+          "schemaHash": "a8510509bc8b4af718c6444aa1addaf86c520fca76c3e60fc5604d65aa911f61",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 936,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having used Docker in their professional experience, which aligns with the 'applicant_explicitly_denies_skill' category.",
+            "quote": "我从未使用过 Docker，也没有相关实践经验。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "partial",
+            "reason": "[evidence-category-v1: applicant_learning_skill] Applicant explicitly states that they are currently learning AWS via introductory materials, which aligns with the 'applicant_learning_skill' category.",
+            "quote": "AWS 是我明年计划阅读的主题，目前没有开始学习。",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-10",
+        "challenge": "chinese-denial",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 36906.96340000001,
+        "predictions": [
+          {
+            "skill": "docker",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denies having used Docker in their professional experience, which aligns with the 'applicant_explicitly_denies_skill' category.",
+            "quote": "我从未使用过 Docker，也没有相关实践经验。",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "aws",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "Explicit source boundary: partial → unknown. Original model: [evidence-category-v1: applicant_learning_skill] Applicant explicitly states that they are currently learning AWS via introductory materials, which aligns with the 'applicant_learning_skill' category.",
+            "quote": "AWS 是我明年计划阅读的主题，目前没有开始学习。",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": [
+          {
+            "skill": "aws",
+            "policyVersion": "evidence-boundaries-v8",
+            "originalVerdict": "partial",
+            "issues": [
+              "explicit-source-boundary"
+            ]
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-11",
+        "challenge": "template-table",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 1.0119000000413507,
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "The requirement is explicitly listed, but depth still requires human verification.",
+            "quote": "| Tailwind project | [applicant to complete] |",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "Personal declaration: I have never used FastAPI.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-11",
+        "challenge": "template-table",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 31240.517300000007,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "fastapi",
+              "importance": "required",
+              "sourceText": "tailwind and fastapi experience required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied using FastAPI in a personal declaration.",
+              "evidenceText": "Personal declaration: I have never used FastAPI."
+            },
+            {
+              "skill": "tailwind",
+              "importance": "required",
+              "sourceText": "tailwind and fastapi experience required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill] Applicant's Tailwind project is described as professional work.",
+              "evidenceText": "| Tailwind project | [applicant to complete] |"
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 50,
+              "explanation": "Both 'tailwind' and 'fastapi' are explicitly required based on the job description.",
+              "evidence": [
+                "| Tailwind project | [applicant to complete] |",
+                "Personal declaration: I have never used FastAPI."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "The resume provides clear evidence of experience with both 'tailwind' and 'fastapi' through specific project descriptions and a personal declaration.",
+              "evidence": [
+                "| Tailwind project | [applicant to complete] |",
+                "Personal declaration: I have never used FastAPI."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No measurable impact is provided for these skills in the resume.",
+              "evidence": []
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 100,
+              "explanation": "The resume clearly describes the applicant's experience with 'tailwind' and 'fastapi' through specific project descriptions and a personal declaration.",
+              "evidence": [
+                "| Tailwind project | [applicant to complete] |",
+                "Personal declaration: I have never used FastAPI."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What experience do you have with FastAPI?",
+            "Can you share more about your experience with Tailwind?",
+            "How did you get started with FastAPI?",
+            "What steps did you take to learn Tailwind?"
+          ],
+          "warnings": [
+            "The applicant explicitly denied using FastAPI, which may indicate a lack of interest or confidence in this technology.",
+            "The applicant has no demonstrated experience with Tailwind, which may raise questions about their readiness for the role.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "fastapi": {
+              "evidenceId": "s3",
+              "reason": "Applicant explicitly denied using FastAPI in a personal declaration.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            },
+            "tailwind": {
+              "evidenceId": "s2",
+              "reason": "Applicant's Tailwind project is described as professional work.",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 50,
+              "explanation": "Both 'tailwind' and 'fastapi' are explicitly required based on the job description.",
+              "evidenceIds": [
+                "s2",
+                "s3"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "The resume provides clear evidence of experience with both 'tailwind' and 'fastapi' through specific project descriptions and a personal declaration.",
+              "evidenceIds": [
+                "s2",
+                "s3"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No measurable impact is provided for these skills in the resume.",
+              "evidenceIds": []
+            },
+            "Document clarity": {
+              "score": 100,
+              "explanation": "The resume clearly describes the applicant's experience with 'tailwind' and 'fastapi' through specific project descriptions and a personal declaration.",
+              "evidenceIds": [
+                "s2",
+                "s3"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What experience do you have with FastAPI?",
+            "Can you share more about your experience with Tailwind?",
+            "How did you get started with FastAPI?",
+            "What steps did you take to learn Tailwind?"
+          ],
+          "warnings": [
+            "The applicant explicitly denied using FastAPI, which may indicate a lack of interest or confidence in this technology.",
+            "The applicant has no demonstrated experience with Tailwind, which may raise questions about their readiness for the role."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "8941625b73baea2d4937a7c865026d146604cdca41db1675f59433eb4bfddb15",
+          "schemaHash": "f1f3ff303f325bed2a3d92f7ad3047789ad6eb73526267d23ad8c26114a995d6",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 783,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "unknown",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill] Applicant's Tailwind project is described as professional work.",
+            "quote": "| Tailwind project | [applicant to complete] |",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied using FastAPI in a personal declaration.",
+            "quote": "Personal declaration: I have never used FastAPI.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel2-11",
+        "challenge": "template-table",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 31242.260800000047,
+        "predictions": [
+          {
+            "skill": "tailwind",
+            "expected": "unknown",
+            "actual": "unknown",
+            "reason": "Explicit source boundary: supported → unknown. Original model: [evidence-category-v1: applicant_used_skill] Applicant's Tailwind project is described as professional work.",
+            "quote": "| Tailwind project | [applicant to complete] |",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "fastapi",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] Applicant explicitly denied using FastAPI in a personal declaration.",
+            "quote": "Personal declaration: I have never used FastAPI.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": [
+          {
+            "skill": "tailwind",
+            "policyVersion": "evidence-boundaries-v8",
+            "originalVerdict": "supported",
+            "issues": [
+              "explicit-source-boundary"
+            ]
+          }
+        ]
+      }
+    ],
+    "summaries": [
+      {
+        "pipeline": "rules",
+        "status": "complete",
+        "evaluatedCases": 11,
+        "totalCases": 11,
+        "modelCases": 0,
+        "fallbackCases": 0,
+        "accuracy": 0.5454545454545454,
+        "macroF1": 0.5391214177978884,
+        "supportPrecision": 0.3333333333333333,
+        "supportRecall": 0.8,
+        "abstentionRate": 0.045454545454545456,
+        "unsupportedSupportRate": 0.6666666666666666,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0.045454545454545456,
+        "p50LatencyMs": 1.285600000002887,
+        "p95LatencyMs": 6.7654999999999745,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            4,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            5,
+            0
+          ],
+          [
+            5,
+            0,
+            1,
+            1
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "archive-change",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "nested-record",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-advert",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "form-product",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "ordinary-word",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "revision-without-denial",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "attributed-team",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "current-correction",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "structured-array",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-denial",
+            "correct": 0,
+            "total": 2
+          },
+          {
+            "challenge": "template-table",
+            "correct": 1,
+            "total": 2
+          }
+        ]
+      },
+      {
+        "pipeline": "llm",
+        "status": "complete",
+        "evaluatedCases": 11,
+        "totalCases": 11,
+        "modelCases": 11,
+        "fallbackCases": 0,
+        "accuracy": 0.8181818181818182,
+        "macroF1": 0.8113247863247864,
+        "supportPrecision": 0.7142857142857143,
+        "supportRecall": 1,
+        "abstentionRate": 0.13636363636363635,
+        "unsupportedSupportRate": 0.2857142857142857,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0.045454545454545456,
+        "p50LatencyMs": 33195.6277,
+        "p95LatencyMs": 44192.137599999995,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            6,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            3
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "archive-change",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "nested-record",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-advert",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "form-product",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "ordinary-word",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "revision-without-denial",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "attributed-team",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "current-correction",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "structured-array",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-denial",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "template-table",
+            "correct": 1,
+            "total": 2
+          }
+        ]
+      },
+      {
+        "pipeline": "hybrid",
+        "status": "complete",
+        "evaluatedCases": 11,
+        "totalCases": 11,
+        "modelCases": 11,
+        "fallbackCases": 0,
+        "accuracy": 1,
+        "macroF1": 1,
+        "supportPrecision": 1,
+        "supportRecall": 1,
+        "abstentionRate": 0.3181818181818182,
+        "unsupportedSupportRate": 0,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0.045454545454545456,
+        "p50LatencyMs": 33205.399099999995,
+        "p95LatencyMs": 44212.203799999996,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            7
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "archive-change",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "nested-record",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-advert",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "form-product",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "ordinary-word",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "revision-without-denial",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "attributed-team",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "current-correction",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "structured-array",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "chinese-denial",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "template-table",
+            "correct": 2,
+            "total": 2
+          }
+        ]
+      }
+    ]
+  }
+}

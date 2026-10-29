@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import type { AuditEvent, Candidate, Job, ReviewStatus } from "@/lib/domain";
 import { TransformerEvidencePanel } from "../components/transformer-evidence";
 import { ResumeQa } from "../components/resume-qa";
+import { EvidenceReview } from "../components/evidence-review";
+import type { ReviewerCorrection } from "@/lib/types";
 
 const DEFAULT_DESCRIPTION = "We are seeking a Software Engineer to build reliable customer-facing products. The role requires TypeScript, React, Next.js, Node.js, PostgreSQL, Docker, testing, REST APIs and GitHub Actions.";
 
@@ -45,7 +46,16 @@ export default function WorkspacePage() {
         if (!response.ok) throw new Error(data.error ?? "Could not load jobs.");
         return data;
       })
-      .then((data) => { setJobs(data.jobs); setMode(data.mode); })
+      .then(async (data) => {
+        setJobs(data.jobs); setMode(data.mode);
+        const jobId = new URLSearchParams(window.location.search).get("job");
+        if (jobId && data.jobs.some((job: Job) => job.id === jobId)) {
+          const response = await fetch('/api/workspace/jobs/' + encodeURIComponent(jobId), { signal: controller.signal });
+          const detail = await response.json();
+          if (!response.ok) throw new Error(detail.error || "Could not open saved review.");
+          setSelectedJob(detail.job); setCandidates(detail.candidates); setAudit(detail.audit);
+        }
+      })
       .catch((caught) => { if (caught.name !== "AbortError") setError(caught instanceof Error ? caught.message : "Could not load jobs."); });
     return () => controller.abort();
   }, []);
@@ -100,6 +110,18 @@ export default function WorkspacePage() {
     finally { setBusy(""); }
   }
 
+  async function updateEvidenceReview(candidate: Candidate, corrections: ReviewerCorrection[]) {
+    const data = await jsonRequest('/api/workspace/candidates/' + candidate.id + '/review', {
+      method: "PATCH", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ corrections: corrections.map(({ skill, verdict, reason }) => ({ skill, verdict, reason })) })
+    });
+    setCandidates(current => current.map(item => item.id === candidate.id ? data.candidate : item));
+    if (selectedJob) {
+      const detail = await jsonRequest('/api/workspace/jobs/' + selectedJob.id);
+      setAudit(detail.audit);
+    }
+  }
+
   async function deleteCandidate(candidate: Candidate) {
     if (!window.confirm(`Permanently delete ${candidate.displayName} and their stored résumé?`)) return;
     setBusy(candidate.id); setError("");
@@ -127,13 +149,8 @@ export default function WorkspacePage() {
 
   const compared = compareIds.map((id) => candidates.find((candidate) => candidate.id === id)).filter((candidate): candidate is Candidate => Boolean(candidate));
 
-  return <main className="app-shell">
-    <header className="app-header">
-      <div><Link className="brand-link" href="/">Open Resume Lab</Link><span className="mode-badge">{mode} mode</span></div>
-      <nav className="app-nav"><Link href="/workspace">Workspace</Link><Link href="/evaluation">Evaluation</Link><Link href="/login">Sign in</Link></nav>
-    </header>
-
-    <section className="page-intro"><p className="eyebrow">HUMAN REVIEW WORKSPACE</p><h1>Jobs, evidence and decisions.</h1><p>Review requirement-level evidence, including partial, contradicted and unknown findings. Scores prioritize inspection; they never reject a candidate or establish qualification.</p></section>
+  return <main id="main-content" className="app-shell">
+    <section className="page-intro"><p className="eyebrow">HUMAN REVIEW WORKSPACE</p><span className="mode-badge">{mode} mode</span><h1>Jobs, evidence and decisions.</h1><p>Review requirement-level evidence, including partial, contradicted and unknown findings. Scores prioritize inspection; they never reject a candidate or establish qualification.</p></section>
     {error && <div className="wide-error" role="alert">{error}</div>}
 
     <div className="workspace-layout">
@@ -171,7 +188,7 @@ export default function WorkspacePage() {
             </div>
             {candidate.analysis && <details><summary>Inspect evidence</summary>
               {candidate.analysis.reliability && <div className={`reliability-banner compact ${candidate.analysis.reliability.status}`}><div><span>Evidence coverage</span><strong>{Math.round(candidate.analysis.reliability.evidenceCoverage * 100)}%</strong></div><div><span>Extraction</span><strong>{candidate.analysis.reliability.extractionQuality}</strong></div><div><span>Review state</span><strong>{candidate.analysis.reliability.status.replaceAll("-", " ")}</strong></div></div>}
-              {candidate.analysis.requirementAssessments?.length ? <div className="requirement-grid compact">{candidate.analysis.requirementAssessments.map((assessment) => <div className={`requirement-card verdict-${assessment.verdict}`} key={assessment.skill}><div><strong>{assessment.skill}</strong><span>{assessment.importance}</span></div><p className="verdict-label">{assessment.verdict} · {Math.round(assessment.confidence * 100)}%</p><p>{assessment.reason}</p>{assessment.evidence && <blockquote>{assessment.evidence.text}</blockquote>}</div>)}</div> : null}
+              <EvidenceReview result={candidate.analysis} source={candidate.resumeText ?? ""} jobDescription={selectedJob.description} onChange={corrections => updateEvidenceReview(candidate, corrections)} />
               <div className="evidence-grid">{candidate.analysis.criteria.map((criterion) => <div key={criterion.criterion}><strong>{criterion.criterion} · {criterion.score}</strong><p>{criterion.explanation}</p>{criterion.evidence.map((line, index) => <blockquote key={`${index}:${line}`}>{line}</blockquote>)}</div>)}</div>
               <TransformerEvidencePanel result={candidate.analysis.transformerEvidence} />
               {candidate.analysis.transformerEvidence && <ResumeQa candidateId={candidate.id} />}

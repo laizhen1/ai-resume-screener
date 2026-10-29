@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-28T23:20:34.539Z",
+  "mode": "offline rules; AI disabled",
+  "fixture": "bundled fictional guided example",
+  "checks": [
+    "four evidence states",
+    "exact source highlight",
+    "separate reviewer correction",
+    "JSON export contains correction",
+    "save original analysis to workspace",
+    "review survives reload",
+    "390px no horizontal overflow"
+  ],
+  "pageErrors": []
+}

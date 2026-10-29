@@ -1,9 +1,12 @@
+import { createRequire } from "node:module";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { runComparison } from "../lib/experiments/runner";
 
 async function main() {
+  const require = createRequire(import.meta.url);
+  createRequire(require.resolve("next/package.json"))("@next/env").loadEnvConfig(process.cwd(), true);
   const { values } = parseArgs({ options: {
     split: { type: "string", default: "development" },
     model: { type: "string" },

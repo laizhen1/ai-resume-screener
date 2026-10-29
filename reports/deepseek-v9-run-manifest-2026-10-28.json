@@ -1,0 +1,50 @@
+{
+  "recordedAt": "2026-10-28T05:15:44.686Z",
+  "model": {
+    "ready": true,
+    "model": "deepseek-r1:7b",
+    "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+    "sizeBytes": 4683075440,
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 3584,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "tools",
+      "thinking",
+      "completion"
+    ]
+  },
+  "files": [
+    {
+      "path": "lib/analyzer.ts",
+      "sha256": "b515db65fc6c36cbd8587fd38fc899b58631d7b884a8ca32d9ec26823755d571"
+    },
+    {
+      "path": "lib/ai-analysis.ts",
+      "sha256": "918a8cd9166dd0f4745db552fb3bc6bddd4d14621b9234fada1b85343af7e097"
+    },
+    {
+      "path": "lib/evidence-eligibility.ts",
+      "sha256": "449c91b4cf2d610c43c4efa87cf5695bd8de57c8908429f4d062116a9782f69f"
+    },
+    {
+      "path": "lib/experiments/runner.ts",
+      "sha256": "04d36641caea3a09532f8eeb23396c53240e5f11737fb8fcb2fcb6428c461b59"
+    },
+    {
+      "path": "scripts/compare.ts",
+      "sha256": "0f292e600f1573a9e2b0d9636539b8fb06cda03d9cdf2e55fe93eced559f8fc1"
+    }
+  ],
+  "note": "Core prompt and evidence policy unchanged. CLI now loads project environment. Concurrent build/browser validation during early challenge cases may affect latency. No independent labels; reused synthetic sets."
+}

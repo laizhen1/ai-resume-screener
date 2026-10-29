@@ -26,7 +26,7 @@ describe("hybrid analysis", () => {
       "We need a TypeScript, React, PostgreSQL and Docker engineer for a customer platform.",
       "SUMMARY\nEngineer\nSKILLS\nTypeScript, React\nEXPERIENCE\nBuilt customer services for 400 users.\nEDUCATION\nBSc"
     );
-    expect(result.engineVersion).toBe("3.2.0");
+    expect(result.engineVersion).toBe("3.7.1");
     expect(result.taxonomyVersion).toBeTruthy();
     expect(result.semanticMatches).toBeDefined();
     expect(result.criteria.every((criterion) => criterion.provenance)).toBe(true);

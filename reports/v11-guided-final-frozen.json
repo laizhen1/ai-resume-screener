@@ -1,0 +1,31 @@
+{
+  "version": "v11-guided-final",
+  "frozenAt": "2026-10-28T20:51:03.234Z",
+  "annotationStatus": "Existing public fictional demo; not unseen or independent.",
+  "sources": {
+    "lib/analyzer.ts": "6a48ac02e0dbf32502c1118afea5c73e8844fb13d673439611504d62dcd5974b",
+    "lib/ai-analysis.ts": "3d9d5e99beed854164a10e2856cf41a8b8420c91c15db79536ec2a7f8043bda6",
+    "lib/evidence-boundaries.ts": "3296e179e4e3aecafec31aadbf0e64b7963d81ed347918e0cce80da8e3353221",
+    "lib/evidence-eligibility.ts": "c5d25f7ffca25630852b3202908d6fbf2bb8d3683ae4cd909d2b5541b659d605",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+  "examples": [
+    {
+      "id": "guided",
+      "challenge": "public-walkthrough",
+      "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+      "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "docker": "partial",
+        "kubernetes": "contradicted",
+        "terraform": "unknown"
+      }
+    }
+  ]
+}

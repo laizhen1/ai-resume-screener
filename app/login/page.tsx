@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { BrandMark } from "../components/brand";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -16,5 +16,5 @@ export default function LoginPage() {
     if (!response.ok) return setError(data.error);
     router.push("/workspace");
   }
-  return <main className="login-shell"><form className="login-card" onSubmit={submit}><Link className="brand-link" href="/">Open Resume Lab</Link><p className="eyebrow">SECURE WORKSPACE</p><h1>Sign in.</h1><p>Authentication is optional in local demo mode and should be enabled for shared deployments.</p><label>Username<input autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} /></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} /></label><button className="primary">Sign in<span>→</span></button>{error && <div className="error">{error}</div>}</form></main>;
+  return <main id="main-content" className="login-shell"><form className="login-card" onSubmit={submit}><BrandMark /><p className="eyebrow">SECURE WORKSPACE</p><h1>Sign in.</h1><p>Authentication is optional in local demo mode and should be enabled for shared deployments.</p><label>Username<input autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} /></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} /></label><button className="primary">Sign in<span>→</span></button>{error && <div className="error" role="alert">{error}</div>}</form></main>;
 }

@@ -1,0 +1,61 @@
+{
+  "createdAt": "2026-10-28T21:52:25.516Z",
+  "ollamaVersion": "0.40.6",
+  "node": "v24.19.0",
+  "model": {
+    "name": "deepseek-r1:7b",
+    "model": "deepseek-r1:7b",
+    "modified_at": "2026-10-20T11:45:08.9966385+13:00",
+    "size": 4683075440,
+    "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "7.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 3584,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "tools",
+      "thinking",
+      "completion"
+    ]
+  },
+  "generation": {
+    "think": true,
+    "options": {
+      "temperature": 0.6,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": 4096
+    }
+  },
+  "sources": [
+    {
+      "path": "lib/ai-analysis.ts",
+      "hash": "3d9d5e99beed854164a10e2856cf41a8b8420c91c15db79536ec2a7f8043bda6"
+    },
+    {
+      "path": "lib/analyzer.ts",
+      "hash": "bdd1918d9ac2f2330b95e24622e51ae73c17e5a700f9fc70c96353fa3d9587b4"
+    },
+    {
+      "path": "lib/evidence-eligibility.ts",
+      "hash": "491a29ef7fcf44e186e022c7fa2a6ddee6b5e1285210bb7e7f953b2095bb1b40"
+    },
+    {
+      "path": "lib/experiments/runner.ts",
+      "hash": "bb9327ee1ca98a4d8f9bfea66246c4a8c5f11e977364966856b76916cb03631d"
+    },
+    {
+      "path": "lib/local-llm.ts",
+      "hash": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "version": "v13-new",
+  "frozenAt": "2026-10-28T22:46:15.505Z",
+  "annotationStatus": "New first-use agent-authored synthetic controls; labels frozen before inference. Known failure mechanisms, not family-disjoint or independently reviewed.",
+  "sources": {
+    "lib/analyzer.ts": "8d3f7e3e134614de675444e9a9eb1e54540cabb5366a3abdc3107e24eb9666aa",
+    "lib/ai-analysis.ts": "b357679d7f6e8505ff26e534edb5fdfd2a368ab61127c6021a3d56181f9fdc71",
+    "lib/evidence-boundaries.ts": "cb9660a394a62be7dd5bf7d6356230fce829c1b06e8992fbbd930fb5e709f3b6",
+    "lib/evidence-eligibility.ts": "d62c7ad1d61789d148cc4a23ea6eb3813bd495b0c8f622c411577d04958f25de",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "dbcfd5ba3bf7bf5bd25957c9614cda9d04934b45b8776a294f66595b8953d562",
+  "examples": [
+    {
+      "id": "v13-new-01",
+      "challenge": "array-separation",
+      "job": "python and java experience required.",
+      "resume": "[{\"section\":\"personal training\",\"text\":\"I am following introductory Python exercises with a mentor.\"},{\"section\":\"saved vacancy\",\"text\":\"Java is required by the employer.\"}]",
+      "expectedVerdicts": {
+        "python": "partial",
+        "java": "unknown"
+      }
+    },
+    {
+      "id": "v13-new-02",
+      "challenge": "chinese-advert",
+      "job": "docker and typescript experience required.",
+      "resume": "虚构候选人陈苏。招聘广告注明 Docker 是岗位要求。我的经历：我使用 TypeScript 独立开发并上线了社区失物登记系统。",
+      "expectedVerdicts": {
+        "docker": "unknown",
+        "typescript": "supported"
+      }
+    },
+    {
+      "id": "v13-new-03",
+      "challenge": "chinese-future",
+      "job": "azure and redis experience required.",
+      "resume": "虚构候选人陶言。Azure 是未来计划阅读的主题，尚未开始学习。I have never used Redis.",
+      "expectedVerdicts": {
+        "azure": "unknown",
+        "redis": "contradicted"
+      }
+    },
+    {
+      "id": "v13-new-04",
+      "challenge": "unfilled-field",
+      "job": "terraform and fastapi experience required.",
+      "resume": "Fictional candidate N13D. Worksheet entry: Terraform deployment — to be filled by the applicant. My FastAPI exposure is limited to introductory exercises I am completing in class.",
+      "expectedVerdicts": {
+        "terraform": "unknown",
+        "fastapi": "partial"
+      }
+    },
+    {
+      "id": "v13-new-05",
+      "challenge": "placeholder-product",
+      "job": "tailwind and aws experience required.",
+      "resume": "I developed Tailwind screens for the fictional ticket office; the screens include an applicant to complete placeholder. I have never used AWS.",
+      "expectedVerdicts": {
+        "tailwind": "supported",
+        "aws": "contradicted"
+      }
+    },
+    {
+      "id": "v13-new-06",
+      "challenge": "advert-product",
+      "job": "python and kubernetes experience required.",
+      "resume": "虚构候选人文青。我独立开发 Python 招聘广告审核工具，维护了三次发布。I have no experience using Kubernetes.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "kubernetes": "contradicted"
+      }
+    },
+    {
+      "id": "v13-new-07",
+      "challenge": "array-positive",
+      "job": "react and sql experience required.",
+      "resume": "[{\"note\":\"I implemented React dashboards for a fictional seed exchange.\"},{\"note\":\"I am attending SQL beginner lessons and following query exercises.\"}]",
+      "expectedVerdicts": {
+        "react": "supported",
+        "sql": "partial"
+      }
+    },
+    {
+      "id": "v13-new-08",
+      "challenge": "learning-denial",
+      "job": "docker and go experience required.",
+      "resume": "For fictional applicant N13H, Docker practice consists of introductory classroom exercises I am currently completing. I have never programmed in Go.",
+      "expectedVerdicts": {
+        "docker": "partial",
+        "go": "contradicted"
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "id": "v13-new-01",
+      "rationale": "Python is current beginner practice; Java belongs only to a vacancy."
+    },
+    {
+      "id": "v13-new-02",
+      "rationale": "Advert supplies no Docker claim; TypeScript has personal delivered work."
+    },
+    {
+      "id": "v13-new-03",
+      "rationale": "Azure remains a future plan; Redis is expressly denied."
+    },
+    {
+      "id": "v13-new-04",
+      "rationale": "Unfilled field is not Terraform experience; FastAPI is current limited study."
+    },
+    {
+      "id": "v13-new-05",
+      "rationale": "Product placeholder does not negate delivered Tailwind work; AWS denial is explicit."
+    },
+    {
+      "id": "v13-new-06",
+      "rationale": "Personally developed advertising software is genuine Python work; Kubernetes expressly denied."
+    },
+    {
+      "id": "v13-new-07",
+      "rationale": "React delivery supported; SQL current learning partial."
+    },
+    {
+      "id": "v13-new-08",
+      "rationale": "Docker is current limited practice; Go expressly denied."
+    }
+  ],
+  "protocol": {
+    "onePass": true,
+    "noTuningDuringRun": true,
+    "scope": "Text-level synthetic controls; no PDF/OCR or hiring validation.",
+    "exactDuplicateCheck": "No exact document match in historical report examples; this does not prove family independence."
+  }
+}

@@ -24,3 +24,14 @@ reports/promptfoo.json
 # Personal career documents stay local.
 /docs/resume-project-zh*.txt
 /docs/STAR-resume-zh*.txt
+
+# Local configuration, editor state and private working documents.
+.env.*
+!.env.example
+!.env.demo.example
+.idea/
+outputs/
+private/
+secrets/
+*.pem
+*.key

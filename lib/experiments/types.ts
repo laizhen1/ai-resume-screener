@@ -18,6 +18,7 @@ export type CaseResult = {
   latencyMs: number; predictions: Prediction[]; error?: string;
   modelDraft?: import("../ai-analysis").AiAnalysisDraft;
   modelOutput?: unknown;
+  requestMetadata?: { promptHash: string; schemaHash: string; responseModel?: string; evalCount?: number; doneReason?: string };
   evidenceChecks?: Array<{ skill: string; policyVersion: string; originalVerdict: import("../types").EvidenceVerdict; issues: string[] }>;
   transformerMetadata?: import("../transformers").TransformerMetadata;
   transformerEvidence?: import("../transformers").TransformerAssessment[];

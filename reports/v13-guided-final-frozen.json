@@ -1,0 +1,32 @@
+{
+  "version": "v13-guided-final",
+  "frozenAt": "2026-10-28T22:53:48.370Z",
+  "annotationStatus": "Reused guided regression example; not unseen.",
+  "sources": {
+    "lib/analyzer.ts": "6f7f379bd1ecbf542c4424d5c78949f030389aab98e872d06f2313529b29d7bd",
+    "lib/ai-analysis.ts": "b357679d7f6e8505ff26e534edb5fdfd2a368ab61127c6021a3d56181f9fdc71",
+    "lib/evidence-boundaries.ts": "cb9660a394a62be7dd5bf7d6356230fce829c1b06e8992fbbd930fb5e709f3b6",
+    "lib/evidence-eligibility.ts": "d62c7ad1d61789d148cc4a23ea6eb3813bd495b0c8f622c411577d04958f25de",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "c55b0b4de4cd5889245d68098341248fb61cd30fce69d677594a08b3b6a26358",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "7a17b8a9b651b97a1c779fe97b186c9ccbab0912ca14610811787bc4aecd91f7",
+  "examples": [
+    {
+      "id": "guided",
+      "challenge": "public-walkthrough",
+      "job": "We are hiring a backend engineer. Python, Docker, Kubernetes and Terraform experience are required. Explain the evidence for each requirement so a human reviewer can verify it.",
+      "resume": "Alex Example — fictional demonstration profile\nSUMMARY\nBackend developer building internal tools for a fictional community library.\nEXPERIENCE\nBuilt Python services that tracked book loans and sent reminder emails.\nDocumented service endpoints and investigated failed background tasks.\nEDUCATION\nCurrently learning Docker through guided container tutorials.\nSKILLS\nI have never used Kubernetes.\nPROJECTS\nCreated a volunteer scheduling tool and wrote its user guide.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "docker": "partial",
+        "kubernetes": "contradicted",
+        "terraform": "unknown"
+      }
+    }
+  ],
+  "previousFreeze": "reports/v13-guided-frozen.json"
+}

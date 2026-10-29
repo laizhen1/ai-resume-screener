@@ -1,0 +1,46 @@
+{
+  "errors": [
+    {
+      "caseId": "novel2-03",
+      "skill": "python",
+      "expected": "unknown",
+      "actual": "contradicted",
+      "reason": "[evidence-category-v1: applicant_explicitly_denies_skill] explicit denial of experience",
+      "quote": "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "novel2-09",
+      "skill": "angular",
+      "expected": "unknown",
+      "actual": "partial",
+      "reason": "Explicit source boundary: contradicted → partial. Original model: [evidence-category-v1: applicant_explicitly_denies_skill] I am taking introductory React lessons and following guided component exercises.",
+      "quote": "[{\"owner\":\"Fictional N09\",\"note\":\"I am taking introductory React lessons and following guided component exercises.\"},{\"owner\":\"target employer\",\"note\":\"Angular experience is requested by the vacancy.\"}]",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "novel2-10",
+      "skill": "aws",
+      "expected": "unknown",
+      "actual": "partial",
+      "reason": "[evidence-category-v1: applicant_learning_skill] Applicant explicitly states that they are currently learning AWS via introductory materials, which aligns with the 'applicant_learning_skill' category.",
+      "quote": "AWS 是我明年计划阅读的主题，目前没有开始学习。",
+      "citationValid": true,
+      "missing": false
+    },
+    {
+      "caseId": "novel2-11",
+      "skill": "tailwind",
+      "expected": "unknown",
+      "actual": "supported",
+      "reason": "[evidence-category-v1: applicant_used_skill] Applicant's Tailwind project is described as professional work.",
+      "quote": "| Tailwind project | [applicant to complete] |",
+      "citationValid": true,
+      "missing": false
+    }
+  ],
+  "repaired": 1,
+  "harmed": 0
+}

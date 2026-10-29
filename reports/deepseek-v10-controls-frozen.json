@@ -1,0 +1,119 @@
+{
+  "frozenAt": "2026-10-28T06:33:28.427Z",
+  "annotationStatus": "New agent-authored regression controls; not independent or blind. Labels frozen before control inference.",
+  "hash": "9c3b75294c47d4881601514ca2124dfc98b54b9a7d95e5c1363e3aaaf79f9cfc",
+  "examples": [
+    {
+      "id": "control-1",
+      "job": "python experience required.",
+      "resume": "Completed introductory Python exercises in a supervised evening class.",
+      "skill": "python",
+      "expected": "partial"
+    },
+    {
+      "id": "control-2",
+      "job": "python experience required.",
+      "resume": "Deployed Python invoicing services for customers at Fictional Harbor Labs.",
+      "skill": "python",
+      "expected": "supported"
+    },
+    {
+      "id": "control-3",
+      "job": "pytorch experience required.",
+      "resume": "Trained and deployed PyTorch classifiers for a production image search service.",
+      "skill": "pytorch",
+      "expected": "supported"
+    },
+    {
+      "id": "control-4",
+      "job": "pytorch experience required.",
+      "resume": "Attending an introductory PyTorch training course and completing guided exercises.",
+      "skill": "pytorch",
+      "expected": "partial"
+    },
+    {
+      "id": "control-5",
+      "job": "redis experience required.",
+      "resume": "I intend to study Redis next spring; my current role is event scheduling.",
+      "skill": "redis",
+      "expected": "unknown"
+    },
+    {
+      "id": "control-6",
+      "job": "redis experience required.",
+      "resume": "Currently studying Redis through beginner exercises.",
+      "skill": "redis",
+      "expected": "partial"
+    },
+    {
+      "id": "control-7",
+      "job": "aws experience required.",
+      "resume": "The infrastructure department operated AWS; I scheduled customer interviews.",
+      "skill": "aws",
+      "expected": "unknown"
+    },
+    {
+      "id": "control-8",
+      "job": "aws experience required.",
+      "resume": "Built AWS monitoring services for the infrastructure department.",
+      "skill": "aws",
+      "expected": "supported"
+    },
+    {
+      "id": "control-9",
+      "job": "kubernetes experience required.",
+      "resume": "I have no hands-on experience with Kubernetes.",
+      "skill": "kubernetes",
+      "expected": "contradicted"
+    },
+    {
+      "id": "control-10",
+      "job": "kubernetes experience required.",
+      "resume": "Configured K8s deployments and monitored cluster rollouts for client services.",
+      "skill": "kubernetes",
+      "expected": "supported"
+    },
+    {
+      "id": "control-11",
+      "job": "github actions experience required.",
+      "resume": "Implemented GitHub workflows to run release checks for a production billing system.",
+      "skill": "github actions",
+      "expected": "supported"
+    },
+    {
+      "id": "control-12",
+      "job": "react experience required.",
+      "resume": "SKILLS\nReact\nEXPERIENCE\nShipped React dashboards used daily by customers.",
+      "skill": "react",
+      "expected": "supported"
+    },
+    {
+      "id": "control-13",
+      "job": "react experience required.",
+      "resume": "React calmly to customer complaints and schedule follow-up calls.",
+      "skill": "react",
+      "expected": "unknown"
+    },
+    {
+      "id": "control-14",
+      "job": "go experience required.",
+      "resume": "EDUCATION\nFictional College\nEXPERIENCE\nOrganized catering schedules.",
+      "skill": "go",
+      "expected": "unknown"
+    },
+    {
+      "id": "control-15",
+      "job": "docker experience required.",
+      "resume": "Completed a Docker tutorial last year. Now I deploy Docker containers for a production billing service.",
+      "skill": "docker",
+      "expected": "supported"
+    },
+    {
+      "id": "control-16",
+      "job": "docker experience required.",
+      "resume": "No professional experience with Docker, although I am completing beginner exercises.",
+      "skill": "docker",
+      "expected": "contradicted"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 # Scoring method
 
-Engine version: **3.2.0**. The taxonomy and engine versions are returned with every result.
+Engine version: **3.7.1**. The taxonomy and engine versions are returned with every result.
 
-The overall result is a weighted sum of four model-proposed criterion scores when Ollama is available. Workspace weights must total 100. Structured output and cited source presence are validated, but those checks do not establish that a proposed score is justified. The v8 requirement-evidence checks do not recalibrate the criterion scores, which can remain inconsistent with an abstained requirement. Invalid or unavailable generation uses an explicitly labeled deterministic offline scorer.
+The overall result is a weighted sum of four criteria. With Ollama, `checked-skills-v1` recomputes Relevant skills from final checked verdicts; experience, impact and clarity retain uncalibrated model suggestions. Workspace weights must total 100. Original model criteria and their aggregate remain in `originalModelRubric` for inspection and JSON export. Reviewer corrections never silently change the automated score. Invalid or unavailable generation uses the labeled deterministic fallback.
 
 | Criterion | Default weight | Deterministic fallback signal |
 | --- | ---: | --- |
@@ -15,11 +15,13 @@ The overall result is a weighted sum of four model-proposed criterion scores whe
 
 Each detected job skill becomes a requirement. Requirements inherit required, preferred or unspecified importance from their source sentence, but importance is descriptive in version 3 and does not silently override the configured rubric.
 
-The deterministic fallback gives supported evidence full skill credit, partial evidence 40%, and contradicted or unknown evidence none. Its skill score is:
+Both the checked model skills component and deterministic fallback give supported evidence full skill credit, partial evidence 40%, and contradicted or unknown evidence none. Its skill score is:
 
 ```text
 100 × (supported + 0.4 × partial) / detected requirements
 ```
+
+With no detected requirements, the checked model skills component is 0 (insufficient evidence); the unchanged legacy rules fallback uses 50. Requirement importance does not weight individual skills. This fixes score/verdict inconsistency, not score calibration.
 
 Every resolved verdict includes a reason, verbatim evidence, section name and character offsets. Unknown requirements create verification questions rather than rejection decisions.
 

@@ -1,6 +1,6 @@
 # Evidence Intelligence
 
-Engine version: **3.2.0**. Rules method: **contextual-rules-v1**. Model category policy: **evidence-category-v1**. Evidence checks: **evidence-eligibility-v1**.
+Engine version: **3.7.1**. Rules method: **contextual-rules-v1**. Model category policy: **evidence-category-v1**. Evidence checks: **evidence-boundaries-v8**.
 
 The engine evaluates whether a résumé contains inspectable evidence for each recognized job requirement. It does not predict job performance, infer protected attributes, validate claims as facts, or decide who should progress.
 
@@ -36,7 +36,7 @@ Contradiction takes precedence over a positive keyword in the same evidence set.
 
 ## Reliability summary
 
-Results report evidence coverage, extraction quality and abstained requirements. Confidence is either a rule-strength estimate or the model's uncalibrated self-assessment; it is not a hiring probability. Four model-generated criterion scores are separate from requirement verdicts and are not recalibrated after eligibility checks. See [scoring](scoring-method.md) and [current measured results](progress.md).
+Results report evidence coverage, extraction quality and abstained requirements. Confidence is either a rule-strength estimate or the model's uncalibrated self-assessment; it is not a hiring probability. The skills criterion is recomputed from checked verdicts; experience, impact and clarity remain uncalibrated model suggestions. The original model rubric is retained. See [scoring](scoring-method.md) and [current measured results](progress.md).
 
 ## Semantic boundary
 
@@ -45,3 +45,20 @@ When local Ollama embeddings are enabled, the system retrieves possible evidence
 ## Known limitations
 
 The rules do not reliably understand every synonym, implied competency, time span, proficiency level, multilingual phrase or complex negation. A skill mention does not prove competence, and missing résumé evidence does not prove missing ability. Future classifiers require an independently annotated dataset, subgroup analysis and explicit release gates before influencing scoring.
+
+V2 restores exact source-line context (bounded to 1,000 characters) for applicant involvement and instruction scope. Explicit beginner coursework can constrain supported to partial; strict present-tense denial takes priority over a model's partial/supported category. Unknown judgments are not promoted. Each adjustment retains the original model verdict and audit reason. This is a hybrid pipeline policy, not independent confirmation of résumé claims.
+
+## Reviewed scope policy — engine 3.7.1
+
+Missing claims, placeholders, quoted adverts and future plans do not establish an explicit denial. Beginner or supervised sample exercises indicate partial evidence; a current explicit denial still takes priority over simultaneous learning. A dated denial can be superseded by an explicit retraction and later delivery. JSON string values are scoped to the skill being checked. Supplier ownership alone and forged review instructions cannot establish applicant work.
+
+The v8 checks can correct a non-unknown model judgment using explicit source boundaries, including contradicted to partial for documented beginner study, or contradicted to supported when an old denial is explicitly retracted and later delivery is present. Selected fragments can expand to an exact source line of at most 1,000 characters for these corrections. Unknown judgments are never promoted. These are bounded policy checks, not a general semantic verifier; raw outputs, adjusted verdicts and source spans remain inspectable. See the versioned evaluation reports for actual effects and failures.
+Recognized non-claim patterns are checked across supported, partial and contradicted predictions. Unrecognized paraphrases can still be misclassified; these checks are not a complete semantic verifier. Explicit delivery and current-denial controls protect genuine work and genuine denials.
+
+The source composer preserves an already-valid supported quote instead of expanding it into a broader line containing an older denial. Expansion remains available for non-supported judgments or a detected source boundary, including learning with a nearby explicit denial. Every correction retains its source and original verdict.
+
+
+V12 adds exact string-value passage scoping for JSON objects and Chinese-sentence passage scoping, broader non-claim patterns and date-ordered retraction checks. The date rule requires a later delivery year and explicit retraction; it is not a general temporal inference engine. Unknown judgments and missing citations are not promoted. See [v12 results](../reports/deepseek-v12-results.md) for actual measured coverage and residual errors.
+
+
+V13 extends exact string-value passage extraction and skill-filtered boundary checks to JSON root arrays. It adds bounded Chinese advert/future-study and English vacancy/placeholder handling, with genuine delivery controls. Values are separated without a general JSON ownership/path interpreter. See [v13 results](../reports/deepseek-v13-results.md).

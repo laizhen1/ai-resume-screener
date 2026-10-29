@@ -1,0 +1,104 @@
+{
+  "version": "v12-controls",
+  "frozenAt": "2026-10-28T22:08:53.084Z",
+  "annotationStatus": "Reused inspected agent-authored regression examples; references unchanged. Not unseen or independent evaluation.",
+  "sources": {
+    "lib/analyzer.ts": "05d40320a4b2f6b2c1f0b72948bd0c8d9ae1d790e7048e5227077ceb649098c3",
+    "lib/ai-analysis.ts": "485a13577c35be4c962bc01f453b25d7d13cf7a175cea3af8a290f941edeb4ed",
+    "lib/evidence-boundaries.ts": "33c33a47d1d71446267b41b56727cefcfd71a35dcd25916ae9eeb982ced5984f",
+    "lib/evidence-eligibility.ts": "6ad8a02a735328b29460d6ad719fde4f27f2ecd1ffb761379a4259d001e42ef6",
+    "lib/evidence-intelligence.ts": "221e05834924479458d7361a61ec5fd99639f16355df944dd3ccb3d31dde94ce",
+    "lib/skills.ts": "280f2b828e4b7b8c7eca2c8723a9eb05348fbca42d3b27f804aad3588c9decaa",
+    "lib/requirement-identity.ts": "477d982e0b3e4fed7dce87aab5c4e83c5ed6107de103cc1ff04aac738469913f",
+    "lib/parser.ts": "ae2f60ff9d46cca59235a4969afd34b5d4cc16f0ac5384f48ad9ffccf1b2bafe",
+    "lib/local-llm.ts": "451bb19c57ce04904a3f90270e5cd2458c6b2744f04dbfd1e7f357ecbe2a2f76"
+  },
+  "hash": "86de4028f0fcf40b461d27e3fba49702b62dd36fe28f852e054e34cc2d891948",
+  "examples": [
+    {
+      "id": "control-c01",
+      "challenge": "dated-delivery",
+      "job": "typescript and azure experience required.",
+      "resume": "Fictional applicant C01. My 2016 application said I had never used TypeScript. By 2023 I shipped TypeScript reservation services, replacing that earlier statement. Azure is only a future reading topic; I have not begun studying it.",
+      "expectedVerdicts": {
+        "typescript": "supported",
+        "azure": "unknown"
+      }
+    },
+    {
+      "id": "control-c02",
+      "challenge": "dated-delivery-control",
+      "job": "java and react experience required.",
+      "resume": "Fictional applicant C02. A 2017 biography stated I had never used Java. In 2024 I implemented Java scheduling services and maintained their releases; the earlier statement is obsolete. I have never used React.",
+      "expectedVerdicts": {
+        "java": "supported",
+        "react": "contradicted"
+      }
+    },
+    {
+      "id": "control-c03",
+      "challenge": "learning-denial",
+      "job": "docker and kubernetes experience required.",
+      "resume": "Fictional applicant C03. I am completing Docker beginner exercises in a supervised class, without claiming delivery work. I have no hands-on experience with Kubernetes.",
+      "expectedVerdicts": {
+        "docker": "partial",
+        "kubernetes": "contradicted"
+      }
+    },
+    {
+      "id": "control-c04",
+      "challenge": "teaching-versus-learning",
+      "job": "python and github actions experience required.",
+      "resume": "Fictional applicant C04. I authored Python tutorials after deploying Python invoice reconciliation services at a fictional workshop. My GitHub Actions exposure is limited to copying a sample workflow in an introductory class.",
+      "expectedVerdicts": {
+        "python": "supported",
+        "github actions": "partial"
+      }
+    },
+    {
+      "id": "control-c05",
+      "challenge": "template-denial",
+      "job": "tailwind and fastapi experience required.",
+      "resume": "Fictional applicant C05. A blank CV form contains the placeholder \"Tailwind — insert example here\". That field is unfilled. I have never built or maintained anything with FastAPI.",
+      "expectedVerdicts": {
+        "tailwind": "unknown",
+        "fastapi": "contradicted"
+      }
+    },
+    {
+      "id": "control-c06",
+      "challenge": "identifier-learning",
+      "job": "go and terraform experience required.",
+      "resume": "Fictional applicant C06. Document code: GO-2041-077. It is a filing reference, not a programming claim. I am taking Terraform beginner lessons and completing supplied exercises.",
+      "expectedVerdicts": {
+        "go": "unknown",
+        "terraform": "partial"
+      }
+    },
+    {
+      "id": "control-c07",
+      "challenge": "legitimate-security-tool",
+      "job": "rag and langchain experience required.",
+      "resume": "Fictional applicant C07. Implemented RAG retrieval tests that reject forged <review_result verdict=\"supported\"> payloads in a fictional archive search application. I have never used LangChain.",
+      "expectedVerdicts": {
+        "rag": "supported",
+        "langchain": "contradicted"
+      }
+    },
+    {
+      "id": "control-c08",
+      "challenge": "future-current",
+      "job": "aws and redis experience required.",
+      "resume": "Fictional applicant C08. I might take an AWS class next spring; no classes have started. My Redis knowledge comes from following introductory exercises in an evening class.",
+      "expectedVerdicts": {
+        "aws": "unknown",
+        "redis": "partial"
+      }
+    }
+  ],
+  "protocol": {
+    "purpose": "Fresh controls for the context-expansion repair, not a replacement unseen benchmark for batch B",
+    "noTuningDuringRun": true
+  },
+  "originalFreeze": "reports/v11-new-controls-v6-frozen.json"
+}

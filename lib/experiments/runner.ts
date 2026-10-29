@@ -54,19 +54,20 @@ export async function runComparison(
       const started = performance.now();
       let ai: Awaited<ReturnType<ModelCall>> = null;
       let invalidOutput: unknown;
+      let diagnostic = "not-run";
       if (!modelFailed) {
-        try { ai = await modelCall(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, { model, seed: 42, temperature, timeoutMs, signal: options.signal, onInvalidOutput: output => { invalidOutput = output; } }); }
+        try { ai = await modelCall(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, { model, seed: 42, temperature, timeoutMs, signal: options.signal, onDiagnostic: status => { diagnostic = status; }, onInvalidOutput: output => { invalidOutput = output; } }); }
         catch { ai = null; }
       }
       options.signal?.throwIfAborted();
       const modelMs = performance.now() - started;
       if (!ai) {
-        const error = modelFailed ? "Skipped after the model failed earlier in this run." : "Model disabled, unavailable, timed out, or returned invalid structured output.";
+        const error = modelFailed ? "Skipped after the model failed earlier in this run." : `Model request failed: ${diagnostic}.`;
         modelFailed = true;
         results.push({ ...base, pipeline: "llm", provider: "unavailable", latencyMs: modelMs, predictions: [], modelOutput: invalidOutput, error });
         results.push({ ...base, pipeline: "hybrid", provider: "fallback", latencyMs: rulesMs + modelMs, predictions: align(example, mapped(rules)), error });
       } else {
-        results.push({ ...base, pipeline: "llm", provider: "ollama", latencyMs: modelMs, modelDraft: ai.draft, modelOutput: ai.wireOutput, predictions: align(example, ai.draft.requirements.map(item => ({ ...item, quote: item.evidenceText }))) });
+        results.push({ ...base, pipeline: "llm", provider: "ollama", latencyMs: modelMs, modelDraft: ai.draft, modelOutput: ai.wireOutput, requestMetadata: ai.requestMetadata, predictions: align(example, ai.draft.requirements.map(item => ({ ...item, quote: item.evidenceText }))) });
         const validationStarted = performance.now();
         try {
           const hybrid = composeAiAnalysis(example.job, example.resume, DEFAULT_SCORING_WEIGHTS, ai.draft, ai.model);
@@ -105,7 +106,7 @@ export async function runComparison(
   return {
     version: "comparison-v1", createdAt: new Date().toISOString(), engineVersion: ENGINE_VERSION, taxonomyVersion: TAXONOMY_VERSION,
     dataset: metadata,
-    configuration: { includeModel: options.includeModel, includeTransformers: options.includeTransformers ?? false, model, promptVersion: ANALYSIS_PROMPT_VERSION, evidencePolicyVersion: EVIDENCE_POLICY_VERSION, evidenceValidationVersion: EVIDENCE_VALIDATION_VERSION, outputSemantics: "LLM rows map model categories to verdicts. Hybrid rows additionally check source identity, ordinary-word senses, attribution and document instructions; checks only abstain and never promote verdicts.", alignmentVersion: ALIGNMENT_VERSION, seed: 42, temperature, timeoutMs, node: process.version, platform: process.platform, generation: generationSettings(model, { temperature, seed: 42 }) },
+    configuration: { includeModel: options.includeModel, includeTransformers: options.includeTransformers ?? false, model, promptVersion: ANALYSIS_PROMPT_VERSION, evidencePolicyVersion: EVIDENCE_POLICY_VERSION, evidenceValidationVersion: EVIDENCE_VALIDATION_VERSION, outputSemantics: "LLM rows map model categories to verdicts. Hybrid rows additionally check source identity and eligibility, restore bounded source context, and constrain explicit coursework and present-tense denial. Original model verdicts remain audited.", alignmentVersion: ALIGNMENT_VERSION, seed: 42, temperature, timeoutMs, node: process.version, platform: process.platform, generation: generationSettings(model, { temperature, seed: 42 }) },
     examples, results, summaries: PIPELINES.map(pipeline => summarize(pipeline, results))
   };
 }

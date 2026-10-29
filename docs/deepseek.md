@@ -25,10 +25,10 @@ Set `OLLAMA_EXECUTABLE` for a portable installation and `OLLAMA_MODELS` to place
 
 ## What DeepSeek does
 
-The application first extracts known requirements using the skill dictionary and aliases, supplies canonical keys, and assigns exact résumé passage IDs. DeepSeek selects from that contract; it may propose additional job requirements with exact job citations. It does not directly emit the final four-class verdict: the public policy maps its semantic category, and source/evidence checks may abstain.
+The application first extracts known requirements using the skill dictionary and aliases, supplies canonical keys, and assigns exact résumé passage IDs. DeepSeek selects from that contract; it may propose additional job requirements with exact job citations. It does not directly emit the final four-class verdict: the public policy maps its semantic category, and source/evidence checks may correct bounded evidence categories or abstain, while retaining the original output.
 
 1. Select résumé evidence passages and semantic categories for job requirements. A public fixed policy maps these categories to supported, partial, contradicted and unknown.
-2. Propose criterion scores, explanations and neutral interview questions. The server validates source quotes and calculates the weighted total.
+2. Propose criterion scores, explanations and neutral interview questions. The server validates source quotes, recomputes the skills component from checked judgments, and calculates the weighted total. Other criterion scores remain advisory.
 3. Generate an optional reviewer summary if the core analysis falls back.
 4. Generate fictional demonstration profiles.
 5. Answer evidence questions from retrieved passages when the separate Python transformer service is enabled.
@@ -67,7 +67,7 @@ Historical first-pass results, including both temperatures and the since-fixed 1
 
 ## Requirement identity and grounded generation
 
-The current prompt is core-analysis-v7-enumerated-categories and the shared identity policy is canonical-wrapper-v2. Exact aliases and bounded skill-name wrappers are normalized in both displayed results and evaluation. Conflicting duplicate verdicts abstain. Job and resume quotes are checked verbatim against their respective sources.
+The current prompt is core-analysis-v13-array-passages and the shared identity policy is canonical-wrapper-v2. Exact aliases and bounded skill-name wrappers are normalized in both displayed results and evaluation. Conflicting duplicate verdicts abstain. Job and resume quotes are checked verbatim against their respective sources.
 
 The original heldout CLI split is now a previously inspected diagnostic set; its labels are unchanged. See [the full revision results](../reports/deepseek-revision.md) for replay versus live-inference results. To replay old saved drafts without inference, run:
 

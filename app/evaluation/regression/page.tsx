@@ -59,11 +59,10 @@ export default function EvaluationPage() {
   }
 
   const latest = runs[0];
-  return <main className="app-shell">
-    <header className="app-header"><Link className="brand-link" href="/">Open Resume Lab</Link><nav className="app-nav"><Link href="/workspace">Workspace</Link><Link href="/evaluation">Evaluation</Link></nav></header>
-    <section className="page-intro"><p className="eyebrow">ADVERSARIAL EVALUATION · DATASET V2</p><h1>Measure before making claims.</h1><p>The versioned benchmark tests exact skills, aliases, negation, learning-only language, ambiguous terms, missing evidence, name counterfactuals and formatting changes. It is a regression suite—not proof of hiring validity or fairness.</p></section>
+  return <main id="main-content" className="app-shell">
+    <section className="page-intro"><p className="eyebrow">ADVERSARIAL EVALUATION · DATASET V2</p><h1>Measure before making claims.</h1><p>The versioned benchmark tests exact skills, aliases, negation, learning-only language, ambiguous terms, missing evidence, name counterfactuals and formatting changes. It is a regression suite—not proof of hiring validity or fairness.</p><nav className="page-tabs" aria-label="Evaluation tools"><Link href="/evaluation">Pipeline comparison</Link><Link href="/evaluation/regression" aria-current="page">Regression suite</Link></nav></section>
     {error && <div className="wide-error">{error}</div>}
-    <p className="experiment-note" style={{ maxWidth: 1112, margin: "16px auto" }}>This suite repeats ten fixed fixtures. Increasing executions does not add unique examples. Use the experiment lab for held-out comparisons.</p>
+    <p className="experiment-note regression-note">This suite repeats ten fixed fixtures. Increasing executions does not add unique examples. Use the experiment lab for held-out comparisons.</p>
     <section className="evaluation-controls content-card">
       <label>Fixture executions<input type="number" min={20} max={500} value={size} onChange={(event) => setSize(Number(event.target.value))} /></label>
       <button onClick={() => void run()} disabled={busy}>{busy ? "Running…" : "Run benchmark"}</button>

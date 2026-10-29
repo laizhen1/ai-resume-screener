@@ -1,0 +1,674 @@
+{
+  "status": "checkpoint",
+  "completedDocuments": 2,
+  "totalDocuments": 2,
+  "report": {
+    "version": "comparison-v1",
+    "createdAt": "2026-10-28T21:57:49.651Z",
+    "engineVersion": "3.5.3",
+    "taxonomyVersion": "2026.08.2",
+    "dataset": {
+      "version": "v11-temporal-confirmation",
+      "split": "heldout",
+      "hash": "ed5e05951ce1b0dae601c3367f177b90e814c9a76692e117315db8d9c7d6be71",
+      "uniqueCases": 2,
+      "executions": 2,
+      "annotationStatus": "Previously inspected temporal cases; confirmation only."
+    },
+    "configuration": {
+      "includeModel": true,
+      "includeTransformers": false,
+      "model": "deepseek-r1:7b",
+      "promptVersion": "core-analysis-v11-scope-multilingual",
+      "evidencePolicyVersion": "evidence-category-v1",
+      "evidenceValidationVersion": "evidence-boundaries-v6",
+      "alignmentVersion": "canonical-wrapper-v2",
+      "outputSemantics": "One fresh generation per document; raw and checked pipelines share that generation. No tuning during this run.",
+      "seed": 42,
+      "temperature": 0.6,
+      "timeoutMs": 180000,
+      "node": "v24.19.0",
+      "platform": "win32",
+      "generation": {
+        "think": true,
+        "options": {
+          "temperature": 0.6,
+          "seed": 42,
+          "num_ctx": 8192,
+          "num_predict": 4096
+        }
+      }
+    },
+    "examples": [
+      {
+        "id": "novel-09",
+        "challenge": "context",
+        "job": "TypeScript and Java experience are required.",
+        "resume": "Fictional applicant N09\nIn an old 2021 profile I said I had never used TypeScript. That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases. Today I still have no hands-on experience with Java.",
+        "expectedVerdicts": {
+          "typescript": "supported",
+          "java": "contradicted"
+        }
+      },
+      {
+        "id": "transfer-b03",
+        "challenge": "dated-denial",
+        "job": "Java and React experience are required.",
+        "resume": "Fictional applicant B03. My 2020 biography said I had never used Java. In 2024 I implemented Java invoicing services and maintained them through 2025; that earlier statement is obsolete. I have never used React.",
+        "expectedVerdicts": {
+          "java": "supported",
+          "react": "contradicted"
+        }
+      }
+    ],
+    "results": [
+      {
+        "caseId": "novel-09",
+        "challenge": "context",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 6.024499999999989,
+        "predictions": [
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "In an old 2021 profile I said I had never used TypeScript.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "java",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "Today I still have no hands-on experience with Java.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel-09",
+        "challenge": "context",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 28946.3075,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "java",
+              "importance": "required",
+              "sourceText": "TypeScript and Java experience are required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant explicitly denies Java experience",
+              "evidenceText": "Today I still have no hands-on experience with Java."
+            },
+            {
+              "skill": "typescript",
+              "importance": "required",
+              "sourceText": "TypeScript and Java experience are required.",
+              "verdict": "supported",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_used_skill]  applicant demonstrated TypeScript usage",
+              "evidenceText": "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 50,
+              "explanation": "Both Java and TypeScript are explicitly required and supported by the candidate's evidence.",
+              "evidence": [
+                "Today I still have no hands-on experience with Java.",
+                "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 100,
+              "explanation": "The candidate explicitly denies Java experience but demonstrates TypeScript usage.",
+              "evidence": [
+                "Today I still have no hands-on experience with Java.",
+                "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No quantified impact or measurable outcome is provided for either skill.",
+              "evidence": [
+                "Today I still have no hands-on experience with Java.",
+                "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The evidence is clear and directly addresses the required skills.",
+              "evidence": [
+                "Today I still have no hands-on experience with Java.",
+                "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "Do you have any TypeScript experience?",
+            "What is your current understanding of TypeScript?",
+            "Can you share your TypeScript development journey?",
+            "How have you applied TypeScript in previous projects?"
+          ],
+          "warnings": [
+            "Unclear evidence for Java experience",
+            "Unclear evidence for TypeScript usage",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "java": {
+              "evidenceId": "s3",
+              "reason": " applicant explicitly denies Java experience",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            },
+            "typescript": {
+              "evidenceId": "s2",
+              "reason": " applicant demonstrated TypeScript usage",
+              "category": "applicant_used_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 50,
+              "explanation": "Both Java and TypeScript are explicitly required and supported by the candidate's evidence.",
+              "evidenceIds": [
+                "s3",
+                "s2"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 100,
+              "explanation": "The candidate explicitly denies Java experience but demonstrates TypeScript usage.",
+              "evidenceIds": [
+                "s3",
+                "s2"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No quantified impact or measurable outcome is provided for either skill.",
+              "evidenceIds": [
+                "s3",
+                "s2"
+              ]
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The evidence is clear and directly addresses the required skills.",
+              "evidenceIds": [
+                "s3",
+                "s2"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "Do you have any TypeScript experience?",
+            "What is your current understanding of TypeScript?",
+            "Can you share your TypeScript development journey?",
+            "How have you applied TypeScript in previous projects?"
+          ],
+          "warnings": [
+            "Unclear evidence for Java experience",
+            "Unclear evidence for TypeScript usage"
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "c0e3add0d955431a875dc00187152875bfe2c95312d68f631f42a26e07618155",
+          "schemaHash": "fd22683a72415734f871141f4d3538b2208c3393ab0027541e680ee27f6c8d30",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 738,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill]  applicant demonstrated TypeScript usage",
+            "quote": "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "java",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant explicitly denies Java experience",
+            "quote": "Today I still have no hands-on experience with Java.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "novel-09",
+        "challenge": "context",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 28962.577100000002,
+        "predictions": [
+          {
+            "skill": "typescript",
+            "expected": "supported",
+            "actual": "supported",
+            "reason": "[evidence-category-v1: applicant_used_skill]  applicant demonstrated TypeScript usage",
+            "quote": "That is no longer true: during 2025 I shipped a TypeScript booking interface and maintained its production releases.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "java",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant explicitly denies Java experience",
+            "quote": "Today I still have no hands-on experience with Java.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      },
+      {
+        "caseId": "transfer-b03",
+        "challenge": "dated-denial",
+        "pipeline": "rules",
+        "provider": "rules",
+        "latencyMs": 2.1918000000005122,
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "My 2020 biography said I had never used Java.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "The résumé explicitly limits or negates this experience.",
+            "quote": "I have never used React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "transfer-b03",
+        "challenge": "dated-denial",
+        "pipeline": "llm",
+        "provider": "ollama",
+        "latencyMs": 28384.0173,
+        "modelDraft": {
+          "requirements": [
+            {
+              "skill": "java",
+              "importance": "required",
+              "sourceText": "Java and React experience are required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: 2020 statement about not using Java.",
+              "evidenceText": "My 2020 biography said I had never used Java."
+            },
+            {
+              "skill": "react",
+              "importance": "required",
+              "sourceText": "Java and React experience are required.",
+              "verdict": "contradicted",
+              "confidence": 1,
+              "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: statement about never using React.",
+              "evidenceText": "I have never used React."
+            }
+          ],
+          "criteria": [
+            {
+              "criterion": "Relevant skills",
+              "score": 100,
+              "explanation": "Both Java and React are explicitly denied based on the provided passages.",
+              "evidence": [
+                "My 2020 biography said I had never used Java.",
+                "I have never used React."
+              ]
+            },
+            {
+              "criterion": "Demonstrated experience",
+              "score": 0,
+              "explanation": "No demonstrated experience for either Java or React.",
+              "evidence": [
+                "My 2020 biography said I had never used Java.",
+                "I have never used React."
+              ]
+            },
+            {
+              "criterion": "Measurable impact",
+              "score": 0,
+              "explanation": "No measurable impact provided for either Java or React.",
+              "evidence": [
+                "My 2020 biography said I had never used Java.",
+                "I have never used React."
+              ]
+            },
+            {
+              "criterion": "Document clarity",
+              "score": 0,
+              "explanation": "The passages are clear but do not provide measurable outcomes.",
+              "evidence": [
+                "My 2020 biography said I had never used Java.",
+                "I have never used React."
+              ]
+            }
+          ],
+          "interviewQuestions": [
+            "What experience do you have with React?"
+          ],
+          "warnings": [
+            "Be cautious of ambiguous evidence for React and Java.",
+            "Verdicts use model-selected evidence categories and a fixed public policy; verify categories and quotations. Scores are uncalibrated."
+          ]
+        },
+        "modelOutput": {
+          "requirementJudgments": {
+            "java": {
+              "evidenceId": "s1",
+              "reason": " applicant_explicitly_denies_skill: 2020 statement about not using Java.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            },
+            "react": {
+              "evidenceId": "s3",
+              "reason": " applicant_explicitly_denies_skill: statement about never using React.",
+              "category": "applicant_explicitly_denies_skill",
+              "confidence": 1
+            }
+          },
+          "additionalRequirements": [],
+          "criteria": {
+            "Relevant skills": {
+              "score": 100,
+              "explanation": "Both Java and React are explicitly denied based on the provided passages.",
+              "evidenceIds": [
+                "s1",
+                "s3"
+              ]
+            },
+            "Demonstrated experience": {
+              "score": 0,
+              "explanation": "No demonstrated experience for either Java or React.",
+              "evidenceIds": [
+                "s1",
+                "s3"
+              ]
+            },
+            "Measurable impact": {
+              "score": 0,
+              "explanation": "No measurable impact provided for either Java or React.",
+              "evidenceIds": [
+                "s1",
+                "s3"
+              ]
+            },
+            "Document clarity": {
+              "score": 0,
+              "explanation": "The passages are clear but do not provide measurable outcomes.",
+              "evidenceIds": [
+                "s1",
+                "s3"
+              ]
+            }
+          },
+          "interviewQuestions": [
+            "What experience do you have with React?"
+          ],
+          "warnings": [
+            "Be cautious of ambiguous evidence for React and Java."
+          ]
+        },
+        "requestMetadata": {
+          "promptHash": "e560bf40d0193cb69fefd3f63dd519b11273dde20863d42f09aee050c20c2c28",
+          "schemaHash": "4fc39a7fca93166683a4c9e0aed5ae1569eb54ab850b3ee5d2670ed05ab2a507",
+          "responseModel": "deepseek-r1:7b",
+          "evalCount": 727,
+          "doneReason": "stop"
+        },
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: 2020 statement about not using Java.",
+            "quote": "My 2020 biography said I had never used Java.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: statement about never using React.",
+            "quote": "I have never used React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ]
+      },
+      {
+        "caseId": "transfer-b03",
+        "challenge": "dated-denial",
+        "pipeline": "hybrid",
+        "provider": "ollama",
+        "latencyMs": 28387.689000000006,
+        "predictions": [
+          {
+            "skill": "java",
+            "expected": "supported",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: 2020 statement about not using Java.",
+            "quote": "My 2020 biography said I had never used Java.",
+            "citationValid": true,
+            "missing": false
+          },
+          {
+            "skill": "react",
+            "expected": "contradicted",
+            "actual": "contradicted",
+            "reason": "[evidence-category-v1: applicant_explicitly_denies_skill]  applicant_explicitly_denies_skill: statement about never using React.",
+            "quote": "I have never used React.",
+            "citationValid": true,
+            "missing": false
+          }
+        ],
+        "evidenceChecks": []
+      }
+    ],
+    "summaries": [
+      {
+        "pipeline": "rules",
+        "status": "complete",
+        "evaluatedCases": 2,
+        "totalCases": 2,
+        "modelCases": 0,
+        "fallbackCases": 0,
+        "accuracy": 0.5,
+        "macroF1": 0.16666666666666666,
+        "supportPrecision": null,
+        "supportRecall": 0,
+        "abstentionRate": 0,
+        "unsupportedSupportRate": null,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0,
+        "p50LatencyMs": 2.1918000000005122,
+        "p95LatencyMs": 6.024499999999989,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "context",
+            "correct": 1,
+            "total": 2
+          },
+          {
+            "challenge": "dated-denial",
+            "correct": 1,
+            "total": 2
+          }
+        ]
+      },
+      {
+        "pipeline": "llm",
+        "status": "complete",
+        "evaluatedCases": 2,
+        "totalCases": 2,
+        "modelCases": 2,
+        "fallbackCases": 0,
+        "accuracy": 0.75,
+        "macroF1": 0.3666666666666667,
+        "supportPrecision": 1,
+        "supportRecall": 0.5,
+        "abstentionRate": 0,
+        "unsupportedSupportRate": 0,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0,
+        "p50LatencyMs": 28384.0173,
+        "p95LatencyMs": 28946.3075,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "context",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "dated-denial",
+            "correct": 1,
+            "total": 2
+          }
+        ]
+      },
+      {
+        "pipeline": "hybrid",
+        "status": "complete",
+        "evaluatedCases": 2,
+        "totalCases": 2,
+        "modelCases": 2,
+        "fallbackCases": 0,
+        "accuracy": 0.75,
+        "macroF1": 0.3666666666666667,
+        "supportPrecision": 1,
+        "supportRecall": 0.5,
+        "abstentionRate": 0,
+        "unsupportedSupportRate": 0,
+        "invalidCitationRate": 0,
+        "missingRequirementRate": 0,
+        "p50LatencyMs": 28387.689000000006,
+        "p95LatencyMs": 28962.577100000002,
+        "accuracyInterval": null,
+        "confusion": [
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "slices": [
+          {
+            "challenge": "context",
+            "correct": 2,
+            "total": 2
+          },
+          {
+            "challenge": "dated-denial",
+            "correct": 1,
+            "total": 2
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "targets": [
+    {
+      "caseId": "novel2-03",
+      "skill": "python",
+      "expected": "unknown",
+      "before": "contradicted",
+      "after": "unknown",
+      "missing": false,
+      "quote": "附件中的招聘广告写着“熟练使用 Python”，这是目标岗位的要求。",
+      "correct": true
+    },
+    {
+      "caseId": "novel2-09",
+      "skill": "angular",
+      "expected": "unknown",
+      "before": "partial",
+      "after": "unknown",
+      "missing": false,
+      "quote": "\"Angular experience is requested by the vacancy.\"",
+      "correct": true
+    },
+    {
+      "caseId": "novel2-10",
+      "skill": "aws",
+      "expected": "unknown",
+      "before": "partial",
+      "after": "unknown",
+      "missing": false,
+      "quote": "AWS 是我明年计划阅读的主题，目前没有开始学习。",
+      "correct": true
+    },
+    {
+      "caseId": "novel2-11",
+      "skill": "tailwind",
+      "expected": "unknown",
+      "before": "supported",
+      "after": "unknown",
+      "missing": false,
+      "quote": "| Tailwind project | [applicant to complete] |",
+      "correct": true
+    }
+  ],
+  "remaining": {
+    "inspected": [],
+    "new": [],
+    "guided": []
+  },
+  "pairedEffects": {
+    "inspected": {
+      "repaired": 5,
+      "harmed": 0
+    },
+    "new": {
+      "repaired": 4,
+      "harmed": 0
+    },
+    "guided": {
+      "repaired": 0,
+      "harmed": 0
+    }
+  }
+}
